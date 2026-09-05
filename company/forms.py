@@ -33,9 +33,11 @@ class TaskModuleForm(forms.ModelForm):
 
 class TemplateUploadForm(forms.Form):
     track = forms.ModelChoiceField(
-        queryset=InternshipTrack.objects.all(), required=False,
+        queryset=InternshipTrack.objects.all(),
+        required=False,
+        empty_label="Global (All Tracks)",
         widget=forms.Select(attrs={"class": INPUT}),
-        help_text="Leave blank to set this as the site-wide default.",
+        help_text="Select 'Global (All Tracks)' to automatically apply this template across all tracks.",
     )
     package = forms.FileField(
         widget=forms.ClearableFileInput(attrs={"class": INPUT, "accept": ".zip"}),

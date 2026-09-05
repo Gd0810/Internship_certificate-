@@ -13,13 +13,13 @@
     <code>{% templatetag openvariable %}score{% templatetag closevariable %}</code>,
     <code>{% templatetag openvariable %}certificate_id{% templatetag closevariable %}</code> and
     <code>{% templatetag openvariable %}date{% templatetag closevariable %}</code> — they're filled in with
-    real data automatically. Leave "Track" blank to set this as the site-wide default design.
+    real data automatically. Select <strong>Global (All Tracks)</strong> in the dropdown to automatically apply this template across all internship certificates/offer letters.
   </p>
 
   <div class="icp-card" style="padding:30px; margin-bottom:32px;">
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="icp-field"><label>Track (optional)</label>{{ form.track }}</div>
+      <div class="icp-field"><label>Target Track Scope</label>{{ form.track }}</div>
       <div class="icp-field"><label>Template package (.zip)</label>{{ form.package }}
         {% for e in form.package.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
       </div>
@@ -30,11 +30,17 @@
   <h3 style="font-size:1.05rem; margin-bottom:14px;">Recent uploads</h3>
   <div class="icp-card">
     <table class="icp-table">
-      <thead><tr><th>Track</th><th>Folder</th><th>Status</th><th>Uploaded</th></tr></thead>
+      <thead><tr><th>Scope / Track</th><th>Folder</th><th>Status</th><th>Uploaded</th></tr></thead>
       <tbody>
         {% for t in templates %}
         <tr>
-          <td>{{ t.track.name|default:"Default (all tracks)" }}</td>
+          <td>
+            {% if t.track %}
+              <span style="font-weight:600; color:var(--c-ink);">{{ t.track.name }}</span>
+            {% else %}
+              <span class="icp-badge" style="background:#eef4fb; color:#0056b3; font-weight:700;">Global (All Tracks)</span>
+            {% endif %}
+          </td>
           <td style="font-family:monospace; font-size:0.82rem;">{{ t.folder_path }}</td>
           <td>{% if t.is_active %}<span class="icp-badge icp-badge--paid"><span class="icp-dot"></span>Active</span>{% else %}<span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Replaced</span>{% endif %}</td>
           <td style="color:var(--c-muted); font-size:0.85rem;">{{ t.uploaded_at|date:"d M Y, H:i" }}</td>
