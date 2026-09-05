@@ -46,8 +46,9 @@ def _normalize_uploaded_index_html(index_path: Path) -> None:
     """
     Post-processes a newly uploaded index.html file:
       1. Resolves all CSS variables (--var: val) so PDF engines render colors properly.
-      2. Injects standard A4 page dimension rules (@page size: A4).
-      3. Normalizes wrapper container CSS so documents fit clean A4 pages in both preview & PDF export.
+      2. Injects viewport meta tag if missing.
+      3. Injects standard A4 page dimension rules (@page size: A4).
+      4. Normalizes wrapper container CSS so documents fit clean A4 pages in both preview & PDF export.
     """
     if not index_path.exists():
         return
@@ -67,25 +68,32 @@ def _normalize_uploaded_index_html(index_path: Path) -> None:
         for var_name, var_val in root_vars.items():
             content = content.replace(f"var(--{var_name})", var_val)
 
-    # 2. Inject standard A4 @page CSS rule if missing
-    if "@page" not in content:
-        a4_page_style = (
-            "@page { size: A4 landscape; margin: 10mm; }"
-            if is_certificate
-            else "@page { size: A4 portrait; margin: 12mm 16mm; }"
-        )
+    # 2. Inject viewport meta tag if missing
+    if "viewport" not in content and "</head>" in content:
+        content = content.replace("</head>", '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n</head>')
+
+    # 3. Inject or replace standard A4 @page CSS rule
+    a4_page_style = (
+        "@page { size: A4 landscape; margin: 8mm; }"
+        if is_certificate
+        else "@page { size: A4 portrait; margin: 10mm 14mm; }"
+    )
+
+    if "@page" in content:
+        content = re.sub(r"@page\s*\{[^}]*\}", a4_page_style, content)
+    else:
         style_block = f"<style>\n  {a4_page_style}\n</style>\n"
         if "</head>" in content:
             content = content.replace("</head>", f"{style_block}</head>")
         else:
             content = f"{style_block}{content}"
 
-    # 3. Add print media overrides for clean single-page A4 PDF rendering
+    # 4. Add print media overrides for clean single-page A4 PDF rendering
     pdf_override_css = """
 <style>
 @media print {
   html, body { background: #ffffff !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
-  .page-wrap, .letter-wrap, .cert-wrap, .letter, .certificate { max-width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; }
+  .page-wrap, .letter-wrap, .cert-wrap, .sheet, .letter, .certificate { max-width: 100% !important; margin: 0 auto !important; box-shadow: none !important; }
 }
 </style>
 """

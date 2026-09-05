@@ -15,6 +15,34 @@ def _profile_or_none(request):
     return getattr(request.user, "intern_profile", None)
 
 
+PREVIEW_CONTAINER_STYLE = """
+<style id="platform-preview-normalizer">
+  html, body {
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    background: #f8fafc !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    min-height: 100vh !important;
+  }
+  .sheet, .certificate, .letter, .page-wrap, .letter-wrap, .cert-wrap, body > div:first-child {
+    max-width: 100% !important;
+    margin: 10px auto !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+    background: #ffffff !important;
+  }
+</style>
+"""
+
+
+def _inject_preview_styles(html: str) -> str:
+    if "</head>" in html:
+        return html.replace("</head>", f"{PREVIEW_CONTAINER_STYLE}</head>")
+    return f"{PREVIEW_CONTAINER_STYLE}{html}"
+
+
 @login_required
 @xframe_options_sameorigin
 def offer_letter_preview(request):
@@ -27,7 +55,7 @@ def offer_letter_preview(request):
             "<p style='font-family:sans-serif;padding:40px;color:#8a8a86;'>"
             "Offer letter template is not configured yet.</p>"
         )
-    return HttpResponse(html)
+    return HttpResponse(_inject_preview_styles(html))
 
 
 @login_required
@@ -44,7 +72,7 @@ def certificate_preview(request):
             "<p style='font-family:sans-serif;padding:40px;color:#8a8a86;'>"
             "Certificate template is not configured yet.</p>"
         )
-    return HttpResponse(html)
+    return HttpResponse(_inject_preview_styles(html))
 
 
 @login_required
