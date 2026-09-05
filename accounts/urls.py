@@ -9,4 +9,5 @@ urlpatterns = [
     path("logout/", views.AccountLogoutView.as_view(), name="logout"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("tasks/<int:task_id>/toggle/", views.toggle_task, name="toggle_task"),
+    path("tasks/<int:task_id>/submit/", views.save_submission, name="save_submission"),
 ]

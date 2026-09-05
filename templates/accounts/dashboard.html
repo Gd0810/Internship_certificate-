@@ -95,21 +95,204 @@
     {% elif active_tab == 'task' %}
       <span class="icp-eyebrow">{{ profile.completed_tasks }} of {{ profile.total_tasks }} complete</span>
       <h1 style="font-size:1.7rem; margin:8px 0 20px;">Task Modules</h1>
-      <div class="icp-progress" style="margin-bottom:24px;"><div class="icp-progress__bar" id="task-progress-bar" style="width:{{ profile.progress_percent }}%;"></div></div>
+      <div class="icp-progress" style="margin-bottom:28px;"><div class="icp-progress__bar" id="task-progress-bar" style="width:{{ profile.progress_percent }}%;"></div></div>
 
-      <div class="icp-card">
+      <style>
+      .icp-mod-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 24px 26px;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        margin-bottom: 24px;
+        max-width: 680px;
+      }
+      .icp-mod-card__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+      .icp-mod-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
+      .icp-mod-duration {
+        font-size: 0.86rem;
+        color: #64748b;
+        margin-top: 2px;
+      }
+      .icp-badge-pill {
+        display: inline-block;
+        padding: 5px 14px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+      .icp-badge-pill.is-completed {
+        background: #dcfce7;
+        color: #15803d;
+      }
+      .icp-badge-pill.is-progress {
+        background: #f1f5f9;
+        color: #475569;
+      }
+      .icp-mod-title {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 14px 0 16px;
+        line-height: 1.3;
+      }
+      .icp-mod-section__label {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #1e293b;
+        margin-bottom: 8px;
+      }
+      .icp-mod-bullets {
+        padding-left: 20px;
+        margin: 0;
+        color: #334155;
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
+      .icp-mod-bullets li {
+        margin-bottom: 6px;
+      }
+      .icp-mod-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .icp-chip {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        color: #334155;
+        font-size: 0.84rem;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-weight: 500;
+      }
+      .icp-btn-edit-sub {
+        width: 100%;
+        background: #0f172a;
+        color: #ffffff;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.92rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .icp-btn-edit-sub:hover {
+        background: #1e293b;
+      }
+      .icp-btn-toggle-comp {
+        width: 100%;
+        background: #ecfdf5;
+        color: #047857;
+        border: 1.5px solid #6ee7b7;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.92rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .icp-btn-toggle-comp:not(.is-completed) {
+        background: #f8fafc;
+        color: #475569;
+        border-color: #cbd5e1;
+      }
+      .icp-btn-toggle-comp:hover {
+        opacity: 0.95;
+      }
+      </style>
+
+      <div>
         {% for row in task_rows %}
-        <div class="icp-task-row" data-task-id="{{ row.task.id }}">
-          <button type="button" class="icp-check {% if row.completed %}is-done{% endif %}" data-task-toggle="{{ row.task.id }}" aria-label="Mark task completed">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          </button>
-          <div>
-            <div class="icp-task-title {% if row.completed %}is-done{% endif %}">{{ row.task.title }}</div>
-            <div class="icp-task-desc">{{ row.task.description }}</div>
+        <div class="icp-mod-card" data-task-id="{{ row.task.id }}">
+          <div class="icp-mod-card__header">
+            <div>
+              <div class="icp-mod-num">Module {{ row.task.module_number }}</div>
+              <div class="icp-mod-duration">{{ row.task.duration_info|default:"Day 1 – Day 5 · High priority" }}</div>
+            </div>
+            <div>
+              <span class="icp-badge-pill {% if row.completed %}is-completed{% else %}is-progress{% endif %}" id="status-pill-{{ row.task.id }}">
+                {% if row.completed %}✓ Completed{% else %}In Progress{% endif %}
+              </span>
+            </div>
           </div>
+
+          <h2 class="icp-mod-title">{{ row.task.title }}</h2>
+
+          {% if row.task.body_points %}
+          <div class="icp-mod-section">
+            <div class="icp-mod-section__label">What You'll Do:</div>
+            <ul class="icp-mod-bullets">
+              {% for point in row.task.body_points %}
+                <li>{{ point }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% elif row.task.description %}
+          <div class="icp-mod-section">
+            <div class="icp-mod-section__label">What You'll Do:</div>
+            <p style="color:#475569; font-size:0.92rem; line-height:1.6;">{{ row.task.description }}</p>
+          </div>
+          {% endif %}
+
+          {% if row.task.deliverables %}
+          <div class="icp-mod-section" style="margin-top:18px;">
+            <div class="icp-mod-section__label">Submission Deliverables:</div>
+            <div class="icp-mod-chips">
+              {% for deliv in row.deliverable_items %}
+                <span class="icp-chip">{{ deliv.name }}</span>
+              {% endfor %}
+            </div>
+
+            <form class="icp-mod-sub-form" data-task-id="{{ row.task.id }}" style="margin-top:14px; display:flex; flex-direction:column; gap:10px;">
+              {% for deliv in row.deliverable_items %}
+                <div>
+                  <input type="text" class="icp-sub-input"
+                         data-deliv-name="{{ deliv.name }}"
+                         placeholder="{{ deliv.name }}"
+                         value="{{ deliv.value }}"
+                         style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; padding:11px 14px; font-size:0.9rem; width:100%; box-sizing:border-box; color:#0f172a;">
+                </div>
+              {% endfor %}
+
+              <div style="display:flex; flex-direction:column; gap:10px; margin-top:14px;">
+                <button type="button" class="icp-btn-edit-sub" data-task-save="{{ row.task.id }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:middle; margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  Edit Submission
+                </button>
+                <button type="button" class="icp-btn-toggle-comp {% if row.completed %}is-completed{% endif %}" data-task-complete="{{ row.task.id }}" id="btn-complete-{{ row.task.id }}">
+                  {% if row.completed %}✓ Completed{% else %}Mark as Completed{% endif %}
+                </button>
+              </div>
+            </form>
+          </div>
+          {% else %}
+          <div style="margin-top:20px;">
+            <button type="button" class="icp-btn-toggle-comp {% if row.completed %}is-completed{% endif %}" data-task-complete="{{ row.task.id }}" id="btn-complete-{{ row.task.id }}">
+              {% if row.completed %}✓ Completed{% else %}Mark as Completed{% endif %}
+            </button>
+          </div>
+          {% endif %}
         </div>
         {% empty %}
-        <div style="padding:40px; text-align:center; color:var(--c-muted);">No task modules published for this track yet.</div>
+        <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No task modules published for this track yet.</div>
         {% endfor %}
       </div>
 
@@ -160,20 +343,87 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
-// --- Task completion toggling (AJAX, no full reload) ---
-document.querySelectorAll('[data-task-toggle]').forEach(function (btn) {
+// --- Task submission saving & completion toggling ---
+document.querySelectorAll('[data-task-save]').forEach(function (btn) {
   btn.addEventListener('click', function () {
-    const taskId = btn.getAttribute('data-task-toggle');
-    fetch(`/accounts/tasks/${taskId}/toggle/`, {
+    const taskId = btn.getAttribute('data-task-save');
+    const card = btn.closest('.icp-mod-card');
+    const deliverables = {};
+    if (card) {
+      card.querySelectorAll('.icp-sub-input').forEach(function (input) {
+        const delivName = input.getAttribute('data-deliv-name');
+        if (delivName) {
+          deliverables[delivName] = input.value.trim();
+        }
+      });
+    }
+
+    btn.disabled = true;
+    const origHtml = btn.innerHTML;
+    btn.textContent = 'Saving...';
+
+    fetch(`/accounts/tasks/${taskId}/submit/`, {
       method: 'POST',
-      headers: { 'X-CSRFToken': csrftoken },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      body: JSON.stringify({ deliverables: deliverables }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+        if (data.ok) {
+          btn.innerHTML = '✓ Saved!';
+          setTimeout(function () {
+            btn.innerHTML = origHtml;
+          }, 2000);
+        }
+      });
+  });
+});
+
+document.querySelectorAll('[data-task-complete]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    const taskId = btn.getAttribute('data-task-complete');
+    const card = btn.closest('.icp-mod-card');
+    const deliverables = {};
+    if (card) {
+      card.querySelectorAll('.icp-sub-input').forEach(function (input) {
+        const delivName = input.getAttribute('data-deliv-name');
+        if (delivName) {
+          deliverables[delivName] = input.value.trim();
+        }
+      });
+    }
+
+    const isCurrentlyDone = btn.classList.contains('is-completed');
+
+    fetch(`/accounts/tasks/${taskId}/submit/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      body: JSON.stringify({
+        deliverables: deliverables,
+        mark_complete: !isCurrentlyDone,
+      }),
     })
       .then((r) => r.json())
       .then((data) => {
         if (!data.ok) return;
-        btn.classList.toggle('is-done', data.is_completed);
-        const title = btn.closest('.icp-task-row').querySelector('.icp-task-title');
-        title.classList.toggle('is-done', data.is_completed);
+        btn.classList.toggle('is-completed', data.is_completed);
+        btn.textContent = data.is_completed ? '✓ Completed' : 'Mark as Completed';
+
+        const pill = document.getElementById('status-pill-' + taskId);
+        if (pill) {
+          pill.classList.toggle('is-completed', data.is_completed);
+          pill.classList.toggle('is-progress', !data.is_completed);
+          pill.textContent = data.is_completed ? '✓ Completed' : 'In Progress';
+        }
+
         const pct = data.total_count ? Math.round((data.completed_count / data.total_count) * 100) : 0;
         const bar = document.getElementById('task-progress-bar');
         if (bar) bar.style.width = pct + '%';

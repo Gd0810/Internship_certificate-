@@ -12,13 +12,19 @@
 
   <div class="icp-card">
     <table class="icp-table">
-      <thead><tr><th>#</th><th>Title</th><th>Description</th><th></th></tr></thead>
+      <thead><tr><th>Module</th><th>Title</th><th>Details</th><th></th></tr></thead>
       <tbody>
         {% for task in tasks %}
         <tr>
-          <td>{{ task.order }}</td>
-          <td>{{ task.title }}</td>
-          <td style="color:var(--c-muted);">{{ task.description|truncatewords:14 }}</td>
+          <td><strong style="color:var(--c-accent-ink);">Module {{ task.module_number }}</strong><br><span style="font-size:0.78rem; color:var(--c-muted);">Order: {{ task.order }}</span></td>
+          <td>
+            <strong>{{ task.title }}</strong><br>
+            <span style="font-size:0.8rem; color:var(--c-muted);">{{ task.duration_info }}</span>
+          </td>
+          <td style="color:var(--c-muted); font-size:0.85rem;">
+            {{ task.body_points|length }} body point{{ task.body_points|length|pluralize }}<br>
+            {{ task.deliverables|length }} deliverable{{ task.deliverables|length|pluralize }}
+          </td>
           <td style="text-align:right;">
             <a href="{% url 'company:task_edit' track.pk task.pk %}" class="icp-btn icp-btn--ghost icp-btn--sm" style="margin-right:8px;">Edit</a>
             <form method="post" action="{% url 'company:task_delete' track.pk task.pk %}" style="display:inline;" onsubmit="return confirm('Delete this task module?');">

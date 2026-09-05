@@ -76,10 +76,22 @@ def dashboard(request):
     progress_map = {
         p.task_id: p for p in UserTaskProgress.objects.filter(profile=profile)
     }
-    task_rows = [
-        {"task": t, "completed": progress_map.get(t.id).is_completed if t.id in progress_map else False}
-        for t in tasks
-    ]
+    task_rows = []
+    for t in tasks:
+        p = progress_map.get(t.id)
+        sub_data = p.submission_data if (p and p.submission_data) else {}
+        deliverable_items = []
+        for deliv in t.deliverables:
+            deliverable_items.append({
+                "name": deliv,
+                "value": sub_data.get(deliv, "")
+            })
+        task_rows.append({
+            "task": t,
+            "completed": p.is_completed if p else False,
+            "submission_data": sub_data,
+            "deliverable_items": deliverable_items,
+        })
 
     context = {
         "profile": profile,
@@ -110,6 +122,49 @@ def toggle_task(request, task_id):
         "ok": True,
         "task_id": task.id,
         "is_completed": progress.is_completed,
+        "completed_count": profile.completed_tasks,
+        "total_count": profile.total_tasks,
+        "all_completed": profile.all_tasks_completed,
+    })
+
+
+@login_required
+@require_POST
+def save_submission(request, task_id):
+    profile = getattr(request.user, "intern_profile", None)
+    if profile is None:
+        return HttpResponseBadRequest("No profile.")
+
+    try:
+        task = TaskModule.objects.get(id=task_id, track=profile.track)
+    except TaskModule.DoesNotExist:
+        return HttpResponseBadRequest("Invalid task.")
+
+    try:
+        body = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        body = request.POST
+
+    deliverables_submitted = body.get("deliverables", {})
+    mark_complete = body.get("mark_complete", None)
+
+    progress, _ = UserTaskProgress.objects.get_or_create(profile=profile, task=task)
+    if deliverables_submitted:
+        current_sub = progress.submission_data or {}
+        current_sub.update(deliverables_submitted)
+        progress.submission_data = current_sub
+
+    if mark_complete is not None:
+        progress.is_completed = bool(mark_complete)
+        progress.completed_at = timezone.now() if progress.is_completed else None
+
+    progress.save()
+
+    return JsonResponse({
+        "ok": True,
+        "task_id": task.id,
+        "is_completed": progress.is_completed,
+        "submission_data": progress.submission_data,
         "completed_count": profile.completed_tasks,
         "total_count": profile.total_tasks,
         "all_completed": profile.all_tasks_completed,

@@ -3,10 +3,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from accounts import views as accounts_views
+
 urlpatterns = [
     path("connect/", admin.site.urls),
     path("", include("core.urls")),
     path("accounts/", include("accounts.urls")),
+    path("dashboard/", accounts_views.dashboard, name="dashboard"),
     path("certificates/", include("certificates.urls")),
     path("payments/", include("payments.urls")),
     # Hidden company portal — the URL prefix is read from settings, not

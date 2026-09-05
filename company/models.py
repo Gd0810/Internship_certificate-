@@ -39,26 +39,43 @@ class TaskModule(models.Model):
     """One learning/task unit within a track. Order controls display sequence."""
 
     track = models.ForeignKey(InternshipTrack, on_delete=models.CASCADE, related_name="task_modules")
+    module_number = models.PositiveIntegerField(default=1, help_text="Module sequence number, e.g. 1 for Module 1")
     title = models.CharField(max_length=160)
-    description = models.TextField()
+    duration_info = models.CharField(max_length=160, blank=True, default="Day 1 – Day 5 · High priority")
+    description = models.TextField(blank=True, help_text="General summary or notes")
+    body_points = models.JSONField(default=list, blank=True, help_text="List of bullet points for 'What You'll Do'")
+    deliverables = models.JSONField(default=list, blank=True, help_text="List of deliverable field labels expected from interns")
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["track", "order", "id"]
+        ordering = ["track", "module_number", "order", "id"]
 
     def __str__(self):
-        return f"{self.track.name} · {self.title}"
+        return f"{self.track.name} · Module {self.module_number}: {self.title}"
+
+    @property
+    def body_points_text(self):
+        if isinstance(self.body_points, list):
+            return "\n".join(self.body_points)
+        return str(self.body_points or "")
+
+    @property
+    def deliverables_text(self):
+        if isinstance(self.deliverables, list):
+            return "\n".join(self.deliverables)
+        return str(self.deliverables or "")
 
 
 class UserTaskProgress(models.Model):
-    """Tracks whether a given intern has completed a given task module."""
+    """Tracks whether a given intern has completed a given task module and stores submission links."""
 
     profile = models.ForeignKey(
         "accounts.InternProfile", on_delete=models.CASCADE, related_name="task_progress"
     )
     task = models.ForeignKey(TaskModule, on_delete=models.CASCADE, related_name="progress_records")
     is_completed = models.BooleanField(default=False)
+    submission_data = models.JSONField(default=dict, blank=True, help_text="Submitted deliverable links/text from intern")
     completed_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:

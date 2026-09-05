@@ -7,11 +7,25 @@
   <div class="icp-card" style="padding:30px;">
     <form method="post">
       {% csrf_token %}
-      <div class="icp-field"><label>Title</label>{{ form.title }}</div>
-      <div class="icp-field"><label>Description / instructions</label>{{ form.description }}</div>
-      <div class="icp-field"><label>Display order</label>{{ form.order }}</div>
-      <button type="submit" class="icp-btn icp-btn--primary">Save task module</button>
-      <a href="{% url 'company:task_list' track.pk %}" class="icp-btn icp-btn--ghost">Cancel</a>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <div class="icp-field"><label>Module Number</label>{{ form.module_number }}</div>
+        <div class="icp-field"><label>Display Order</label>{{ form.order }}</div>
+      </div>
+      <div class="icp-field"><label>Module Title</label>{{ form.title }}</div>
+      <div class="icp-field"><label>Duration / Timeline Subtitle</label>{{ form.duration_info }}
+        <span style="font-size:0.8rem; color:var(--c-muted);">e.g. "Day 1 – Day 5 · High priority"</span>
+      </div>
+      <div class="icp-field"><label>Module Body Content / What You'll Do (1 point per line)</label>{{ form.body_points_input }}
+        <span style="font-size:0.8rem; color:var(--c-muted);">Enter each bullet point on a new line. You can add as many points as needed!</span>
+      </div>
+      <div class="icp-field"><label>Submission Deliverables (1 item per line)</label>{{ form.deliverables_input }}
+        <span style="font-size:0.8rem; color:var(--c-muted);">Enter each required deliverable label on a new line (e.g. "Learning Notes Link", "LinkedIn Post Link").</span>
+      </div>
+      <div class="icp-field"><label>Optional Notes / Additional Summary</label>{{ form.description }}</div>
+      <div style="display:flex; gap:12px; margin-top:20px;">
+        <button type="submit" class="icp-btn icp-btn--primary">Save task module</button>
+        <a href="{% url 'company:task_list' track.pk %}" class="icp-btn icp-btn--ghost">Cancel</a>
+      </div>
     </form>
   </div>
 </section>
