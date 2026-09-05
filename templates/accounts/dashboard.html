@@ -152,14 +152,19 @@
         margin-bottom: 8px;
       }
       .icp-mod-bullets {
-        padding-left: 20px;
-        margin: 0;
+        list-style-type: disc !important;
+        padding-left: 22px !important;
+        margin: 8px 0 0 0;
         color: #334155;
         font-size: 0.92rem;
         line-height: 1.6;
       }
       .icp-mod-bullets li {
         margin-bottom: 6px;
+        padding-left: 4px;
+      }
+      .icp-mod-bullets li::marker {
+        color: #0f172a;
       }
       .icp-mod-chips {
         display: flex;
@@ -217,6 +222,75 @@
       .icp-btn-toggle-comp:hover {
         opacity: 0.95;
       }
+
+      /* Modal Dialog Styling */
+      .icp-modal-backdrop {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(4px);
+        z-index: 99999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      .icp-modal-dialog {
+        background: #ffffff;
+        border-radius: 28px;
+        max-width: 500px;
+        width: 100%;
+        padding: 34px 38px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        animation: icpModalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        text-align: left;
+      }
+      @keyframes icpModalPop {
+        from { opacity: 0; transform: scale(0.95) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .icp-modal-title {
+        font-size: 1.55rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 6px;
+      }
+      .icp-modal-subtitle {
+        font-size: 0.94rem;
+        color: #64748b;
+        margin: 0 0 24px;
+        line-height: 1.45;
+      }
+      .icp-modal-btn-cancel {
+        flex: 1;
+        background: #f1f5f9;
+        color: #334155;
+        border: none;
+        padding: 14px 20px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      .icp-modal-btn-cancel:hover {
+        background: #e2e8f0;
+      }
+      .icp-modal-btn-submit {
+        flex: 1;
+        background: #881337;
+        color: #ffffff;
+        border: none;
+        padding: 14px 20px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      .icp-modal-btn-submit:hover {
+        background: #9f1239;
+      }
       </style>
 
       <div>
@@ -260,37 +334,55 @@
                 <span class="icp-chip">{{ deliv.name }}</span>
               {% endfor %}
             </div>
-
-            <form class="icp-mod-sub-form" data-task-id="{{ row.task.id }}" style="margin-top:14px; display:flex; flex-direction:column; gap:10px;">
-              {% for deliv in row.deliverable_items %}
-                <div>
-                  <input type="text" class="icp-sub-input"
-                         data-deliv-name="{{ deliv.name }}"
-                         placeholder="{{ deliv.name }}"
-                         value="{{ deliv.value }}"
-                         style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; padding:11px 14px; font-size:0.9rem; width:100%; box-sizing:border-box; color:#0f172a;">
-                </div>
-              {% endfor %}
-
-              <div style="display:flex; flex-direction:column; gap:10px; margin-top:14px;">
-                <button type="button" class="icp-btn-edit-sub" data-task-save="{{ row.task.id }}">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:middle; margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                  Edit Submission
-                </button>
-                <button type="button" class="icp-btn-toggle-comp {% if row.completed %}is-completed{% endif %}" data-task-complete="{{ row.task.id }}" id="btn-complete-{{ row.task.id }}">
-                  {% if row.completed %}✓ Completed{% else %}Mark as Completed{% endif %}
-                </button>
-              </div>
-            </form>
           </div>
-          {% else %}
-          <div style="margin-top:20px;">
+          {% endif %}
+
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+            {% if row.task.deliverables %}
+            <button type="button" class="icp-btn-edit-sub" data-open-modal="{{ row.task.id }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:middle; margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Edit Submission
+            </button>
+            {% endif %}
             <button type="button" class="icp-btn-toggle-comp {% if row.completed %}is-completed{% endif %}" data-task-complete="{{ row.task.id }}" id="btn-complete-{{ row.task.id }}">
               {% if row.completed %}✓ Completed{% else %}Mark as Completed{% endif %}
             </button>
           </div>
-          {% endif %}
         </div>
+
+        <!-- Deliverables Submission Modal -->
+        {% if row.task.deliverables %}
+        <div class="icp-modal-backdrop" id="modal-{{ row.task.id }}" style="display:none;">
+          <div class="icp-modal-dialog">
+            <h2 class="icp-modal-title">Submit Module Deliverables</h2>
+            <p class="icp-modal-subtitle">Provide the required links for: <strong style="color: #881337;">{{ row.task.title }}</strong></p>
+
+            <form class="icp-modal-form" data-task-id="{{ row.task.id }}">
+              {% for deliv in row.deliverable_items %}
+                <div style="margin-bottom:18px; text-align:left;">
+                  <label style="font-weight:700; color:#334155; font-size:0.92rem; margin-bottom:6px; display:block;">{{ deliv.name }} *</label>
+                  <input type="text" class="icp-modal-sub-input"
+                         data-deliv-name="{{ deliv.name }}"
+                         placeholder="https://..."
+                         value="{{ deliv.value }}"
+                         style="width:100%; padding:13px 16px; border:1.5px solid #cbd5e1; border-radius:14px; font-size:0.92rem; color:#0f172a; box-sizing:border-box; background:#ffffff; outline:none; transition:border-color 0.15s ease;">
+                </div>
+              {% endfor %}
+
+              <div style="display:flex; gap:8px; font-size:0.86rem; color:#475569; margin:6px 0 24px; text-align:left;">
+                <span style="color:#0284c7; font-weight:700;">Tip:</span>
+                <span>Please make sure to tag <strong style="color:#0284c7;">Credentia</strong> in your post.</span>
+              </div>
+
+              <div style="display:flex; gap:14px; margin-top:20px;">
+                <button type="button" class="icp-modal-btn-cancel" data-close-modal="{{ row.task.id }}">Cancel</button>
+                <button type="button" class="icp-modal-btn-submit" data-task-save="{{ row.task.id }}">Submit Work</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        {% endif %}
+
         {% empty %}
         <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No task modules published for this track yet.</div>
         {% endfor %}
@@ -343,14 +435,38 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
-// --- Task submission saving & completion toggling ---
+// --- Modal Dialog & Task Submission Handling ---
+document.querySelectorAll('[data-open-modal]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    const taskId = btn.getAttribute('data-open-modal');
+    const modal = document.getElementById('modal-' + taskId);
+    if (modal) modal.style.display = 'flex';
+  });
+});
+
+document.querySelectorAll('[data-close-modal]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    const taskId = btn.getAttribute('data-close-modal');
+    const modal = document.getElementById('modal-' + taskId);
+    if (modal) modal.style.display = 'none';
+  });
+});
+
+document.querySelectorAll('.icp-modal-backdrop').forEach(function (backdrop) {
+  backdrop.addEventListener('click', function (e) {
+    if (e.target === backdrop) {
+      backdrop.style.display = 'none';
+    }
+  });
+});
+
 document.querySelectorAll('[data-task-save]').forEach(function (btn) {
   btn.addEventListener('click', function () {
     const taskId = btn.getAttribute('data-task-save');
-    const card = btn.closest('.icp-mod-card');
+    const modal = document.getElementById('modal-' + taskId);
     const deliverables = {};
-    if (card) {
-      card.querySelectorAll('.icp-sub-input').forEach(function (input) {
+    if (modal) {
+      modal.querySelectorAll('.icp-modal-sub-input').forEach(function (input) {
         const delivName = input.getAttribute('data-deliv-name');
         if (delivName) {
           deliverables[delivName] = input.value.trim();
@@ -359,8 +475,8 @@ document.querySelectorAll('[data-task-save]').forEach(function (btn) {
     }
 
     btn.disabled = true;
-    const origHtml = btn.innerHTML;
-    btn.textContent = 'Saving...';
+    const origText = btn.textContent;
+    btn.textContent = 'Submitting...';
 
     fetch(`/accounts/tasks/${taskId}/submit/`, {
       method: 'POST',
@@ -373,12 +489,13 @@ document.querySelectorAll('[data-task-save]').forEach(function (btn) {
       .then((r) => r.json())
       .then((data) => {
         btn.disabled = false;
-        btn.innerHTML = origHtml;
+        btn.textContent = origText;
         if (data.ok) {
-          btn.innerHTML = '✓ Saved!';
+          btn.textContent = '✓ Submitted!';
           setTimeout(function () {
-            btn.innerHTML = origHtml;
-          }, 2000);
+            btn.textContent = origText;
+            if (modal) modal.style.display = 'none';
+          }, 800);
         }
       });
   });
@@ -387,10 +504,10 @@ document.querySelectorAll('[data-task-save]').forEach(function (btn) {
 document.querySelectorAll('[data-task-complete]').forEach(function (btn) {
   btn.addEventListener('click', function () {
     const taskId = btn.getAttribute('data-task-complete');
-    const card = btn.closest('.icp-mod-card');
+    const modal = document.getElementById('modal-' + taskId);
     const deliverables = {};
-    if (card) {
-      card.querySelectorAll('.icp-sub-input').forEach(function (input) {
+    if (modal) {
+      modal.querySelectorAll('.icp-modal-sub-input').forEach(function (input) {
         const delivName = input.getAttribute('data-deliv-name');
         if (delivName) {
           deliverables[delivName] = input.value.trim();
