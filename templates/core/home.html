@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "core/_public_nav.html" %}
+
+<section class="icp-hero">
+  <div class="icp-shell">
+    <span class="icp-eyebrow">Internship certification, done properly</span>
+    <h1>Real internship work, backed by a certificate employers can verify.</h1>
+    <p class="lead">Pick a track, work through the task modules a real company set for it, and unlock a signed offer letter and completion certificate — no busywork, no guesswork.</p>
+    <div style="margin-top:32px; display:flex; gap:14px;">
+      <a href="{% url 'accounts:register' %}" class="icp-btn icp-btn--primary">Start an internship</a>
+      <a href="{% url 'core:track_list' %}" class="icp-btn icp-btn--ghost">Browse tracks</a>
+    </div>
+    <div class="icp-hero__stats">
+      <div class="icp-hero__stat"><b>{{ featured_tracks|length }}</b><span>active tracks</span></div>
+      <div class="icp-hero__stat"><b>Task-based</b><span>progress, not attendance</span></div>
+      <div class="icp-hero__stat"><b>Verified</b><span>certificate IDs</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="icp-shell" style="padding-bottom: 80px;">
+  <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:24px;">
+    <h2 style="font-size:1.5rem;">Featured tracks</h2>
+    <a href="{% url 'core:track_list' %}" style="font-size:0.9rem; color:var(--c-accent-ink);">View all →</a>
+  </div>
+  {% if featured_tracks %}
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
+    {% for track in featured_tracks %}
+    <a href="{% url 'core:track_detail' track.slug %}" class="icp-card icp-card--track" style="display:block;">
+      <span class="icp-eyebrow">{{ track.task_modules.count }} task module{{ track.task_modules.count|pluralize }}</span>
+      <h3 style="font-size:1.2rem; margin:8px 0 10px;">{{ track.name }}</h3>
+      <p style="color:var(--c-ink-soft); font-size:0.9rem; line-height:1.55; margin:0 0 18px;">{{ track.description|truncatewords:20 }}</p>
+      <span style="font-weight:600; color:var(--c-charcoal);">₹{{ track.price }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No tracks published yet — check back soon.</div>
+  {% endif %}
+</section>
+
+{% include "core/_footer.html" %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "core/_public_nav.html" %}
+
+<section class="icp-shell" style="padding: 56px 0 90px; max-width: 820px;">
+  <span class="icp-eyebrow">{{ module_count }} task module{{ module_count|pluralize }} · ₹{{ track.price }}</span>
+  <h1 style="font-size:2.1rem; margin:12px 0 20px;">{{ track.name }}</h1>
+  <p style="color:var(--c-ink-soft); line-height:1.7; font-size:1.02rem;">{{ track.description|linebreaksbr }}</p>
+
+  <div class="icp-card" style="padding:28px; margin-top:36px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+    <div>
+      <div style="font-family:var(--font-display); font-size:1.6rem; color:var(--c-charcoal);">₹{{ track.price }}</div>
+      <div style="color:var(--c-muted); font-size:0.85rem;">Charged only when you're ready to unlock your certificate</div>
+    </div>
+    <a href="{% url 'accounts:register' %}" class="icp-btn icp-btn--primary">Apply for this track</a>
+  </div>
+</section>
+
+{% include "core/_footer.html" %}
+{% endblock %}

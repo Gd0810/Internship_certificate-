@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "core/_public_nav.html" %}
+
+<section class="icp-shell" style="padding: 56px 0 80px;">
+  <span class="icp-eyebrow">All programs</span>
+  <h1 style="font-size:2rem; margin:10px 0 36px;">Internship tracks</h1>
+
+  {% if page_obj.object_list %}
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
+    {% for track in page_obj %}
+    <a href="{% url 'core:track_detail' track.slug %}" class="icp-card icp-card--track" style="display:block;">
+      <span class="icp-eyebrow">{{ track.task_modules.count }} task module{{ track.task_modules.count|pluralize }}</span>
+      <h3 style="font-size:1.2rem; margin:8px 0 10px;">{{ track.name }}</h3>
+      <p style="color:var(--c-ink-soft); font-size:0.9rem; line-height:1.55; margin:0 0 18px;">{{ track.description|truncatewords:20 }}</p>
+      <span style="font-weight:600; color:var(--c-charcoal);">₹{{ track.price }}</span>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if page_obj.has_other_pages %}
+  <div style="display:flex; gap:10px; justify-content:center; margin-top:44px;">
+    {% if page_obj.has_previous %}<a class="icp-btn icp-btn--ghost icp-btn--sm" href="?page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
+    <span style="align-self:center; color:var(--c-muted); font-size:0.9rem;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}<a class="icp-btn icp-btn--ghost icp-btn--sm" href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+  </div>
+  {% endif %}
+  {% else %}
+  <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No tracks published yet — check back soon.</div>
+  {% endif %}
+</section>
+
+{% include "core/_footer.html" %}
+{% endblock %}

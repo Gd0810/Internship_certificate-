@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "company/_nav.html" %}
+<section class="icp-shell" style="padding: 44px 0 80px; max-width:640px;">
+  <span class="icp-eyebrow">{{ track.name }}</span>
+  <h1 style="font-size:1.6rem; margin:8px 0 26px;">{{ mode }} task module</h1>
+  <div class="icp-card" style="padding:30px;">
+    <form method="post">
+      {% csrf_token %}
+      <div class="icp-field"><label>Title</label>{{ form.title }}</div>
+      <div class="icp-field"><label>Description / instructions</label>{{ form.description }}</div>
+      <div class="icp-field"><label>Display order</label>{{ form.order }}</div>
+      <button type="submit" class="icp-btn icp-btn--primary">Save task module</button>
+      <a href="{% url 'company:task_list' track.pk %}" class="icp-btn icp-btn--ghost">Cancel</a>
+    </form>
+  </div>
+</section>
+{% endblock %}

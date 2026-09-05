@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="icp-dash">
+  <aside class="icp-dash__side">
+    <a href="{% url 'core:home' %}" class="icp-brand"><span class="icp-brand__mark">C</span> Credentia</a>
+
+    <div class="icp-dash__profile">
+      <span class="icp-avatar">{{ profile.full_name|first|upper }}</span>
+      <div>
+        <div style="color:#fff; font-weight:500;">{{ profile.full_name }}</div>
+        <div style="color:#9c9a96;">{{ profile.track.name }}</div>
+      </div>
+    </div>
+
+    <a href="?tab=dashboard" class="icp-tab {% if active_tab == 'dashboard' %}is-active{% endif %}">
+      <span class="icp-tab__dot"></span> Dashboard
+    </a>
+    <a href="?tab=offer-letter" class="icp-tab {% if active_tab == 'offer-letter' %}is-active{% endif %}">
+      <span class="icp-tab__dot"></span> Offer Letter
+    </a>
+    <a href="?tab=task" class="icp-tab {% if active_tab == 'task' %}is-active{% endif %}">
+      <span class="icp-tab__dot"></span> Task
+    </a>
+    <a href="?tab=certificate" class="icp-tab {% if active_tab == 'certificate' %}is-active{% endif %}">
+      <span class="icp-tab__dot"></span> Certificate
+    </a>
+
+    <form method="post" action="{% url 'accounts:logout' %}" style="margin-top:32px;">
+      {% csrf_token %}
+      <button type="submit" class="icp-tab" style="width:100%; border:none; background:none; cursor:pointer; text-align:left;">
+        <span class="icp-tab__dot"></span> Log out
+      </button>
+    </form>
+  </aside>
+
+  <main class="icp-dash__main">
+    {% if messages %}
+      {% for message in messages %}<div class="icp-alert icp-alert--{{ message.tags }}">{{ message }}</div>{% endfor %}
+    {% endif %}
+
+    {% if active_tab == 'dashboard' %}
+      <span class="icp-eyebrow">Overview</span>
+      <h1 style="font-size:1.7rem; margin:8px 0 4px;">Welcome back, {{ profile.full_name }}</h1>
+      <p style="color:var(--c-muted); margin-bottom:0;">{{ profile.track.name }} · {{ profile.college_name }}</p>
+
+      <div class="icp-stat-grid">
+        <div class="icp-card icp-stat">
+          <b>{{ profile.completed_tasks }}/{{ profile.total_tasks }}</b>
+          <span>Task modules completed</span>
+        </div>
+        <div class="icp-card icp-stat">
+          <b>{% if profile.has_paid %}Unlocked{% else %}Locked{% endif %}</b>
+          <span>Certificate status</span>
+        </div>
+        <div class="icp-card icp-stat">
+          <b>₹{{ profile.track.price }}</b>
+          <span>Certificate fee</span>
+        </div>
+      </div>
+
+      <div class="icp-card" style="padding:26px 28px; margin-bottom:24px;">
+        <h3 style="font-size:1.05rem; margin:0 0 14px;">Your progress</h3>
+        <div class="icp-progress"><div class="icp-progress__bar" style="width:{{ profile.progress_percent }}%;"></div></div>
+        <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:0.85rem; color:var(--c-muted);">
+          <span>{{ profile.progress_percent }}% complete</span>
+          <span>{{ profile.track.task_modules.count }} module{{ profile.track.task_modules.count|pluralize }} total</span>
+        </div>
+      </div>
+
+      <div class="icp-card" style="padding:26px 28px;">
+        <h3 style="font-size:1.05rem; margin:0 0 16px;">Your details</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px 24px; font-size:0.92rem;">
+          <div><span style="color:var(--c-muted);">Intern ID</span><br><strong style="color:var(--c-accent-ink); font-family:monospace;">{{ profile.intern_id }}</strong></div>
+          <div><span style="color:var(--c-muted);">Full name</span><br>{{ profile.full_name }}</div>
+          <div><span style="color:var(--c-muted);">Email</span><br>{{ profile.user.email }}</div>
+          <div><span style="color:var(--c-muted);">College</span><br>{{ profile.college_name }}</div>
+          <div><span style="color:var(--c-muted);">Degree</span><br>{{ profile.degree }}</div>
+          <div><span style="color:var(--c-muted);">Mobile</span><br>{{ profile.mobile_number }}</div>
+          <div><span style="color:var(--c-muted);">Track</span><br>{{ profile.track.name }}</div>
+        </div>
+      </div>
+
+    {% elif active_tab == 'offer-letter' %}
+      <span class="icp-eyebrow">Document</span>
+      <h1 style="font-size:1.7rem; margin:8px 0 20px;">Offer Letter</h1>
+      <div class="icp-doc-preview">
+        <div class="icp-doc-preview__frame">
+          <iframe src="{% url 'certificates:offer_letter_preview' %}" title="Offer letter preview"></iframe>
+        </div>
+        <div style="padding:18px 24px; display:flex; justify-content:flex-end;">
+          <a href="{% url 'certificates:offer_letter_download' %}" class="icp-btn icp-btn--dark">Download PDF</a>
+        </div>
+      </div>
+
+    {% elif active_tab == 'task' %}
+      <span class="icp-eyebrow">{{ profile.completed_tasks }} of {{ profile.total_tasks }} complete</span>
+      <h1 style="font-size:1.7rem; margin:8px 0 20px;">Task Modules</h1>
+      <div class="icp-progress" style="margin-bottom:24px;"><div class="icp-progress__bar" id="task-progress-bar" style="width:{{ profile.progress_percent }}%;"></div></div>
+
+      <div class="icp-card">
+        {% for row in task_rows %}
+        <div class="icp-task-row" data-task-id="{{ row.task.id }}">
+          <button type="button" class="icp-check {% if row.completed %}is-done{% endif %}" data-task-toggle="{{ row.task.id }}" aria-label="Mark task completed">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <div>
+            <div class="icp-task-title {% if row.completed %}is-done{% endif %}">{{ row.task.title }}</div>
+            <div class="icp-task-desc">{{ row.task.description }}</div>
+          </div>
+        </div>
+        {% empty %}
+        <div style="padding:40px; text-align:center; color:var(--c-muted);">No task modules published for this track yet.</div>
+        {% endfor %}
+      </div>
+
+      <div id="all-done-banner" class="icp-alert icp-alert--success" style="display:{% if profile.all_tasks_completed %}block{% else %}none{% endif %}; margin-top:20px;">
+        All task modules complete — head to the Certificate tab to unlock your certificate.
+        <a href="?tab=certificate" style="font-weight:600; margin-left:6px;">Go there →</a>
+      </div>
+
+    {% elif active_tab == 'certificate' %}
+      <span class="icp-eyebrow">Document</span>
+      <h1 style="font-size:1.7rem; margin:8px 0 20px;">Certificate</h1>
+
+      {% if profile.has_paid %}
+        <div class="icp-doc-preview">
+          <div class="icp-doc-preview__frame">
+            <iframe src="{% url 'certificates:certificate_preview' %}" title="Certificate preview"></iframe>
+          </div>
+          <div style="padding:18px 24px; display:flex; justify-content:space-between; align-items:center;">
+            <span class="icp-badge icp-badge--paid"><span class="icp-dot"></span>Certificate ID: {{ profile.certificate_id }}</span>
+            <a href="{% url 'certificates:certificate_download' %}" class="icp-btn icp-btn--dark">Download PDF</a>
+          </div>
+        </div>
+      {% elif not profile.all_tasks_completed %}
+        <div class="icp-card icp-locked-panel">
+          <span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Locked</span>
+          <h3 style="margin:16px 0 8px;">Finish your task modules first</h3>
+          <p style="color:var(--c-muted); max-width:44ch; margin:0 auto 20px;">You've completed {{ profile.completed_tasks }} of {{ profile.total_tasks }} modules for {{ profile.track.name }}.</p>
+          <a href="?tab=task" class="icp-btn icp-btn--ghost">Go to Task tab</a>
+        </div>
+      {% else %}
+        <div class="icp-card icp-locked-panel">
+          <span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Payment required</span>
+          <div class="icp-price">₹{{ profile.track.price }}</div>
+          <p style="color:var(--c-muted); max-width:44ch; margin:0 auto 26px;">Unlock your {{ profile.track.name }} certificate with a one-time payment via Razorpay.</p>
+          <button id="pay-btn" class="icp-btn icp-btn--primary">Pay &amp; Unlock Certificate</button>
+          <p id="pay-error" class="icp-error" style="display:none; margin-top:14px;"></p>
+        </div>
+      {% endif %}
+    {% endif %}
+  </main>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+function getCookie(name) {
+  const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return match ? match.pop() : '';
+}
+const csrftoken = getCookie('csrftoken');
+
+// --- Task completion toggling (AJAX, no full reload) ---
+document.querySelectorAll('[data-task-toggle]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    const taskId = btn.getAttribute('data-task-toggle');
+    fetch(`/accounts/tasks/${taskId}/toggle/`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': csrftoken },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.ok) return;
+        btn.classList.toggle('is-done', data.is_completed);
+        const title = btn.closest('.icp-task-row').querySelector('.icp-task-title');
+        title.classList.toggle('is-done', data.is_completed);
+        const pct = data.total_count ? Math.round((data.completed_count / data.total_count) * 100) : 0;
+        const bar = document.getElementById('task-progress-bar');
+        if (bar) bar.style.width = pct + '%';
+        const banner = document.getElementById('all-done-banner');
+        if (banner) banner.style.display = data.all_completed ? 'block' : 'none';
+      });
+  });
+});
+
+// --- Razorpay checkout flow ---
+const payBtn = document.getElementById('pay-btn');
+if (payBtn) {
+  payBtn.addEventListener('click', function () {
+    payBtn.disabled = true;
+    payBtn.textContent = 'Starting payment…';
+    const errorEl = document.getElementById('pay-error');
+    errorEl.style.display = 'none';
+
+    fetch('/payments/create-order/', { method: 'POST', headers: { 'X-CSRFToken': csrftoken } })
+      .then((r) => r.json())
+      .then((order) => {
+        if (!order.ok) throw new Error(order.error || 'Could not start payment.');
+
+        const rzp = new Razorpay({
+          key: order.key_id,
+          amount: order.amount,
+          currency: order.currency,
+          name: order.name,
+          order_id: order.order_id,
+          prefill: { name: order.profile_name, email: order.email, contact: order.contact },
+          theme: { color: '#F80101' },
+          handler: function (response) {
+            fetch('/payments/verify/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+              body: JSON.stringify(response),
+            })
+              .then((r) => r.json())
+              .then((result) => {
+                if (result.ok) {
+                  window.location.href = '?tab=certificate';
+                } else {
+                  errorEl.textContent = result.error || 'Payment verification failed.';
+                  errorEl.style.display = 'block';
+                  payBtn.disabled = false;
+                  payBtn.textContent = 'Pay & Unlock Certificate';
+                }
+              });
+          },
+          modal: {
+            ondismiss: function () {
+              payBtn.disabled = false;
+              payBtn.textContent = 'Pay & Unlock Certificate';
+            },
+          },
+        });
+        rzp.open();
+      })
+      .catch((err) => {
+        errorEl.textContent = err.message;
+        errorEl.style.display = 'block';
+        payBtn.disabled = false;
+        payBtn.textContent = 'Pay & Unlock Certificate';
+      });
+  });
+}
+</script>
+{% endblock %}

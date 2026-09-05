@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "company/_nav.html" %}
+<section class="icp-shell" style="padding: 44px 0 80px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+    <div>
+      <span class="icp-eyebrow"><a href="{% url 'company:track_list' %}" style="color:var(--c-accent-ink);">Tracks</a> / {{ track.name }}</span>
+      <h1 style="font-size:1.8rem; margin:8px 0 0;">Task modules</h1>
+    </div>
+    <a href="{% url 'company:task_create' track.pk %}" class="icp-btn icp-btn--primary">Add task module</a>
+  </div>
+
+  <div class="icp-card">
+    <table class="icp-table">
+      <thead><tr><th>#</th><th>Title</th><th>Description</th><th></th></tr></thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr>
+          <td>{{ task.order }}</td>
+          <td>{{ task.title }}</td>
+          <td style="color:var(--c-muted);">{{ task.description|truncatewords:14 }}</td>
+          <td style="text-align:right;">
+            <a href="{% url 'company:task_edit' track.pk task.pk %}" class="icp-btn icp-btn--ghost icp-btn--sm" style="margin-right:8px;">Edit</a>
+            <form method="post" action="{% url 'company:task_delete' track.pk task.pk %}" style="display:inline;" onsubmit="return confirm('Delete this task module?');">
+              {% csrf_token %}<button class="icp-btn icp-btn--danger icp-btn--sm" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center; color:var(--c-muted); padding:30px;">No task modules yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

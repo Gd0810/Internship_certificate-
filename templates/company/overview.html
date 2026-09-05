@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "company/_nav.html" %}
+<section class="icp-shell" style="padding: 44px 0 80px;">
+  <span class="icp-eyebrow">Company dashboard</span>
+  <h1 style="font-size:1.8rem; margin:8px 0 30px;">Overview</h1>
+
+  <div class="icp-stat-grid">
+    <div class="icp-card icp-stat"><b>{{ stats.tracks }}</b><span>Internship tracks</span></div>
+    <div class="icp-card icp-stat"><b>{{ stats.interns }}</b><span>Registered interns</span></div>
+    <div class="icp-card icp-stat"><b>{{ stats.paid }}</b><span>Certificates unlocked</span></div>
+  </div>
+
+  <div class="icp-card" style="margin-top:6px;">
+    <table class="icp-table">
+      <thead><tr><th>Intern</th><th>Track</th><th>Progress</th><th>Certificate</th></tr></thead>
+      <tbody>
+        {% for p in recent_interns %}
+        <tr>
+          <td>{{ p.full_name }}<br><span style="color:var(--c-muted); font-size:0.82rem;">{{ p.user.email }}</span></td>
+          <td>{{ p.track.name }}</td>
+          <td>{{ p.completed_tasks }}/{{ p.total_tasks }}</td>
+          <td>
+            {% if p.has_paid %}<span class="icp-badge icp-badge--paid"><span class="icp-dot"></span>Paid</span>
+            {% else %}<span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Unpaid</span>{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center; color:var(--c-muted); padding:30px;">No interns registered yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

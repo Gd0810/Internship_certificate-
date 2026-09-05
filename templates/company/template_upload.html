@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "company/_nav.html" %}
+<section class="icp-shell" style="padding: 44px 0 80px; max-width:760px;">
+  <span class="icp-eyebrow">Design system</span>
+  <h1 style="font-size:1.8rem; margin:8px 0 10px;">{{ kind }} template</h1>
+  <p style="color:var(--c-muted); margin-bottom:28px; line-height:1.6;">
+    Upload a .zip containing <code>index.html</code> at its root (with your HTML, CSS and JS all in that
+    one file) plus an <code>img/</code> folder for logo, signature, seal and background images. Use
+    placeholders like <code>{% templatetag openvariable %}user_name{% templatetag closevariable %}</code>,
+    <code>{% templatetag openvariable %}track_name{% templatetag closevariable %}</code>,
+    <code>{% templatetag openvariable %}college_name{% templatetag closevariable %}</code>,
+    <code>{% templatetag openvariable %}score{% templatetag closevariable %}</code>,
+    <code>{% templatetag openvariable %}certificate_id{% templatetag closevariable %}</code> and
+    <code>{% templatetag openvariable %}date{% templatetag closevariable %}</code> — they're filled in with
+    real data automatically. Leave "Track" blank to set this as the site-wide default design.
+  </p>
+
+  <div class="icp-card" style="padding:30px; margin-bottom:32px;">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="icp-field"><label>Track (optional)</label>{{ form.track }}</div>
+      <div class="icp-field"><label>Template package (.zip)</label>{{ form.package }}
+        {% for e in form.package.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+      </div>
+      <button type="submit" class="icp-btn icp-btn--primary">Upload &amp; activate</button>
+    </form>
+  </div>
+
+  <h3 style="font-size:1.05rem; margin-bottom:14px;">Recent uploads</h3>
+  <div class="icp-card">
+    <table class="icp-table">
+      <thead><tr><th>Track</th><th>Folder</th><th>Status</th><th>Uploaded</th></tr></thead>
+      <tbody>
+        {% for t in templates %}
+        <tr>
+          <td>{{ t.track.name|default:"Default (all tracks)" }}</td>
+          <td style="font-family:monospace; font-size:0.82rem;">{{ t.folder_path }}</td>
+          <td>{% if t.is_active %}<span class="icp-badge icp-badge--paid"><span class="icp-dot"></span>Active</span>{% else %}<span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Replaced</span>{% endif %}</td>
+          <td style="color:var(--c-muted); font-size:0.85rem;">{{ t.uploaded_at|date:"d M Y, H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center; color:var(--c-muted); padding:30px;">Nothing uploaded yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

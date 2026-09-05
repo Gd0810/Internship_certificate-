@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "core/_public_nav.html" %}
+<div class="icp-auth-shell">
+  <div class="icp-card icp-auth-card icp-auth-card--wide">
+    <span class="icp-eyebrow">Create your account</span>
+    <h1 style="font-size:1.7rem; margin:8px 0 26px;">Start your internship</h1>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="icp-alert icp-alert--error">{{ form.non_field_errors|join:", " }}</div>
+      {% endif %}
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 18px;">
+        <div class="icp-field">
+          <label for="{{ form.full_name.id_for_label }}">Full name</label>
+          {{ form.full_name }}
+          {% for e in form.full_name.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="icp-field">
+          <label for="{{ form.college_name.id_for_label }}">College name</label>
+          {{ form.college_name }}
+          {% for e in form.college_name.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="icp-field">
+          <label for="{{ form.degree.id_for_label }}">Degree</label>
+          {{ form.degree }}
+          {% for e in form.degree.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="icp-field">
+          <label for="{{ form.track.id_for_label }}">Internship track</label>
+          {{ form.track }}
+          {% for e in form.track.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="icp-field">
+          <label for="{{ form.email.id_for_label }}">Email address</label>
+          {{ form.email }}
+          {% for e in form.email.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="icp-field">
+          <label for="{{ form.mobile_number.id_for_label }}">Mobile number</label>
+          {{ form.mobile_number }}
+          {% for e in form.mobile_number.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="icp-field">
+          <label for="{{ form.password.id_for_label }}">Password</label>
+          {{ form.password }}
+          {% for e in form.password.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="icp-field">
+          <label for="{{ form.re_enter_password.id_for_label }}">Re-enter password</label>
+          {{ form.re_enter_password }}
+          {% for e in form.re_enter_password.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+        </div>
+      </div>
+      <button type="submit" class="icp-btn icp-btn--primary" style="width:100%; margin-top:8px;">Create account</button>
+    </form>
+    <p style="text-align:center; margin-top:20px; font-size:0.9rem; color:var(--c-muted);">
+      Already have an account? <a href="{% url 'accounts:login' %}" style="color:var(--c-accent-ink); font-weight:500;">Log in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "company/_nav.html" %}
+<section class="icp-shell" style="padding: 44px 0 80px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+    <div>
+      <span class="icp-eyebrow">Manage</span>
+      <h1 style="font-size:1.8rem; margin:8px 0 0;">Internship tracks</h1>
+    </div>
+    <a href="{% url 'company:track_create' %}" class="icp-btn icp-btn--primary">New track</a>
+  </div>
+
+  <div class="icp-card">
+    <table class="icp-table">
+      <thead><tr><th>Name</th><th>Price</th><th>Tasks</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for track in tracks %}
+        <tr>
+          <td>{{ track.name }}</td>
+          <td>₹{{ track.price }}</td>
+          <td><a href="{% url 'company:task_list' track.pk %}" style="color:var(--c-accent-ink);">{{ track.task_modules.count }} module{{ track.task_modules.count|pluralize }} →</a></td>
+          <td>{% if track.is_active %}<span class="icp-badge icp-badge--paid"><span class="icp-dot"></span>Active</span>{% else %}<span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Hidden</span>{% endif %}</td>
+          <td style="text-align:right;">
+            <a href="{% url 'company:track_edit' track.pk %}" class="icp-btn icp-btn--ghost icp-btn--sm" style="margin-right:8px;">Edit</a>
+            <form method="post" action="{% url 'company:track_delete' track.pk %}" style="display:inline;" onsubmit="return confirm('Delete this track and all its tasks?');">
+              {% csrf_token %}<button class="icp-btn icp-btn--danger icp-btn--sm" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" style="text-align:center; color:var(--c-muted); padding:30px;">No tracks yet — create the first one.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

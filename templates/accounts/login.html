@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "core/_public_nav.html" %}
+<div class="icp-auth-shell">
+  <div class="icp-card icp-auth-card">
+    <span class="icp-eyebrow">Welcome back</span>
+    <h1 style="font-size:1.7rem; margin:8px 0 26px;">Log in</h1>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="icp-alert icp-alert--error">{{ form.non_field_errors|join:", " }}</div>
+      {% endif %}
+      <div class="icp-field">
+        <label for="{{ form.username.id_for_label }}">Email</label>
+        {{ form.username }}
+      </div>
+      <div class="icp-field">
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+      </div>
+      <button type="submit" class="icp-btn icp-btn--primary" style="width:100%;">Log in</button>
+    </form>
+    <p style="text-align:center; margin-top:20px; font-size:0.9rem; color:var(--c-muted);">
+      New here? <a href="{% url 'accounts:register' %}" style="color:var(--c-accent-ink); font-weight:500;">Create an account</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

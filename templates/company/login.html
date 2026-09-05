@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="icp-auth-shell" style="background:var(--c-charcoal); min-height:100vh;">
+  <div class="icp-card icp-auth-card" style="background:#2f2f2d; border-color:#454542;">
+    <span class="icp-eyebrow">Company portal</span>
+    <h1 style="font-size:1.6rem; margin:8px 0 26px; color:#fff;">Sign in</h1>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="icp-alert icp-alert--error">{{ form.non_field_errors|join:", " }}</div>
+      {% endif %}
+      <div class="icp-field">
+        <label style="color:#c9c7c2;" for="{{ form.username.id_for_label }}">Staff email</label>
+        {{ form.username }}
+      </div>
+      <div class="icp-field">
+        <label style="color:#c9c7c2;" for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+      </div>
+      <button type="submit" class="icp-btn icp-btn--primary" style="width:100%;">Sign in</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

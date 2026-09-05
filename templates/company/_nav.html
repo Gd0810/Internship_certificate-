@@ -1,0 +1,14 @@
+<header class="icp-topbar" style="background:var(--c-charcoal); border-color:#454542;">
+  <div class="icp-shell icp-topbar__inner">
+    <a href="{% url 'company:overview' %}" class="icp-brand" style="color:#fff;">
+      <span class="icp-brand__mark" style="background:var(--c-accent);">C</span> Credentia — Company
+    </a>
+    <nav class="icp-nav" style="color:#c9c7c2;">
+      <a href="{% url 'company:overview' %}" style="color:inherit;">Overview</a>
+      <a href="{% url 'company:track_list' %}" style="color:inherit;">Tracks &amp; tasks</a>
+      <a href="{% url 'company:offer_letter_template_upload' %}" style="color:inherit;">Offer letter design</a>
+      <a href="{% url 'company:certificate_template_upload' %}" style="color:inherit;">Certificate design</a>
+      <a href="{% url 'company:logout' %}" class="icp-btn icp-btn--ghost icp-btn--sm" style="color:#fff; border-color:#5a5a57;">Log out</a>
+    </nav>
+  </div>
+</header>

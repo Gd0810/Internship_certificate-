@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "company/_nav.html" %}
+<section class="icp-shell" style="padding: 44px 0 80px; max-width:640px;">
+  <span class="icp-eyebrow">{{ mode }} track</span>
+  <h1 style="font-size:1.6rem; margin:8px 0 26px;">{{ mode }} internship track</h1>
+  <div class="icp-card" style="padding:30px;">
+    <form method="post">
+      {% csrf_token %}
+      <div class="icp-field"><label>Name</label>{{ form.name }}</div>
+      <div class="icp-field"><label>Description</label>{{ form.description }}</div>
+      <div class="icp-field"><label>Certificate price (₹)</label>{{ form.price }}</div>
+      <div class="icp-field" style="display:flex; align-items:center; gap:8px;">{{ form.is_active }} <label style="margin:0;" for="{{ form.is_active.id_for_label }}">Visible on public site</label></div>
+      <button type="submit" class="icp-btn icp-btn--primary">Save track</button>
+      <a href="{% url 'company:track_list' %}" class="icp-btn icp-btn--ghost">Cancel</a>
+    </form>
+  </div>
+</section>
+{% endblock %}
