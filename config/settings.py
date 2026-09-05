@@ -32,7 +32,7 @@ ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", default="127.0.0.1,localhost,test
 
 # The company portal is intentionally reached through an unlisted, random-looking
 # URL prefix rather than a guessable "/company/" path. Override in production via env.
-COMPANY_PORTAL_SLUG = config("COMPANY_PORTAL_SLUG", default="mgmt-9f21")
+COMPANY_PORTAL_SLUG = config("COMPANY_PORTAL_SLUG", default="company/connect")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
