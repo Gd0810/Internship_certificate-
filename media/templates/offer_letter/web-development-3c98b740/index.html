@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counter Offer Letter — {{user_name}}</title>
+<style>
+  :root{
+    --navy:#0b3d63;
+    --blue:#2f7ab8;
+    --light-blue:#9fc9e8;
+    --paper:#ffffff;
+    --text:#26313c;
+    --muted:#5b6b78;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:#e9edf1;
+    font-family:"Segoe UI", Arial, Helvetica, sans-serif;
+    color:#26313c;
+  }
+
+  .page-wrap{
+    display:flex;
+    justify-content:center;
+    padding:36px 16px;
+  }
+
+  .letter{
+    position:relative;
+    width:100%;
+    max-width:840px;
+    background:#ffffff;
+    box-shadow:0 10px 30px rgba(11,61,99,0.15);
+    overflow:hidden;
+    border-radius:2px;
+  }
+
+  /* decorative bars */
+  .bar-top{
+    width:100%;
+    height:16px;
+    display:block;
+  }
+  .bar-bottom{
+    width:100%;
+    height:16px;
+    display:block;
+  }
+  .corner-bottom{
+    position:absolute;
+    right:0;
+    bottom:16px;
+    width:220px;
+    height:auto;
+    pointer-events:none;
+  }
+
+  .content{
+    position:relative;
+    padding:56px 64px 48px;
+    z-index:1;
+  }
+
+  .letterhead{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:44px;
+  }
+  .letterhead img.logo{
+    width:56px;
+    height:auto;
+  }
+  .letterhead .org-name{
+    font-size:20px;
+    font-weight:700;
+    color:#0b3d63;
+    line-height:1.2;
+  }
+
+  h1.title{
+    font-size:38px;
+    color:#2f7ab8;
+    margin:0 0 34px;
+    font-weight:700;
+    letter-spacing:0.2px;
+  }
+
+  .meta-block{
+    font-size:15px;
+    line-height:1.7;
+    margin-bottom:26px;
+  }
+
+  .subject{
+    font-weight:700;
+    margin-bottom:26px;
+    font-size:15px;
+  }
+
+  .salutation{
+    margin-bottom:20px;
+    font-size:15px;
+  }
+
+  p.body-text{
+    font-size:15px;
+    line-height:1.75;
+    margin:0 0 22px;
+    text-align:justify;
+  }
+
+  .highlight{
+    font-weight:700;
+    color:#0b3d63;
+  }
+
+  .closing{
+    margin-top:6px;
+    font-size:15px;
+  }
+
+  .signature-block{
+    margin-top:18px;
+  }
+  .signature-block img.signature{
+    height:60px;
+    display:block;
+    margin-bottom:2px;
+  }
+  .signature-name{
+    font-size:15px;
+    font-weight:700;
+    color:#0b3d63;
+  }
+  .signature-role{
+    font-size:13px;
+    color:#5b6b78;
+  }
+
+  .doc-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-top:40px;
+    padding-top:18px;
+    border-top:1px solid #e2e8ee;
+    font-size:11px;
+    color:#5b6b78;
+    letter-spacing:0.3px;
+  }
+
+  .doc-footer .seal{
+    width:64px;
+    height:64px;
+    opacity:0.9;
+  }
+
+  /* Line that disappears automatically if its placeholder value is empty */
+  .optional-line:empty,
+  .optional-line[data-empty="true"]{
+    display:none;
+  }
+
+  @media (max-width:640px){
+    .content{ padding:34px 22px 30px; }
+    h1.title{ font-size:28px; }
+    .letterhead .org-name{ font-size:17px; }
+  }
+
+  @media print{
+    body{ background:#fff; }
+    .page-wrap{ padding:0; }
+    .letter{ box-shadow:none; border-radius:0; max-width:100%; }
+  }
+</style>
+<style>
+  @page { size: A4 portrait; margin: 10mm 14mm; }
+</style>
+</head>
+<body>
+
+  <div class="page-wrap">
+    <div class="letter" id="letter">
+
+      <!-- top decorative stripe -->
+      <img class="bar-top" src="img/bg-top.svg" alt="">
+
+      <div class="content">
+
+        <!-- Letterhead -->
+        <div class="letterhead">
+          <img class="logo" src="img/logo.svg" alt="{{college_name}} logo">
+          <div class="org-name">{{college_name}}</div>
+        </div>
+
+        <h1 class="title">Counter Offer Letter</h1>
+
+        <div class="meta-block">
+          {{date}}<br>
+          Hiring Manager<br>
+          {{college_name}}
+        </div>
+
+        <div class="subject">
+          Subject: Counter Offer for Employment<span class="optional-line" id="track-suffix"> — {{track_name}}</span>
+        </div>
+
+        <div class="salutation">Dear Hiring Manager,</div>
+
+        <p class="body-text">
+          Thank you for offering me the position of <span id="track-inline">{{track_name}}</span> at {{college_name}}. I sincerely appreciate the opportunity to join your team and am excited about the possibility of contributing to the company's continued success.
+        </p>
+
+        <p class="body-text">
+          After carefully reviewing the offer, I would like to discuss the proposed compensation package. Considering my professional experience, industry knowledge, and the responsibilities of this position, I would like to propose an annual salary of
+          <span class="highlight">${{score}}</span>. I believe this adjustment more accurately reflects the value and expertise I would bring to the role.
+        </p>
+
+        <p class="body-text">
+          I remain very enthusiastic about joining your organization and am confident we can reach a mutually beneficial agreement. Thank you for your time, consideration, and willingness to review my request.
+        </p>
+
+        <p class="body-text">
+          I look forward to your response and hope to begin this new opportunity soon.
+        </p>
+
+        <div class="closing">Sincerely,</div>
+        <div class="signature-block">
+          <img class="signature" src="img/signature.png" alt="Signature">
+          <div class="signature-name">{{user_name}}</div>
+          <div class="signature-role" id="track-role">{{track_name}}</div>
+        </div>
+
+        <div class="doc-footer">
+          <div>Document ID: {{certificate_id}}</div>
+          <img class="seal" src="img/seal.svg" alt="Official seal">
+        </div>
+
+      </div>
+
+      <!-- bottom decorative corner -->
+      <img class="corner-bottom" src="img/bg-bottom.svg" alt="">
+      <img class="bar-bottom" src="img/bg-top.svg" alt="">
+
+    </div>
+  </div>
+
+  <script>
+    // If {{track_name}} was left blank by the templating system, this letter
+    // acts as the site-wide default design: hide every element that only
+    // makes sense when a specific track/role name is supplied.
+    (function () {
+      var isUnfilled = function (text) {
+        return (text || '').trim() === '';
+      };
+
+      var suffix = document.getElementById('track-suffix');
+      var inline = document.getElementById('track-inline');
+      var role = document.getElementById('track-role');
+
+      var trackValue = inline ? inline.textContent : '';
+
+      if (isUnfilled(trackValue)) {
+        if (suffix) suffix.setAttribute('data-empty', 'true');
+        if (role) role.setAttribute('data-empty', 'true');
+        if (inline) inline.textContent = 'this role';
+      }
+    })();
+  </script>
+
+</body>
+</html>

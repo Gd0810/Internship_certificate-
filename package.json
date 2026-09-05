@@ -1,0 +1,29 @@
+{
+  "name": "internproj",
+  "version": "1.0.0",
+  "description": "A Django platform for running task-based internship programs: interns register, work through company-defined task modules, and unlock a company-branded offer letter and payment-gated certificate. Companies manage everything — tracks, tasks, pricing, and the certificate/offer-letter designs — from a private portal with no public registration.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
+    "watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
+    "tailwind": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
+    "tailwind:build": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
+    "tailwind:watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gd0810/Internship_certificate-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Gd0810/Internship_certificate-/issues"
+  },
+  "homepage": "https://github.com/Gd0810/Internship_certificate-#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

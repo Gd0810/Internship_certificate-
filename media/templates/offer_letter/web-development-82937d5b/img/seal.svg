@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <circle cx="80" cy="80" r="76" fill="none" stroke="#0b3d63" stroke-width="3"/>
+  <circle cx="80" cy="80" r="66" fill="none" stroke="#9fc9e8" stroke-width="2"/>
+  <path id="circlePath" fill="none" d="M 80,80 m -58,0 a 58,58 0 1,1 116,0 a 58,58 0 1,1 -116,0"/>
+  <text font-size="11" fill="#0b3d63" letter-spacing="2" font-family="Arial, sans-serif">
+    <textPath href="#circlePath" startOffset="2%">OFFICIAL DOCUMENT • VERIFIED RECORD •</textPath>
+  </text>
+  <polygon points="80,45 88,68 112,68 92,82 100,105 80,91 60,105 68,82 48,68 72,68"
+           fill="#0b3d63" opacity="0.85"/>
+</svg>

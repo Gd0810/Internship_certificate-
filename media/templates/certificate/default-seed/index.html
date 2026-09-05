@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4 landscape; margin: 10mm; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'DejaVu Serif', Georgia, serif;
+    background: #faf8f5;
+    color: #2f2f2f;
+    width: 100%;
+  }
+  .sheet { width: 100%; background: #faf8f5; }
+  .frame-table { width: 100%; border-collapse: collapse; }
+  .frame-cell { border: 3px solid #535353; padding: 30px 50px 24px; text-align: center; }
+  .rule { border-top: 2px solid #f80101; margin: 0 60px 20px; height: 0; font-size: 0; line-height: 0; }
+  .brand-table { width: 100%; margin-bottom: 14px; border-collapse: collapse; }
+  .brand-table td { text-align: center; vertical-align: middle; }
+  .brand-table img { width: 40px; height: 40px; }
+  .brand-label { font-family: 'DejaVu Sans', sans-serif; font-size: 15px; letter-spacing: 2px; color:#535353; padding-left: 10px; }
+  .eyebrow { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; letter-spacing: 3px; color:#f80101; margin-bottom: 6px; }
+  h1.title { font-size: 30px; color:#262625; margin-bottom: 20px; font-weight: bold; }
+  .presented { font-family:'DejaVu Sans', sans-serif; font-size:13px; color:#8a8a86; margin-bottom: 8px; }
+  .name { font-size: 36px; color:#f80101; margin: 4px 0 18px; border-bottom: 1px solid #e6e2da; padding-bottom: 8px; }
+  .body-text { font-family:'DejaVu Sans', sans-serif; font-size: 13.5px; color:#535353; line-height: 1.6; margin: 0 auto 28px; padding: 0 40px; }
+  .track { font-weight: bold; color:#262625; }
+  .footer-table { width: 100%; margin-top: 30px; border-collapse: collapse; }
+  .footer-table td { width: 33%; text-align: center; vertical-align: bottom; padding-top: 10px; }
+  .sig-line { border-top: 1px solid #535353; margin-top: 4px; padding-top: 6px; font-family:'DejaVu Sans', sans-serif; font-size: 11px; color:#8a8a86; }
+  .date-value { font-family: 'DejaVu Serif', serif; font-size: 13px; padding-bottom: 8px; }
+  .meta { font-family:'DejaVu Sans', sans-serif; font-size: 11px; color:#8a8a86; margin-top: 20px; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+  <div class="sheet">
+    <table class="frame-table"><tr><td class="frame-cell">
+        <table class="brand-table"><tr>
+          <td style="width:50%; text-align:right;"><img src="img/logo.png" alt="Credentia"></td>
+          <td style="width:50%; text-align:left;"><span class="brand-label">CREDENTIA</span></td>
+        </tr></table>
+        <div class="rule"></div>
+        <div class="eyebrow">CERTIFICATE OF COMPLETION</div>
+        <h1 class="title">Internship Completion Certificate</h1>
+        <div class="presented">This certificate is proudly presented to</div>
+        <div class="name">{{user_name}}</div>
+        <div class="body-text">
+          for successfully completing all task modules of the
+          <span class="track">{{track_name}}</span> internship program,
+          demonstrating consistent commitment and practical skill throughout the engagement.
+        </div>
+
+        <table class="footer-table"><tr>
+          <td>
+            <img src="img/signature.png" alt="signature" style="height:42px;"><br>
+            <div class="sig-line">Program Director</div>
+          </td>
+          <td><img src="img/seal.png" alt="seal" style="width:76px; height:76px;"></td>
+          <td>
+            <div class="date-value">{{date}}</div>
+            <div class="sig-line">Date Issued</div>
+          </td>
+        </tr></table>
+
+        <div class="meta">Certificate ID: {{certificate_id}} &nbsp;&middot;&nbsp; Verify at credentia.example/verify</div>
+    </td></tr></table>
+  </div>
+</body>
+</html>

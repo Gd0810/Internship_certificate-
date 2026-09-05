@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Internship Offer Letter — {{user_name}}</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 12mm 16mm 12mm 16mm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #0f172a;
+    background: #ffffff;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .sheet {
+    width: 100%;
+  }
+  .header-table {
+    width: 100%;
+    border-bottom: 2.5px solid #0d9488;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    border-collapse: collapse;
+  }
+  .header-table td {
+    vertical-align: middle;
+  }
+  .org-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #0f766e;
+    letter-spacing: 0.3px;
+  }
+  .doc-type {
+    font-size: 11px;
+    font-weight: bold;
+    color: #64748b;
+    letter-spacing: 1.5px;
+    margin-top: 3px;
+  }
+  .meta-table {
+    width: 100%;
+    margin-bottom: 18px;
+    border-collapse: collapse;
+  }
+  .meta-label {
+    font-size: 12px;
+    color: #475569;
+  }
+  .subject-bar {
+    background-color: #f0fdfa;
+    border-left: 4px solid #0d9488;
+    padding: 10px 14px;
+    font-weight: bold;
+    font-size: 13.5px;
+    color: #115e59;
+    margin-bottom: 18px;
+  }
+  .salutation {
+    font-size: 13.5px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #0f172a;
+  }
+  p.body-p {
+    margin-bottom: 14px;
+    color: #334155;
+    text-align: justify;
+  }
+  .details-box {
+    width: 100%;
+    border: 1px solid #ccfbf1;
+    background-color: #f8fafc;
+    margin: 16px 0;
+    border-collapse: collapse;
+  }
+  .details-box td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 12.5px;
+  }
+  .details-box tr:last-child td {
+    border-bottom: none;
+  }
+  .label-cell {
+    width: 140px;
+    font-weight: bold;
+    color: #0f766e;
+  }
+  .value-cell {
+    color: #0f172a;
+  }
+  .closing {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .sig-table {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 16px;
+    border-collapse: collapse;
+  }
+  .sig-table td {
+    vertical-align: bottom;
+  }
+  .sig-img {
+    height: 46px;
+    margin-bottom: 4px;
+  }
+  .sig-name {
+    font-weight: bold;
+    font-size: 13px;
+    color: #0f766e;
+  }
+  .sig-title {
+    font-size: 11.5px;
+    color: #64748b;
+  }
+  .footer-table {
+    width: 100%;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 10px;
+    margin-top: 16px;
+    border-collapse: collapse;
+  }
+  .footer-text {
+    font-size: 10.5px;
+    color: #64748b;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <table class="header-table">
+    <tr>
+      <td style="width: 58px;">
+        <img src="img/logo.png" style="width: 46px; height: 46px;" alt="Logo">
+      </td>
+      <td>
+        <div class="org-title">CREDENTIA INTERNSHIP PLATFORM</div>
+        <div class="doc-type">OFFICIAL INTERNSHIP OFFER LETTER</div>
+      </td>
+    </tr>
+  </table>
+
+  <table class="meta-table">
+    <tr>
+      <td class="meta-label"><strong>Date:</strong> {{date}}</td>
+      <td style="text-align: right;" class="meta-label"><strong>Intern ID:</strong> {{intern_id}}</td>
+    </tr>
+  </table>
+
+  <div class="subject-bar">
+    SUBJECT: OFFER OF INTERNSHIP FOR {{track_name}} TRACK
+  </div>
+
+  <div class="salutation">Dear {{user_name}},</div>
+
+  <p class="body-p">
+    We are pleased to extend an offer of internship for the <strong>{{track_name}}</strong> program at Credentia. Following our review of your profile and academic credentials from <strong>{{college_name}}</strong>, we are confident that your background and technical aptitude make you an excellent candidate for our Data Science &amp; Artificial Intelligence curriculum.
+  </p>
+
+  <table class="details-box">
+    <tr>
+      <td class="label-cell">Candidate Name:</td>
+      <td class="value-cell">{{user_name}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Intern ID:</td>
+      <td class="value-cell">{{intern_id}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Internship Track:</td>
+      <td class="value-cell">{{track_name}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Institution:</td>
+      <td class="value-cell">{{college_name}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Start Date:</td>
+      <td class="value-cell">{{start_date}}</td>
+    </tr>
+    <tr>
+      <td class="label-cell">Status:</td>
+      <td class="value-cell"><strong style="color: #0d9488;">Confirmed &amp; Active</strong></td>
+    </tr>
+  </table>
+
+  <p class="body-p">
+    During this internship, you will gain hands-on practical experience through machine learning, analytics, and AI modeling projects designed to build industry-ready skills. Upon successful completion of all required tasks and performance evaluations, you will be awarded an official, verifiable Certificate of Completion.
+  </p>
+
+  <p class="body-p">
+    We welcome you to Credentia and wish you a highly rewarding and successful internship experience.
+  </p>
+
+  <div class="closing">Sincerely,</div>
+
+  <table class="sig-table">
+    <tr>
+      <td>
+        <img class="sig-img" src="img/signature.png" alt="Signature"><br>
+        <div class="sig-name">Program Director</div>
+        <div class="sig-title">Credentia Internship Platform</div>
+      </td>
+      <td style="text-align: right;">
+        <img src="img/seal.png" style="width: 52px; height: 52px;" alt="Seal">
+      </td>
+    </tr>
+  </table>
+
+  <table class="footer-table">
+    <tr>
+      <td class="footer-text">
+        This is an official computer-generated document issued by Credentia Internship Platform.<br>
+        Verification ID: {{intern_id}} | Authenticity can be verified at credentia.org/verify
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
