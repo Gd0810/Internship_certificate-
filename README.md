@@ -1,4 +1,4 @@
-# Credentia — Internship Certificate Provider
+# Redback — Internship Certificate Provider
 
 A Django platform for running task-based internship programs: interns register,
 work through company-defined task modules, and unlock a company-branded offer
