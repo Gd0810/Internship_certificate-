@@ -2,38 +2,359 @@
 {% block body %}
 {% include "core/_public_nav.html" %}
 
-<section class="icp-hero">
-  <div class="icp-shell">
-    <span class="icp-eyebrow">Internship certification, done properly</span>
-    <h1>Real internship work, backed by a certificate employers can verify.</h1>
-    <p class="lead">Pick a track, work through the task modules a real company set for it, and unlock a signed offer letter and completion certificate — no busywork, no guesswork.</p>
-    <div style="margin-top:32px; display:flex; gap:14px;">
-      <a href="{% url 'accounts:register' %}" class="icp-btn icp-btn--primary">Start an internship</a>
-      <a href="{% url 'core:track_list' %}" class="icp-btn icp-btn--ghost">Browse tracks</a>
+<main class="flex-1 w-full bg-[#f9f9ff]">
+  <!-- Hero Section (Exact Match to Demo UI) -->
+  <section class="relative pt-12 pb-16 px-4 lg:px-6 max-w-[1280px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center overflow-hidden">
+    <!-- Abstract Background Blurs -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+      <div class="absolute top-10 right-1/4 w-96 h-96 bg-[#ffdad5]/30 rounded-full blur-[100px] opacity-70"></div>
+      <div class="absolute bottom-20 left-10 w-[500px] h-[500px] bg-[#d9e2ff]/30 rounded-full blur-[120px] opacity-60"></div>
     </div>
-    <div class="icp-hero__stats">
-      <div class="icp-hero__stat"><b>{{ featured_tracks|length }}</b><span>active tracks</span></div>
-      <div class="icp-hero__stat"><b>Task-based</b><span>progress, not attendance</span></div>
-      <div class="icp-hero__stat"><b>Verified</b><span>certificate IDs</span></div>
-    </div>
-  </div>
-</section>
 
-<section class="icp-shell" style="padding-bottom: 80px;">
-  <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:24px;">
-    <h2 style="font-size:1.5rem;">Featured tracks</h2>
-    <a href="{% url 'core:track_list' %}" style="font-size:0.9rem; color:var(--c-accent-ink);">View all →</a>
-  </div>
-  {% if featured_tracks %}
-  <div class="icp-landing-track-grid">
-    {% for track in featured_tracks %}
-      {% include "core/_track_card.html" %}
-    {% endfor %}
-  </div>
-  {% else %}
-  <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No tracks published yet — check back soon.</div>
-  {% endif %}
-</section>
+    <!-- Hero Left Column -->
+    <div class="flex flex-col gap-4 z-10">
+      <span class="text-sm text-[#bb0004] font-bold tracking-widest uppercase">LEARN. CHALLENGE. CERTIFY.</span>
+      <h1 class="text-4xl sm:text-5xl lg:text-[54px] text-[#151c27] font-extrabold leading-[1.1] tracking-tight">
+        Test Your Knowledge.<br/>
+        <span class="text-[#bb0004]">Earn Your Certificate.</span>
+      </h1>
+      <p class="text-base sm:text-lg text-[#5d3f3b] max-w-lg mt-2 leading-relaxed">
+        Take free quizzes, IQ tests, and technical challenges. Boost your skills and get certified by <span class="font-bold text-[#151c27]">Redback.</span>
+      </p>
+
+      <!-- Feature Grid under text -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="w-10 h-10 rounded-full bg-[#ffdad5] flex items-center justify-center text-[#bb0004]">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">psychology</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-[#151c27]">IQ Tests</span>
+            <span class="text-[10px] text-[#5d3f3b]">Challenge Your Mind</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 items-start">
+          <div class="w-10 h-10 rounded-full bg-[#d9e2ff] flex items-center justify-center text-[#1159c2]">
+            <span class="material-symbols-outlined text-[20px]">code</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-[#151c27]">Technical Quiz</span>
+            <span class="text-[10px] text-[#5d3f3b]">Test Your Technical Skills</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 items-start">
+          <div class="w-10 h-10 rounded-full bg-[#ffdad5] flex items-center justify-center text-[#bb0004]">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-[#151c27]">Leaderboards</span>
+            <span class="text-[10px] text-[#5d3f3b]">Compete & Top the Rank</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 items-start">
+          <div class="w-10 h-10 rounded-full bg-[#d9e2ff] flex items-center justify-center text-[#1159c2]">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-[#151c27]">Free Certificate</span>
+            <span class="text-[10px] text-[#5d3f3b]">Download & Share Your Achievement</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-wrap items-center gap-4 mt-6">
+        <a href="{% url 'accounts:register' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-semibold text-sm px-8 py-3.5 rounded-xl flex items-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline">
+          Start a Quiz Now
+          <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+        </a>
+        <a href="{% url 'core:track_list' %}" class="bg-white border-2 border-[#e7bdb7] hover:bg-[#f0f3ff] text-[#151c27] font-semibold text-sm px-8 py-3.5 rounded-xl flex items-center gap-2 transition-all no-underline">
+          <span class="material-symbols-outlined text-[20px]">grid_view</span>
+          Explore Categories
+        </a>
+      </div>
+    </div>
+
+    <!-- Hero Image / Illustration Area Right -->
+    <div class="relative w-full h-[460px] sm:h-[500px] flex items-center justify-center z-10 lg:ml-4 mt-8 lg:mt-0">
+      <!-- Floating Lightbulb -->
+      <div class="absolute top-4 right-10 z-30 animate-bounce" style="animation-duration: 3s;">
+        <div class="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#bb0004] border border-[#e7bdb7]/40">
+          <span class="material-symbols-outlined">lightbulb</span>
+        </div>
+      </div>
+
+      <!-- Floating Help -->
+      <div class="absolute bottom-20 left-4 z-30 animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
+        <div class="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#1159c2] border border-[#e7bdb7]/40">
+          <span class="material-symbols-outlined">help_center</span>
+        </div>
+      </div>
+
+      <!-- Device Mockups Composition -->
+      <div class="relative w-full max-w-[560px] aspect-[4/3]">
+        <!-- Laptop Card -->
+        <div class="absolute inset-y-0 left-0 w-[78%] bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#e7bdb7]/30 z-10 flex flex-col transform -rotate-2 hover:rotate-0 transition-transform duration-500">
+          <!-- Browser Top Bar -->
+          <div class="h-6 bg-[#dce2f3] w-full border-b border-[#e7bdb7]/20 flex items-center px-3 gap-1.5">
+            <div class="w-2.5 h-2.5 rounded-full bg-[#ba1a1a]"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-[#5d93ff]"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-[#ffb4a9]"></div>
+          </div>
+
+          <!-- Laptop Content -->
+          <div class="flex-1 p-5 sm:p-6 flex flex-col items-center text-center">
+            <h3 class="font-bold text-lg text-[#151c27] mb-1">Choose Your Quiz</h3>
+            <p class="text-xs text-[#5d3f3b] mb-4">Select a category and start learning</p>
+
+            <div class="grid grid-cols-2 gap-3 w-full mb-4 text-left">
+              <div class="border border-[#e7bdb7]/30 rounded-xl p-2.5 flex items-center gap-2.5 bg-white">
+                <div class="w-7 h-7 rounded-lg bg-[#d9e2ff] flex items-center justify-center text-[#1159c2]">
+                  <span class="material-symbols-outlined text-[15px]">school</span>
+                </div>
+                <div>
+                  <div class="text-[11px] font-bold text-[#151c27]">General Knowledge</div>
+                  <div class="text-[9px] text-[#5d3f3b]">120+ Quizzes</div>
+                </div>
+              </div>
+
+              <div class="border border-[#e7bdb7]/30 rounded-xl p-2.5 flex items-center gap-2.5 bg-white">
+                <div class="w-7 h-7 rounded-lg bg-[#ffdad5] flex items-center justify-center text-[#bb0004]">
+                  <span class="material-symbols-outlined text-[15px]">code</span>
+                </div>
+                <div>
+                  <div class="text-[11px] font-bold text-[#151c27]">Technical Quiz</div>
+                  <div class="text-[9px] text-[#5d3f3b]">200+ Quizzes</div>
+                </div>
+              </div>
+
+              <div class="border border-[#e7bdb7]/30 rounded-xl p-2.5 flex items-center gap-2.5 bg-white">
+                <div class="w-7 h-7 rounded-lg bg-[#d6e3fa] flex items-center justify-center text-[#505c6f]">
+                  <span class="material-symbols-outlined text-[15px]">psychology</span>
+                </div>
+                <div>
+                  <div class="text-[11px] font-bold text-[#151c27]">IQ Test</div>
+                  <div class="text-[9px] text-[#5d3f3b]">50+ Tests</div>
+                </div>
+              </div>
+
+              <div class="border border-[#e7bdb7]/30 rounded-xl p-2.5 flex items-center gap-2.5 bg-white">
+                <div class="w-7 h-7 rounded-lg bg-[#e2e8f8] flex items-center justify-center text-[#151c27]">
+                  <span class="material-symbols-outlined text-[15px]">extension</span>
+                </div>
+                <div>
+                  <div class="text-[11px] font-bold text-[#151c27]">Aptitude</div>
+                  <div class="text-[9px] text-[#5d3f3b]">100+ Quizzes</div>
+                </div>
+              </div>
+            </div>
+
+            <a href="{% url 'accounts:register' %}" class="bg-[#1159c2] text-white font-semibold text-xs px-6 py-2.5 rounded-lg mt-auto w-3/4 shadow-sm no-underline inline-block">
+              Start Quiz
+            </a>
+          </div>
+
+          <!-- Laptop Base Notch -->
+          <div class="h-4 bg-[#dce2f3] w-full border-t border-[#e7bdb7]/30 relative">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/4 h-1 bg-[#bac7dd] rounded-b-md"></div>
+          </div>
+        </div>
+
+        <!-- Certificate Mockup Card -->
+        <div class="absolute top-6 right-0 w-[58%] h-[82%] bg-white rounded-xl shadow-2xl border-[3.5px] border-[#C9A227] z-20 transform rotate-3 hover:rotate-0 transition-transform duration-500 flex flex-col items-center justify-center p-4 sm:p-5 text-center" style="background-image: radial-gradient(circle at center, #ffffff 0%, #f9f9ff 100%);">
+          <div class="w-full h-full border-2 border-dashed border-[#C9A227]/50 p-3 sm:p-4 flex flex-col items-center">
+            <h4 class="font-bold text-xs uppercase tracking-widest text-[#1a2332] mb-0.5">CERTIFICATE</h4>
+            <p class="text-[8px] uppercase tracking-wider text-[#5d3f3b] mb-3">OF ACHIEVEMENT</p>
+            <p class="text-[8px] text-[#5d3f3b] mb-1">This is to certify that</p>
+            <h2 class="text-xl sm:text-2xl text-[#bb0004] font-[serif] italic font-bold mb-2">Your Name</h2>
+            <p class="text-[7.5px] text-[#5d3f3b] leading-tight px-2 mb-auto">has successfully completed the Quiz and has been awarded this certificate by <span class="font-bold text-[#bb0004]">Redback.</span></p>
+
+            <div class="flex justify-between w-full items-end mt-2">
+              <div class="text-left">
+                <p class="text-[6px] text-[#5d3f3b] m-0">Date: 25 May 2025</p>
+                <p class="text-[6px] text-[#5d3f3b] m-0">ID: RBQZ12345</p>
+              </div>
+              <div class="w-8 h-8 border-2 border-[#bb0004] rounded-full flex items-center justify-center text-[#bb0004] font-bold text-xs relative overflow-hidden bg-white">
+                <div class="absolute inset-0 border-[2px] border-dashed border-white rounded-full"></div>
+                R
+              </div>
+              <div class="text-center">
+                <div class="w-12 border-b border-[#5d3f3b] mb-0.5 text-[8px] italic text-[#5d3f3b]">Signature</div>
+                <p class="text-[6px] text-[#5d3f3b] leading-tight">Director<br/>Redback</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3D Trophy Image Overlay -->
+          <div class="absolute -bottom-8 -right-6 w-20 h-20 sm:w-24 sm:h-24 pointer-events-none">
+            <img class="w-full h-full object-contain filter drop-shadow-xl" alt="Trophy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfkq9hX1kj10sNNrrkomi24rkBFsZhB4rTY2-vNZmGhjpxpfiuWw2rnq8_zcPG7XB2H6wmy47cON4JenIWrVuh3K0F8WS-piQEQ5xAWR1sgWfaiPQqi4VTchnXZtMJPGTaQuwMCHxgUKdrrAOrh-AXC8LKz2nVMknjpbLD7I2t6eKeVzwEXorapc9RbwLw12oSmHGLZTvblcjXFU9GYXRnJC0SoAxTn3JGZrQRZJlDFm04-IVeSLao"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Categories Bar -->
+  <section class="max-w-[1280px] mx-auto px-4 lg:px-6 w-full mb-10">
+    <div class="bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-[#e7bdb7]/20 p-6 flex flex-col md:flex-row items-center gap-8 justify-between relative overflow-hidden">
+      <div class="flex-shrink-0 md:border-r border-[#e7bdb7]/30 md:pr-8">
+        <h3 class="text-xl font-bold leading-tight text-[#151c27]">
+          Popular<br/>
+          <span class="text-[#bb0004]">Categories</span>
+        </h3>
+      </div>
+      <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+        <!-- Category 1 -->
+        <div class="flex items-center gap-4 group cursor-pointer">
+          <div class="w-12 h-12 rounded-full bg-[#d9e2ff] flex items-center justify-center text-[#1159c2] group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined">language</span>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold mb-1 text-[#151c27] group-hover:text-[#1159c2] transition-colors">General Knowledge</h4>
+            <p class="text-[11px] text-[#5d3f3b] line-clamp-2">History, Science, Sports, Geography &amp; more</p>
+          </div>
+        </div>
+
+        <!-- Category 2 -->
+        <div class="flex items-center gap-4 group cursor-pointer">
+          <div class="w-12 h-12 rounded-full bg-[#d9e2ff]/50 flex items-center justify-center text-[#1159c2] group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined">computer</span>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold mb-1 text-[#151c27] group-hover:text-[#1159c2] transition-colors">Computer Science</h4>
+            <p class="text-[11px] text-[#5d3f3b] line-clamp-2">Programming, DBMS, Networking &amp; more</p>
+          </div>
+        </div>
+
+        <!-- Category 3 -->
+        <div class="flex items-center gap-4 group cursor-pointer">
+          <div class="w-12 h-12 rounded-full bg-[#ffdad5]/50 flex items-center justify-center text-[#bb0004] group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined">engineering</span>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold mb-1 text-[#151c27] group-hover:text-[#bb0004] transition-colors">Engineering</h4>
+            <p class="text-[11px] text-[#5d3f3b] line-clamp-2">All Engineering Streams</p>
+          </div>
+        </div>
+
+        <!-- Category 4 -->
+        <div class="flex items-center gap-4 group cursor-pointer">
+          <div class="w-12 h-12 rounded-full bg-[#fff4e5] flex items-center justify-center text-[#ff9800] group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined">psychology</span>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold mb-1 text-[#151c27] group-hover:text-[#ff9800] transition-colors">Aptitude</h4>
+            <p class="text-[11px] text-[#5d3f3b] line-clamp-2">Logical, Numerical, Verbal Ability</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Tracks Grid -->
+  <section class="max-w-[1280px] mx-auto px-4 lg:px-6 pb-20 w-full">
+    <div class="flex justify-between items-baseline mb-6">
+      <h2 class="text-2xl font-extrabold text-[#151c27]">Featured Tracks</h2>
+      <a href="{% url 'core:track_list' %}" class="text-sm font-semibold text-[#bb0004] hover:underline no-underline">View all →</a>
+    </div>
+    {% if featured_tracks %}
+    <div class="icp-landing-track-grid">
+      {% for track in featured_tracks %}
+        {% include "core/_track_card.html" %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No tracks published yet — check back soon.</div>
+    {% endif %}
+  </section>
+
+  <!-- Statistics Grid -->
+  <section class="max-w-[1280px] mx-auto px-4 lg:px-6 w-full mb-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl shadow-sm border border-[#e7bdb7]/10 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
+        <div class="w-14 h-14 rounded-full bg-[#ffdad5] flex items-center justify-center text-[#bb0004]">
+          <span class="material-symbols-outlined text-[28px]">groups</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-2xl font-bold text-[#151c27]">25,000+</span>
+          <span class="text-xs text-[#5d3f3b]">Active Users</span>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-[#e7bdb7]/10 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
+        <div class="w-14 h-14 rounded-full bg-[#d9e2ff] flex items-center justify-center text-[#1159c2]">
+          <span class="material-symbols-outlined text-[28px]">assignment</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-2xl font-bold text-[#151c27]">1,500+</span>
+          <span class="text-xs text-[#5d3f3b]">Quizzes &amp; Tests</span>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-[#e7bdb7]/10 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
+        <div class="w-14 h-14 rounded-full bg-[#e8f5e9] flex items-center justify-center text-[#4caf50]">
+          <span class="material-symbols-outlined text-[28px]">workspace_premium</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-2xl font-bold text-[#151c27]">10,000+</span>
+          <span class="text-xs text-[#5d3f3b]">Certificates Issued</span>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-[#e7bdb7]/10 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
+        <div class="w-14 h-14 rounded-full bg-[#fff8e1] flex items-center justify-center text-[#ffc107]">
+          <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-2xl font-bold text-[#151c27]">500+</span>
+          <span class="text-xs text-[#5d3f3b]">Top Performers</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Banner -->
+  <section class="border-t border-[#e7bdb7]/20 bg-[#f0f3ff] py-10 mt-auto">
+    <div class="max-w-[1280px] mx-auto px-4 lg:px-6 w-full flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="flex flex-col items-center md:items-start text-center md:text-left">
+        <h4 class="text-xl font-bold text-[#bb0004] mb-1">Trusted by Learners</h4>
+        <p class="text-lg font-bold text-[#151c27]">Across India</p>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-8 md:gap-12">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[#1159c2] text-[24px]">public</span>
+          <span class="text-xs font-bold text-[#5d3f3b]">Accessible<br/>Anywhere</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[#1159c2] text-[24px]">verified</span>
+          <span class="text-xs font-bold text-[#5d3f3b]">100% Free<br/>Forever</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[#1159c2] text-[24px]">lock</span>
+          <span class="text-xs font-bold text-[#5d3f3b]">Secure &amp;<br/>Reliable</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[#1159c2] text-[24px]">share</span>
+          <span class="text-xs font-bold text-[#5d3f3b]">Share &amp;<br/>Grow</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col items-center text-center">
+        <span class="text-[10px] text-[#5d3f3b] uppercase tracking-wider mb-1">An Initiative by</span>
+        <div class="flex items-center gap-1.5">
+          <span class="w-6 h-6 bg-[#bb0004] rounded flex items-center justify-center text-white text-[12px] font-bold">R</span>
+          <span class="text-xl font-bold text-[#bb0004] tracking-tight">Redback</span>
+        </div>
+        <span class="text-[10px] text-[#5d3f3b] mt-1">Empowering Minds. Building Futures.</span>
+      </div>
+    </div>
+  </section>
+</main>
 
 {% include "core/_footer.html" %}
 {% endblock %}
+
