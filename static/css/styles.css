@@ -212,3 +212,196 @@ input[type="hidden"] { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Landing Page Track Cards (Matching Mockup) */
+.icp-landing-track-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.icp-landing-track-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1.5px solid #e2e8f0;
+  position: relative;
+}
+
+.icp-landing-track-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.08);
+}
+
+/* Color Themes */
+.icp-landing-track-card:nth-child(4n+1) {
+  border-color: #e9d5ff;
+}
+.icp-landing-track-card:nth-child(4n+1) .icp-landing-track-card__icon {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+.icp-landing-track-card:nth-child(4n+1) .icp-landing-point-chip {
+  background: #faf5ff;
+  border: 1px solid #f3e8ff;
+  color: #7e22ce;
+}
+.icp-landing-track-card:nth-child(4n+1) .icp-chip-check {
+  color: #9333ea;
+}
+.icp-landing-track-card:nth-child(4n+1) .icp-landing-track-card__btn {
+  border: 1.5px solid #c084fc;
+  color: #7e22ce;
+  background: #ffffff;
+}
+.icp-landing-track-card:nth-child(4n+1) .icp-landing-track-card__btn:hover {
+  background: #f3e8ff;
+}
+
+.icp-landing-track-card:nth-child(4n+2) {
+  border-color: #fecdd3;
+}
+.icp-landing-track-card:nth-child(4n+2) .icp-landing-track-card__icon {
+  background: #ffe4e6;
+  color: #e11d48;
+}
+.icp-landing-track-card:nth-child(4n+2) .icp-landing-point-chip {
+  background: #fff1f2;
+  border: 1px solid #ffe4e6;
+  color: #be123c;
+}
+.icp-landing-track-card:nth-child(4n+2) .icp-chip-check {
+  color: #e11d48;
+}
+.icp-landing-track-card:nth-child(4n+2) .icp-landing-track-card__btn {
+  border: 1.5px solid #fda4af;
+  color: #be123c;
+  background: #ffffff;
+}
+.icp-landing-track-card:nth-child(4n+2) .icp-landing-track-card__btn:hover {
+  background: #ffe4e6;
+}
+
+.icp-landing-track-card:nth-child(4n+3) {
+  border-color: #bfdbfe;
+}
+.icp-landing-track-card:nth-child(4n+3) .icp-landing-track-card__icon {
+  background: #dbeafe;
+  color: #2563eb;
+}
+.icp-landing-track-card:nth-child(4n+3) .icp-landing-point-chip {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: #1d4ed8;
+}
+.icp-landing-track-card:nth-child(4n+3) .icp-chip-check {
+  color: #2563eb;
+}
+.icp-landing-track-card:nth-child(4n+3) .icp-landing-track-card__btn {
+  border: 1.5px solid #93c5fd;
+  color: #1d4ed8;
+  background: #ffffff;
+}
+.icp-landing-track-card:nth-child(4n+3) .icp-landing-track-card__btn:hover {
+  background: #dbeafe;
+}
+
+.icp-landing-track-card:nth-child(4n+0) {
+  border-color: #fde68a;
+}
+.icp-landing-track-card:nth-child(4n+0) .icp-landing-track-card__icon {
+  background: #fef3c7;
+  color: #d97706;
+}
+.icp-landing-track-card:nth-child(4n+0) .icp-landing-point-chip {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  color: #b45309;
+}
+.icp-landing-track-card:nth-child(4n+0) .icp-chip-check {
+  color: #d97706;
+}
+.icp-landing-track-card:nth-child(4n+0) .icp-landing-track-card__btn {
+  border: 1.5px solid #fcd34d;
+  color: #b45309;
+  background: #ffffff;
+}
+.icp-landing-track-card:nth-child(4n+0) .icp-landing-track-card__btn:hover {
+  background: #fef3c7;
+}
+
+.icp-landing-track-card__icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.icp-landing-track-card__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.icp-landing-track-card__title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 10px 0;
+  line-height: 1.3;
+}
+
+.icp-landing-track-card__desc {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 18px 0;
+}
+
+.icp-landing-track-card__points {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 26px;
+  flex-grow: 1;
+}
+
+.icp-landing-point-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.icp-chip-check {
+  flex-shrink: 0;
+}
+
+.icp-landing-track-card__footer {
+  margin-top: auto;
+}
+
+.icp-landing-track-card__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}

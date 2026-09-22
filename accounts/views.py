@@ -1,16 +1,18 @@
 import json
 import logging
 
+from django.contrib import messages
 from django.contrib.auth import get_user_model, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db import transaction
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from company.models import TaskModule, UserTaskProgress
+from company.models import InternshipTrack, TaskModule, UserTaskProgress
 from .forms import RegistrationForm, StyledAuthenticationForm
 from .models import InternProfile
 
@@ -20,7 +22,17 @@ logger = logging.getLogger("accounts")
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect("accounts:dashboard")
+        if request.user.is_staff:
+            return redirect("company:overview")
+        if hasattr(request.user, "intern_profile"):
+            return redirect("accounts:dashboard")
+
+    track_slug = request.GET.get("track")
+    initial_data = {}
+    if track_slug:
+        selected_track = InternshipTrack.objects.filter(slug=track_slug, is_active=True).first()
+        if selected_track:
+            initial_data["track"] = selected_track.id
 
     if request.method == "POST":
         form = RegistrationForm(request.POST)
@@ -45,7 +57,7 @@ def register(request):
             logger.info("New intern registered: %s", user.email)
             return redirect("accounts:dashboard")
     else:
-        form = RegistrationForm()
+        form = RegistrationForm(initial=initial_data)
 
     return render(request, "accounts/register.html", {"form": form})
 
@@ -55,6 +67,11 @@ class AccountLoginView(LoginView):
     authentication_form = StyledAuthenticationForm
     redirect_authenticated_user = True
 
+    def get_success_url(self):
+        if self.request.user.is_staff:
+            return reverse("company:overview")
+        return super().get_success_url()
+
 
 class AccountLogoutView(LogoutView):
     next_page = "core:home"
@@ -62,8 +79,12 @@ class AccountLogoutView(LogoutView):
 
 @login_required
 def dashboard(request):
+    if request.user.is_staff:
+        return redirect("company:overview")
+
     profile = getattr(request.user, "intern_profile", None)
     if profile is None:
+        messages.info(request, "You do not have an intern profile associated with this account.")
         return redirect("core:home")
 
     tab = request.GET.get("tab", "dashboard")

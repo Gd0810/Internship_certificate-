@@ -5,14 +5,54 @@
   <span class="icp-eyebrow">{{ mode }} track</span>
   <h1 style="font-size:1.6rem; margin:8px 0 26px;">{{ mode }} internship track</h1>
   <div class="icp-card" style="padding:30px;">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="icp-field"><label>Name</label>{{ form.name }}</div>
-      <div class="icp-field"><label>Description</label>{{ form.description }}</div>
-      <div class="icp-field"><label>Certificate price (₹)</label>{{ form.price }}</div>
-      <div class="icp-field" style="display:flex; align-items:center; gap:8px;">{{ form.is_active }} <label style="margin:0;" for="{{ form.is_active.id_for_label }}">Visible on public site</label></div>
-      <button type="submit" class="icp-btn icp-btn--primary">Save track</button>
-      <a href="{% url 'company:track_list' %}" class="icp-btn icp-btn--ghost">Cancel</a>
+      <div class="icp-field">
+        <label for="{{ form.name.id_for_label }}">Track Name *</label>
+        {{ form.name }}
+        {% if form.name.errors %}<div class="icp-error">{{ form.name.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="icp-field" style="margin-top:16px;">
+        <label for="{{ form.description.id_for_label }}">Description *</label>
+        {{ form.description }}
+        {% if form.description.errors %}<div class="icp-error">{{ form.description.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="icp-field" style="margin-top:16px;">
+        <label for="{{ form.track_image.id_for_label }}">{{ form.track_image.label }}</label>
+        {% if track.track_image %}
+          <div style="margin-bottom:8px; display:flex; align-items:center; gap:10px;">
+            <img src="{{ track.track_image.url }}" alt="{{ track.name }}" style="width:44px; height:44px; object-fit:cover; border-radius:8px; border:1px solid #cbd5e1;">
+            <span style="font-size:0.85rem; color:#64748b;">Current image</span>
+          </div>
+        {% endif %}
+        {{ form.track_image }}
+        {% if form.track_image.errors %}<div class="icp-error">{{ form.track_image.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="icp-field" style="margin-top:16px;">
+        <label for="{{ form.points.id_for_label }}">{{ form.points.label }}</label>
+        {{ form.points }}
+        <p style="font-size:0.84rem; color:#64748b; margin-top:4px;">{{ form.points.help_text }}</p>
+        {% if form.points.errors %}<div class="icp-error">{{ form.points.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="icp-field" style="margin-top:16px;">
+        <label for="{{ form.price.id_for_label }}">Certificate price (₹) *</label>
+        {{ form.price }}
+        {% if form.price.errors %}<div class="icp-error">{{ form.price.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="icp-field" style="display:flex; align-items:center; gap:8px; margin-top:18px;">
+        {{ form.is_active }}
+        <label style="margin:0; font-weight:500;" for="{{ form.is_active.id_for_label }}">Visible on public site</label>
+      </div>
+
+      <div style="margin-top:24px; display:flex; gap:12px;">
+        <button type="submit" class="icp-btn icp-btn--primary">Save track</button>
+        <a href="{% url 'company:track_list' %}" class="icp-btn icp-btn--ghost">Cancel</a>
+      </div>
     </form>
   </div>
 </section>

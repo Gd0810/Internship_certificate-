@@ -9,6 +9,12 @@ class InternshipTrack(models.Model):
     name = models.CharField(max_length=140)
     slug = models.SlugField(max_length=160, unique=True, blank=True)
     description = models.TextField()
+    track_image = models.ImageField(upload_to="track_images/", blank=True, null=True, help_text="Optional icon or image for this track")
+    points = models.TextField(
+        blank=True,
+        default="",
+        help_text="Comma-separated points/skills (e.g. Prompt Engineering & APIs, RAG & Vector Databases)"
+    )
     price = models.DecimalField(
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
         help_text="Amount charged to unlock the certificate for this track.",
@@ -22,6 +28,12 @@ class InternshipTrack(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def points_list(self):
+        if not self.points:
+            return []
+        return [p.strip() for p in self.points.split(",") if p.strip()]
 
     def save(self, *args, **kwargs):
         if not self.slug:

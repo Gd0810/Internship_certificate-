@@ -66,7 +66,7 @@ def track_list(request):
 
 @company_staff_required
 def track_create(request):
-    form = TrackForm(request.POST or None)
+    form = TrackForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, "Internship track created.")
@@ -77,7 +77,7 @@ def track_create(request):
 @company_staff_required
 def track_edit(request, pk):
     track = get_object_or_404(InternshipTrack, pk=pk)
-    form = TrackForm(request.POST or None, instance=track)
+    form = TrackForm(request.POST or None, request.FILES or None, instance=track)
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, "Track updated.")

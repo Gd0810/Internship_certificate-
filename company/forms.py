@@ -11,12 +11,24 @@ INPUT = (
 class TrackForm(forms.ModelForm):
     class Meta:
         model = InternshipTrack
-        fields = ["name", "description", "price", "is_active"]
+        fields = ["name", "description", "track_image", "points", "price", "is_active"]
         widgets = {
-            "name": forms.TextInput(attrs={"class": INPUT}),
-            "description": forms.Textarea(attrs={"class": INPUT, "rows": 4}),
+            "name": forms.TextInput(attrs={"class": INPUT, "placeholder": "e.g. Generative AI"}),
+            "description": forms.Textarea(attrs={"class": INPUT, "rows": 3, "placeholder": "Program summary or overview"}),
+            "track_image": forms.FileInput(attrs={"class": INPUT}),
+            "points": forms.Textarea(attrs={
+                "class": INPUT, "rows": 3,
+                "placeholder": "e.g. Prompt Engineering & APIs, RAG & Vector Databases, AI Agents & Automation"
+            }),
             "price": forms.NumberInput(attrs={"class": INPUT, "step": "0.01"}),
             "is_active": forms.CheckboxInput(attrs={"class": "icp-checkbox"}),
+        }
+        labels = {
+            "track_image": "Track Image / Icon",
+            "points": "Track Points / Skills (Comma-separated)",
+        }
+        help_texts = {
+            "points": "Add points/skills separated by comma (,). Each point will be displayed as an individual chip on the track card.",
         }
 
 

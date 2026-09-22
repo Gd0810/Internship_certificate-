@@ -29,40 +29,79 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("All old database records removed."))
 
         # 1. Create Tracks & Task Modules
-        track_web, _ = InternshipTrack.objects.get_or_create(
-            name="Web Development",
-            defaults={
-                "description": "Build real front-end and back-end features across guided modules using modern Django & web tech.",
+        tracks_data = [
+            {
+                "name": "Generative AI",
+                "description": "Learn prompt engineering, build applications with LLM APIs, implement RAG systems, and create autonomous AI agents.",
+                "points": "Prompt Engineering & APIs, RAG & Vector Databases, AI Agents & Automation",
                 "price": 499,
-                "is_active": True,
+                "modules": [
+                    ("Environment & LLM Setup", "Set up API keys, environment variables, and basic Python scripts."),
+                    ("Prompt Engineering & API Integration", "Build structured prompts and handle JSON model completions."),
+                    ("RAG & Vector Storage", "Implement vector store document chunking and semantic search."),
+                    ("Autonomous AI Agent", "Build a tool-calling agent workflow for automated tasks."),
+                ]
             },
-        )
-        web_modules = [
-            ("Environment & Git Setup", "Set up your local dev environment and make your first commit."),
-            ("Build a Responsive Layout", "Implement modern HTML & CSS templates for web applications."),
-            ("Connect Django Views & API", "Wire templates to backend views and REST endpoints."),
-            ("Write Tests & Deploy", "Add test cases and verify application workflow."),
-        ]
-        for idx, (title, desc) in enumerate(web_modules, start=1):
-            TaskModule.objects.create(track=track_web, title=title, description=desc, order=idx)
-
-        track_ds, _ = InternshipTrack.objects.get_or_create(
-            name="Data Science & AI",
-            defaults={
-                "description": "Learn data preprocessing, machine learning model building, and evaluation.",
+            {
+                "name": "Cybersecurity & Ethical Hacking",
+                "description": "Understand security principles, web vulnerabilities (OWASP Top 10), conduct assessments, and practice defensive security.",
+                "points": "Linux & Reconnaissance tools, Web Application Security, Incident Response & Defense",
+                "price": 599,
+                "modules": [
+                    ("Linux Fundamentals & Recon", "Perform port scanning and target enumeration using Nmap."),
+                    ("OWASP Top 10 Security Audit", "Analyze SQL injection, XSS, and broken authentication vectors."),
+                    ("Incident Response & Patching", "Remediate vulnerabilities and write defensive security patches."),
+                ]
+            },
+            {
+                "name": "Cloud Computing & DevOps",
+                "description": "Deploy server architectures, manage virtualization, containerize apps with Docker, and build CI/CD pipelines.",
+                "points": "Cloud Deployment & Networking, Docker Containerization, DevOps & CI/CD Pipelines",
                 "price": 699,
-                "is_active": True,
+                "modules": [
+                    ("Linux Cloud Server Setup", "Configure Nginx, systemd services, and SSH key pairs."),
+                    ("Docker Containerization", "Write Dockerfiles and compose multi-container stacks."),
+                    ("CI/CD Pipeline Automation", "Create automated build and deploy pipelines using GitHub Actions."),
+                ]
             },
-        )
-        ds_modules = [
-            ("Data Cleaning & EDA", "Analyze and clean structured datasets using Pandas."),
-            ("Model Training", "Train regression and classification algorithms."),
-            ("Evaluation & Deployment", "Evaluate performance and package models for production."),
+            {
+                "name": "Full Stack Development",
+                "description": "Build modern web applications using front-end and back-end technologies through hands-on projects.",
+                "points": "Frontend Frameworks (React), REST API Backend (Node/Express), Database Modeling (MongoDB/PostgreSQL)",
+                "price": 499,
+                "modules": [
+                    ("Environment & Git Setup", "Set up local dev environment and repository."),
+                    ("Build Responsive Frontend", "Implement interactive UI components and responsive layout."),
+                    ("Connect Backend REST API", "Wire client routes to server endpoints and database models."),
+                    ("Testing & Production Deploy", "Write unit test cases and deploy to cloud host."),
+                ]
+            },
         ]
-        for idx, (title, desc) in enumerate(ds_modules, start=1):
-            TaskModule.objects.create(track=track_ds, title=title, description=desc, order=idx)
 
-        self.stdout.write(self.style.SUCCESS("Demo internship tracks and task modules created."))
+        created_tracks = []
+        for item in tracks_data:
+            track, _ = InternshipTrack.objects.get_or_create(
+                name=item["name"],
+                defaults={
+                    "description": item["description"],
+                    "points": item["points"],
+                    "price": item["price"],
+                    "is_active": True,
+                },
+            )
+            # Ensure points and description are updated
+            track.description = item["description"]
+            track.points = item["points"]
+            track.price = item["price"]
+            track.save()
+
+            if not track.task_modules.exists():
+                for idx, (title, desc) in enumerate(item["modules"], start=1):
+                    TaskModule.objects.create(track=track, title=title, description=desc, order=idx)
+
+            created_tracks.append(track)
+
+        track_web = created_tracks[3]  # Full Stack Development
 
         # 2. Set up Default Templates
         CertificateTemplate.objects.create(track=None, folder_path="default-seed", is_active=True)

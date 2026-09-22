@@ -1,0 +1,39 @@
+<div class="icp-landing-track-card">
+  <div class="icp-landing-track-card__icon">
+    {% if track.track_image %}
+      <img src="{{ track.track_image.url }}" alt="{{ track.name }}">
+    {% else %}
+      {% if forloop.counter0|default:0 == 0 %}
+        <!-- AI Icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 14a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"></path></svg>
+      {% elif forloop.counter0 == 1 %}
+        <!-- Security Shield Icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      {% elif forloop.counter0 == 2 %}
+        <!-- Cloud Server Icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="6" rx="2"></rect><rect x="4" y="14" width="16" height="6" rx="2"></rect></svg>
+      {% else %}
+        <!-- Monitor Icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <h3 class="icp-landing-track-card__title">{{ track.name }}</h3>
+  <p class="icp-landing-track-card__desc">{{ track.description }}</p>
+
+  {% if track.points_list %}
+  <div class="icp-landing-track-card__points">
+    {% for point in track.points_list %}
+      <div class="icp-landing-point-chip">
+        <svg class="icp-chip-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span>{{ point }}</span>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="icp-landing-track-card__footer">
+    <a href="{% url 'accounts:register' %}?track={{ track.slug }}" class="icp-landing-track-card__btn">Apply Free →</a>
+  </div>
+</div>
