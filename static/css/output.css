@@ -555,6 +555,9 @@
   .cursor-pointer {
     cursor: pointer;
   }
+  .list-none {
+    list-style-type: none;
+  }
   .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
@@ -792,6 +795,9 @@
   .object-cover {
     object-fit: cover;
   }
+  .p-0 {
+    padding: 0px;
+  }
   .p-2\.5 {
     padding: calc(var(--spacing) * 2.5);
   }
@@ -842,6 +848,12 @@
   }
   .py-10 {
     padding-block: calc(var(--spacing) * 10);
+  }
+  .py-12 {
+    padding-block: calc(var(--spacing) * 12);
+  }
+  .pt-6 {
+    padding-top: calc(var(--spacing) * 6);
   }
   .pt-12 {
     padding-top: calc(var(--spacing) * 12);
@@ -1140,6 +1152,9 @@
     }
     .hover\:bg-\[\#f0f3ff\]:hover {
       background-color: #f0f3ff;
+    }
+    .hover\:text-\[\#bb0004\]:hover {
+      color: #bb0004;
     }
     .hover\:underline:hover {
       text-decoration-line: underline;
