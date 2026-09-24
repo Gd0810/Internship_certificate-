@@ -244,50 +244,8 @@
     {% endif %}
   </section>
 
-  <!-- Statistics Grid -->
-  <section class="max-w-[1280px] mx-auto px-4 lg:px-6 w-full mb-16">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-white rounded-xl shadow-sm border border-[#e7bdb7]/10 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
-        <div class="w-14 h-14 rounded-full bg-[#ffdad5] flex items-center justify-center text-[#bb0004]">
-          <span class="material-symbols-outlined text-[28px]">groups</span>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-2xl font-bold text-[#151c27]">25,000+</span>
-          <span class="text-xs text-[#5d3f3b]">Active Users</span>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-sm border border-[#e7bdb7]/10 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
-        <div class="w-14 h-14 rounded-full bg-[#d9e2ff] flex items-center justify-center text-[#1159c2]">
-          <span class="material-symbols-outlined text-[28px]">assignment</span>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-2xl font-bold text-[#151c27]">1,500+</span>
-          <span class="text-xs text-[#5d3f3b]">Quizzes &amp; Tests</span>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-sm border border-[#e7bdb7]/10 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
-        <div class="w-14 h-14 rounded-full bg-[#e8f5e9] flex items-center justify-center text-[#4caf50]">
-          <span class="material-symbols-outlined text-[28px]">workspace_premium</span>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-2xl font-bold text-[#151c27]">10,000+</span>
-          <span class="text-xs text-[#5d3f3b]">Certificates Issued</span>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-sm border border-[#e7bdb7]/10 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
-        <div class="w-14 h-14 rounded-full bg-[#fff8e1] flex items-center justify-center text-[#ffc107]">
-          <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-2xl font-bold text-[#151c27]">500+</span>
-          <span class="text-xs text-[#5d3f3b]">Top Performers</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- About Redback Section Component -->
+  {% include "core/_about_section.html" %}
 
   </main>
 

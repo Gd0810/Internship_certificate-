@@ -1,0 +1,78 @@
+<!-- Reusable Professional About Component -->
+<section class="max-w-[1280px] mx-auto px-4 lg:px-6 py-16 w-full">
+  <!-- Eyebrow & Header -->
+  <div class="text-center max-w-3xl mx-auto mb-14">
+    <span class="text-xs font-bold text-[#bb0004] tracking-widest uppercase bg-[#ffdad5]/50 px-4 py-1.5 rounded-full inline-block mb-3">
+      ABOUT REDBACK PLATFORM
+    </span>
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-[#151c27] tracking-tight leading-tight m-0">
+      Empowering Practical Skill &amp; Verifiable Internship Credentials
+    </h2>
+    <p class="text-base text-[#5d3f3b] mt-3.5 leading-relaxed m-0">
+      Redback provides a modern, task-based ecosystem for students and companies. We bridge the gap between academic learning and industry readiness through real project deliverables and tamper-proof certificates.
+    </p>
+  </div>
+
+  <!-- 3 Core Feature Cards Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
+    <!-- Card 1: Task-Based Learning -->
+    <div class="bg-white rounded-2xl p-8 border border-[#e7bdb7]/30 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all group">
+      <div class="w-14 h-14 rounded-2xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+      </div>
+      <h3 class="text-xl font-bold text-[#151c27] mb-3 group-hover:text-[#bb0004] transition-colors m-0">
+        Task-Based Modules
+      </h3>
+      <p class="text-sm text-[#5d3f3b] leading-relaxed mt-2 m-0">
+        Work through structured, real-world task modules defined by companies. No arbitrary attendance counters—your progress is measured by actual work completed.
+      </p>
+    </div>
+
+    <!-- Card 2: Practical Submissions -->
+    <div class="bg-white rounded-2xl p-8 border border-[#e7bdb7]/30 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all group">
+      <div class="w-14 h-14 rounded-2xl bg-[#d9e2ff] text-[#1159c2] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">assignment_turned_in</span>
+      </div>
+      <h3 class="text-xl font-bold text-[#151c27] mb-3 group-hover:text-[#1159c2] transition-colors m-0">
+        Practical Submissions
+      </h3>
+      <p class="text-sm text-[#5d3f3b] leading-relaxed mt-2 m-0">
+        Submit repository links, post proofs, and live project deliverables. Receive structured feedback and track your module completion in real time.
+      </p>
+    </div>
+
+    <!-- Card 3: Verified Credentials -->
+    <div class="bg-white rounded-2xl p-8 border border-[#e7bdb7]/30 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all group">
+      <div class="w-14 h-14 rounded-2xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+      </div>
+      <h3 class="text-xl font-bold text-[#151c27] mb-3 group-hover:text-[#bb0004] transition-colors m-0">
+        Verified Credentials
+      </h3>
+      <p class="text-sm text-[#5d3f3b] leading-relaxed mt-2 m-0">
+        Earn official offer letters and tamper-proof completion certificates backed by unique verification IDs that recruiters and employers can verify instantly.
+      </p>
+    </div>
+  </div>
+
+  <!-- Interactive Callout Banner -->
+  <div class="bg-gradient-to-r from-white via-[#f0f3ff] to-white rounded-2xl border border-[#e7bdb7]/30 p-8 sm:p-10 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-sm">
+    <div class="flex items-start gap-5 max-w-2xl">
+      <div class="w-12 h-12 rounded-xl bg-[#1159c2] text-white flex items-center justify-center shrink-0 shadow-md">
+        <span class="material-symbols-outlined text-[26px]">school</span>
+      </div>
+      <div>
+        <h4 class="text-xl font-bold text-[#151c27] mb-2 m-0">Designed for Ambitious Learners</h4>
+        <p class="text-sm text-[#5d3f3b] leading-relaxed mt-1 m-0">
+          Whether you are aiming to master AI, Cloud Computing, Cybersecurity, or Full Stack Web Development, Redback provides structured pathways to prove your capabilities to top tech providers.
+        </p>
+      </div>
+    </div>
+    <div class="flex items-center gap-4 shrink-0">
+      <a href="{% url 'accounts:register' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-semibold text-sm px-7 py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline flex items-center gap-2">
+        Get Started Free
+        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+      </a>
+    </div>
+  </div>
+</section>
