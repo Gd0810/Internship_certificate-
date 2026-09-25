@@ -1,0 +1,359 @@
+<!-- Certificate & Intern ID Verifier Component -->
+<section id="verify" class="relative py-20 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto w-full">
+  <div class="bg-white rounded-3xl shadow-[0_12px_40px_rgba(21,28,39,0.06)] border border-[#e7bdb7]/40 p-6 sm:p-10 lg:p-12 relative overflow-hidden">
+    <!-- Decorative Ambient Background Gradient -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#ffdad5]/40 via-[#d9e2ff]/20 to-transparent rounded-full blur-3xl pointer-events-none -z-0"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[#d9e2ff]/40 via-[#ffdad5]/20 to-transparent rounded-full blur-3xl pointer-events-none -z-0"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <!-- Section Header -->
+      <div class="text-center mb-10">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ffdad5]/60 text-[#bb0004] text-xs font-bold uppercase tracking-wider mb-3">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+          Official Credential Verifier
+        </span>
+        <h2 class="text-3xl sm:text-4xl text-[#151c27] font-extrabold tracking-tight">
+          Verify Internship <span class="text-[#bb0004]">Certificate & Status</span>
+        </h2>
+        <p class="text-sm sm:text-base text-[#5d3f3b] max-w-2xl mx-auto mt-3 leading-relaxed">
+          Enter an Intern ID (e.g. <strong class="text-[#151c27] font-mono">RBS/INT/930624</strong>) or Certificate ID to instantly verify student credentials, completed internship modules, and payment status.
+        </p>
+      </div>
+
+      <!-- Search Input Box -->
+      <form id="verify-form" action="{% url 'core:verify' %}" method="GET" class="w-full max-w-2xl mx-auto mb-8">
+        <div class="relative flex flex-col sm:flex-row items-center gap-3 bg-[#f9f9ff] p-2 sm:p-2.5 rounded-2xl border-2 border-[#e7bdb7]/60 focus-within:border-[#bb0004] focus-within:ring-4 focus-within:ring-[#bb0004]/10 transition-all shadow-sm">
+          <div class="flex items-center pl-3 text-[#bb0004] shrink-0">
+            <span class="material-symbols-outlined text-2xl">badge</span>
+          </div>
+          <input
+            type="text"
+            id="verify-input"
+            name="intern_id"
+            value="{{ query|default:'' }}"
+            placeholder="Enter Intern ID (e.g., RBS/INT/930624)"
+            class="w-full bg-transparent border-0 text-[#151c27] placeholder-[#8a8a86] focus:outline-none focus:ring-0 text-base font-medium px-2 py-2"
+            required
+            autocomplete="off"
+          />
+          <button
+            type="submit"
+            id="verify-submit-btn"
+            class="w-full sm:w-auto bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-sm px-8 py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg shrink-0 cursor-pointer border-0"
+          >
+            <span class="material-symbols-outlined text-xl">search</span>
+            <span>Verify Now</span>
+          </button>
+        </div>
+
+        <!-- Quick Sample Badges -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-3 text-xs text-[#5d3f3b]">
+          <span class="font-medium text-[#8a8a86]">Quick Try:</span>
+          <button type="button" onclick="fillVerifyInput('RBS/INT/930624')" class="px-2.5 py-1 rounded-lg bg-white border border-[#e7bdb7]/40 hover:border-[#bb0004] text-[#151c27] font-mono hover:text-[#bb0004] transition-colors cursor-pointer">
+            RBS/INT/930624
+          </button>
+          <button type="button" onclick="fillVerifyInput('RBS/INT/623037')" class="px-2.5 py-1 rounded-lg bg-white border border-[#e7bdb7]/40 hover:border-[#bb0004] text-[#151c27] font-mono hover:text-[#bb0004] transition-colors cursor-pointer">
+            RBS/INT/623037
+          </button>
+        </div>
+      </form>
+
+      <!-- Verification Result Container -->
+      <div id="verify-result-container" class="max-w-2xl mx-auto">
+        {% if searched %}
+          {% if profile %}
+            <div class="bg-gradient-to-br from-white to-[#f9f9ff] rounded-2xl border border-[#e7bdb7]/40 p-6 sm:p-8 shadow-lg transition-all animate-fadeIn">
+              <!-- Result Status Header Badge -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e7bdb7]/30 pb-6 mb-6">
+                <div>
+                  <span class="text-xs font-bold text-[#8a8a86] uppercase tracking-wider block mb-1">Verification Status</span>
+                  {% if profile.all_tasks_completed and profile.has_paid %}
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs sm:text-sm font-bold">
+                      <span class="material-symbols-outlined text-base text-emerald-600" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                      VERIFIED &amp; CERTIFICATE ISSUED
+                    </div>
+                  {% elif profile.all_tasks_completed %}
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm font-bold">
+                      <span class="material-symbols-outlined text-base text-amber-600" style="font-variation-settings: 'FILL' 1;">pending</span>
+                      MODULES COMPLETED — PAYMENT PENDING
+                    </div>
+                  {% else %}
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold">
+                      <span class="material-symbols-outlined text-base text-blue-600">hourglass_top</span>
+                      INTERNSHIP IN PROGRESS
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="text-left sm:text-right">
+                  <span class="text-xs text-[#8a8a86] block">Intern ID</span>
+                  <span class="font-mono font-extrabold text-[#151c27] text-base sm:text-lg">{{ profile.intern_id }}</span>
+                </div>
+              </div>
+
+              <!-- Student Details Grid -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
+                <div class="bg-white p-4 rounded-xl border border-[#e7bdb7]/20 shadow-2xs">
+                  <span class="text-[11px] text-[#8a8a86] font-semibold uppercase tracking-wider block mb-0.5">Student Name</span>
+                  <span class="font-bold text-[#151c27] text-base block">{{ profile.full_name }}</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-[#e7bdb7]/20 shadow-2xs">
+                  <span class="text-[11px] text-[#8a8a86] font-semibold uppercase tracking-wider block mb-0.5">Internship Track</span>
+                  <span class="font-bold text-[#bb0004] text-base block truncate" title="{{ profile.track.name }}">{{ profile.track.name }}</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-[#e7bdb7]/20 shadow-2xs">
+                  <span class="text-[11px] text-[#8a8a86] font-semibold uppercase tracking-wider block mb-0.5">College / University</span>
+                  <span class="font-medium text-[#151c27] text-sm block truncate" title="{{ profile.college_name|default:'N/A' }}">{{ profile.college_name|default:"N/A" }}</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-[#e7bdb7]/20 shadow-2xs">
+                  <span class="text-[11px] text-[#8a8a86] font-semibold uppercase tracking-wider block mb-0.5">Enrolled Date</span>
+                  <span class="font-medium text-[#151c27] text-sm block">{{ profile.created_at|date:"M d, Y" }}</span>
+                </div>
+              </div>
+
+              <!-- Module Completion Progress Card -->
+              <div class="bg-white p-5 rounded-xl border border-[#e7bdb7]/30 mb-6">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#1159c2] text-xl">fact_check</span>
+                    <span class="text-sm font-bold text-[#151c27]">Internship Modules Completion</span>
+                  </div>
+                  <span class="text-sm font-extrabold text-[#1159c2]">{{ profile.completed_tasks }} / {{ profile.total_tasks }} Modules</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full h-3 bg-[#f0f3ff] rounded-full overflow-hidden mb-3 border border-[#d9e2ff]">
+                  <div class="h-full bg-gradient-to-r from-[#1159c2] to-[#bb0004] transition-all duration-500 rounded-full" style="width: {{ profile.progress_percent }}%;"></div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-[#5d3f3b]">
+                  <span>Progress: <strong class="text-[#151c27]">{{ profile.progress_percent }}%</strong></span>
+                  {% if profile.all_tasks_completed %}
+                    <span class="text-emerald-600 font-bold flex items-center gap-1">
+                      <span class="material-symbols-outlined text-xs">check_circle</span> All Tasks Completed
+                    </span>
+                  {% else %}
+                    <span class="text-amber-600 font-bold flex items-center gap-1">
+                      <span class="material-symbols-outlined text-xs">pending</span> Incomplete Modules
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Certificate & Payment Status Card -->
+              <div class="p-5 rounded-xl border {% if profile.has_paid %}bg-emerald-50/50 border-emerald-200{% else %}bg-amber-50/50 border-amber-200{% endif %} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-start gap-3">
+                  <div class="w-10 h-10 rounded-full {% if profile.has_paid %}bg-emerald-100 text-emerald-700{% else %}bg-amber-100 text-amber-700{% endif %} flex items-center justify-center shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-[#151c27]">
+                      {% if profile.has_paid %}
+                        Official Certificate Issued
+                      {% else %}
+                        Certificate Locked / Unpaid
+                      {% endif %}
+                    </h4>
+                    <p class="text-xs text-[#5d3f3b] mt-0.5">
+                      {% if profile.has_paid %}
+                        Certificate ID: <strong class="font-mono text-[#151c27]">{{ profile.certificate_id|default:"Available" }}</strong>
+                      {% else %}
+                        Student has completed internship modules but payment is not verified.
+                      {% endif %}
+                    </p>
+                  </div>
+                </div>
+
+                {% if profile.has_paid %}
+                  <span class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold inline-flex items-center gap-1 shrink-0">
+                    <span class="material-symbols-outlined text-sm">verified</span> Verified
+                  </span>
+                {% else %}
+                  <span class="px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-bold inline-flex items-center gap-1 shrink-0">
+                    <span class="material-symbols-outlined text-sm">lock</span> Payment Required
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          {% else %}
+            <!-- Not Found Card -->
+            <div class="bg-red-50/60 rounded-2xl border border-red-200 p-6 text-center animate-fadeIn">
+              <div class="w-12 h-12 rounded-full bg-red-100 text-[#bb0004] flex items-center justify-center mx-auto mb-3">
+                <span class="material-symbols-outlined text-2xl">person_search</span>
+              </div>
+              <h3 class="text-base font-bold text-[#151c27] mb-1">No Verification Record Found</h3>
+              <p class="text-xs text-[#5d3f3b] max-w-md mx-auto">
+                {{ error_message|default:"We couldn't find any student profile matching the provided Intern ID." }}
+              </p>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Client-side Interactive Search Script -->
+<script>
+  function fillVerifyInput(id) {
+    const input = document.getElementById('verify-input');
+    if (input) {
+      input.value = id;
+      document.getElementById('verify-form').dispatchEvent(new Event('submit'));
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('verify-form');
+    const input = document.getElementById('verify-input');
+    const container = document.getElementById('verify-result-container');
+    const submitBtn = document.getElementById('verify-submit-btn');
+
+    if (form && input && container) {
+      form.addEventListener('submit', function (e) {
+        // If JS enabled, execute AJAX search for instant smooth loading
+        e.preventDefault();
+        const query = input.value.trim();
+        if (!query) return;
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="inline-block animate-spin material-symbols-outlined text-xl">sync</span> <span>Verifying...</span>`;
+
+        fetch(`{% url 'core:verify' %}?intern_id=${encodeURIComponent(query)}`, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span class="material-symbols-outlined text-xl">search</span> <span>Verify Now</span>`;
+
+            if (data.found) {
+              const statusBadge = (data.all_tasks_completed && data.has_paid)
+                ? `<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs sm:text-sm font-bold">
+                    <span class="material-symbols-outlined text-base text-emerald-600" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    VERIFIED &amp; CERTIFICATE ISSUED
+                   </div>`
+                : (data.all_tasks_completed
+                  ? `<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm font-bold">
+                      <span class="material-symbols-outlined text-base text-amber-600" style="font-variation-settings: 'FILL' 1;">pending</span>
+                      MODULES COMPLETED — PAYMENT PENDING
+                     </div>`
+                  : `<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold">
+                      <span class="material-symbols-outlined text-base text-blue-600">hourglass_top</span>
+                      INTERNSHIP IN PROGRESS
+                     </div>`
+                );
+
+              const certCard = data.has_paid
+                ? `<div class="p-5 rounded-xl border bg-emerald-50/50 border-emerald-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3">
+                      <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                        <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold text-[#151c27]">Official Certificate Issued</h4>
+                        <p class="text-xs text-[#5d3f3b] mt-0.5">Certificate ID: <strong class="font-mono text-[#151c27]">${data.certificate_id || 'Available'}</strong></p>
+                      </div>
+                    </div>
+                    <span class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold inline-flex items-center gap-1 shrink-0">
+                      <span class="material-symbols-outlined text-sm">verified</span> Verified
+                    </span>
+                   </div>`
+                : `<div class="p-5 rounded-xl border bg-amber-50/50 border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3">
+                      <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mt-0.5">
+                        <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                      </div>
+                      <div>
+                        <h4 class="text-sm font-bold text-[#151c27]">Certificate Locked / Unpaid</h4>
+                        <p class="text-xs text-[#5d3f3b] mt-0.5">Student has completed internship modules but payment is not verified.</p>
+                      </div>
+                    </div>
+                    <span class="px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-bold inline-flex items-center gap-1 shrink-0">
+                      <span class="material-symbols-outlined text-sm">lock</span> Payment Required
+                    </span>
+                   </div>`;
+
+              container.innerHTML = `
+                <div class="bg-gradient-to-br from-white to-[#f9f9ff] rounded-2xl border border-[#e7bdb7]/40 p-6 sm:p-8 shadow-lg transition-all animate-fadeIn">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e7bdb7]/30 pb-6 mb-6">
+                    <div>
+                      <span class="text-xs font-bold text-[#8a8a86] uppercase tracking-wider block mb-1">Verification Status</span>
+                      ${statusBadge}
+                    </div>
+                    <div class="text-left sm:text-right">
+                      <span class="text-xs text-[#8a8a86] block">Intern ID</span>
+                      <span class="font-mono font-extrabold text-[#151c27] text-base sm:text-lg">${data.intern_id}</span>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
+                    <div class="bg-white p-4 rounded-xl border border-[#e7bdb7]/20 shadow-2xs">
+                      <span class="text-[11px] text-[#8a8a86] font-semibold uppercase tracking-wider block mb-0.5">Student Name</span>
+                      <span class="font-bold text-[#151c27] text-base block">${data.full_name}</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-[#e7bdb7]/20 shadow-2xs">
+                      <span class="text-[11px] text-[#8a8a86] font-semibold uppercase tracking-wider block mb-0.5">Internship Track</span>
+                      <span class="font-bold text-[#bb0004] text-base block truncate" title="${data.track_name}">${data.track_name}</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-[#e7bdb7]/20 shadow-2xs">
+                      <span class="text-[11px] text-[#8a8a86] font-semibold uppercase tracking-wider block mb-0.5">College / University</span>
+                      <span class="font-medium text-[#151c27] text-sm block truncate" title="${data.college_name}">${data.college_name}</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-[#e7bdb7]/20 shadow-2xs">
+                      <span class="text-[11px] text-[#8a8a86] font-semibold uppercase tracking-wider block mb-0.5">Enrolled Date</span>
+                      <span class="font-medium text-[#151c27] text-sm block">${data.created_at}</span>
+                    </div>
+                  </div>
+
+                  <div class="bg-white p-5 rounded-xl border border-[#e7bdb7]/30 mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#1159c2] text-xl">fact_check</span>
+                        <span class="text-sm font-bold text-[#151c27]">Internship Modules Completion</span>
+                      </div>
+                      <span class="text-sm font-extrabold text-[#1159c2]">${data.completed_tasks} / ${data.total_tasks} Modules</span>
+                    </div>
+
+                    <div class="w-full h-3 bg-[#f0f3ff] rounded-full overflow-hidden mb-3 border border-[#d9e2ff]">
+                      <div class="h-full bg-gradient-to-r from-[#1159c2] to-[#bb0004] transition-all duration-500 rounded-full" style="width: ${data.progress_percent}%;"></div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs text-[#5d3f3b]">
+                      <span>Progress: <strong class="text-[#151c27]">${data.progress_percent}%</strong></span>
+                      ${data.all_tasks_completed
+                        ? `<span class="text-emerald-600 font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span> All Tasks Completed</span>`
+                        : `<span class="text-amber-600 font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs">pending</span> Incomplete Modules</span>`
+                      }
+                    </div>
+                  </div>
+
+                  ${certCard}
+                </div>
+              `;
+            } else {
+              container.innerHTML = `
+                <div class="bg-red-50/60 rounded-2xl border border-red-200 p-6 text-center animate-fadeIn">
+                  <div class="w-12 h-12 rounded-full bg-red-100 text-[#bb0004] flex items-center justify-center mx-auto mb-3">
+                    <span class="material-symbols-outlined text-2xl">person_search</span>
+                  </div>
+                  <h3 class="text-base font-bold text-[#151c27] mb-1">No Verification Record Found</h3>
+                  <p class="text-xs text-[#5d3f3b] max-w-md mx-auto">
+                    ${data.error || 'No matching intern profile found for this ID.'}
+                  </p>
+                </div>
+              `;
+            }
+          })
+          .catch(err => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span class="material-symbols-outlined text-xl">search</span> <span>Verify Now</span>`;
+            // Fallback to standard form submit
+            form.submit();
+          });
+      });
+    }
+  });
+</script>

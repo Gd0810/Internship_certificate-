@@ -6,6 +6,7 @@
     <nav class="icp-nav">
       <a href="{% url 'core:track_list' %}" class="{% if request.resolver_match.url_name == 'track_list' %}is-active{% endif %}">Internship tracks</a>
       <a href="{% url 'core:about' %}" class="{% if request.resolver_match.url_name == 'about' %}is-active{% endif %}">About</a>
+      <a href="{% url 'core:verify' %}" class="{% if request.resolver_match.url_name == 'verify' %}is-active{% endif %}">Verify Certificate</a>
       {% if request.user.is_authenticated %}
         <a href="{% url 'accounts:dashboard' %}" class="icp-btn icp-btn--dark icp-btn--sm">Dashboard</a>
       {% else %}
