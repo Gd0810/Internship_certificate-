@@ -1,14 +1,52 @@
-<header class="icp-topbar" style="background:var(--c-charcoal); border-color:#454542;">
-  <div class="icp-shell icp-topbar__inner">
-    <a href="{% url 'company:overview' %}" class="icp-brand" style="color:#fff;">
-      <span class="icp-brand__mark" style="background:var(--c-accent);">R</span> Redback — Company
+<!-- Company Portal Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full bg-[#151c27]/95 backdrop-blur-md border-b border-slate-800 shadow-md">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
+
+    <!-- Company Brand Logo -->
+    <a href="{% url 'company:overview' %}" class="flex items-center gap-2.5 group no-underline">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#bb0004] to-[#e1251b] flex items-center justify-center text-white font-extrabold text-lg shadow-md group-hover:scale-105 transition-transform duration-300">
+        R
+      </div>
+      <div class="flex flex-col">
+        <span class="text-lg font-extrabold tracking-tight text-white group-hover:text-[#ffdad5] transition-colors leading-none">
+          Redback
+        </span>
+        <span class="text-[10px] font-bold text-[#ffdad5] tracking-widest uppercase mt-0.5 leading-none">
+          Company Portal
+        </span>
+      </div>
     </a>
-    <nav class="icp-nav" style="color:#c9c7c2;">
-      <a href="{% url 'company:overview' %}" style="color:inherit;">Overview</a>
-      <a href="{% url 'company:track_list' %}" style="color:inherit;">Tracks &amp; tasks</a>
-      <a href="{% url 'company:offer_letter_template_upload' %}" style="color:inherit;">Offer letter design</a>
-      <a href="{% url 'company:certificate_template_upload' %}" style="color:inherit;">Certificate design</a>
-      <a href="{% url 'company:logout' %}" class="icp-btn icp-btn--ghost icp-btn--sm" style="color:#fff; border-color:#5a5a57;">Log out</a>
+
+    <!-- Navigation Links -->
+    <nav class="hidden md:flex items-center gap-1.5 lg:gap-2">
+      <a href="{% url 'company:overview' %}" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 no-underline {% if request.resolver_match.url_name == 'overview' %}bg-white/15 text-white font-bold shadow-2xs{% else %}text-slate-300 hover:text-white hover:bg-white/10{% endif %}">
+        <span class="material-symbols-outlined text-[18px]">analytics</span>
+        <span>Overview</span>
+      </a>
+
+      <a href="{% url 'company:track_list' %}" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 no-underline {% if request.resolver_match.url_name == 'track_list' %}bg-white/15 text-white font-bold shadow-2xs{% else %}text-slate-300 hover:text-white hover:bg-white/10{% endif %}">
+        <span class="material-symbols-outlined text-[18px]">account_tree</span>
+        <span>Tracks &amp; Tasks</span>
+      </a>
+
+      <a href="{% url 'company:offer_letter_template_upload' %}" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 no-underline {% if request.resolver_match.url_name == 'offer_letter_template_upload' %}bg-white/15 text-white font-bold shadow-2xs{% else %}text-slate-300 hover:text-white hover:bg-white/10{% endif %}">
+        <span class="material-symbols-outlined text-[18px]">description</span>
+        <span>Offer Letter Design</span>
+      </a>
+
+      <a href="{% url 'company:certificate_template_upload' %}" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 no-underline {% if request.resolver_match.url_name == 'certificate_template_upload' %}bg-white/15 text-white font-bold shadow-2xs{% else %}text-slate-300 hover:text-white hover:bg-white/10{% endif %}">
+        <span class="material-symbols-outlined text-[18px]">workspace_premium</span>
+        <span>Certificate Design</span>
+      </a>
     </nav>
+
+    <!-- Logout Action -->
+    <div class="flex items-center gap-3">
+      <a href="{% url 'company:logout' %}" class="bg-white/10 hover:bg-[#bb0004] text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all border border-white/10 hover:border-transparent no-underline flex items-center gap-1.5 shadow-xs">
+        <span class="material-symbols-outlined text-[16px]">logout</span>
+        <span>Log out</span>
+      </a>
+    </div>
+
   </div>
 </header>
