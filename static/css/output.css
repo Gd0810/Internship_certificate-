@@ -940,6 +940,9 @@
   .border-\[\#bb0004\]\/50 {
     border-color: color-mix(in oklab, #bb0004 50%, transparent);
   }
+  .border-\[\#bb0004\]\/60 {
+    border-color: color-mix(in oklab, #bb0004 60%, transparent);
+  }
   .border-\[\#d9e2ff\] {
     border-color: #d9e2ff;
   }
@@ -1056,6 +1059,9 @@
   }
   .bg-\[\#bb0004\]\/30 {
     background-color: color-mix(in oklab, #bb0004 30%, transparent);
+  }
+  .bg-\[\#bb0004\]\/40 {
+    background-color: color-mix(in oklab, #bb0004 40%, transparent);
   }
   .bg-\[\#d6e3fa\] {
     background-color: #d6e3fa;
