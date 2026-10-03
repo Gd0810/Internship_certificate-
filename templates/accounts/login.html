@@ -1,28 +1,151 @@
 {% extends "base.html" %}
+
+{% block title %}Log In | Redback Internship Platform{% endblock %}
+
 {% block body %}
 {% include "core/_public_nav.html" %}
-<div class="icp-auth-shell">
-  <div class="icp-card icp-auth-card">
-    <span class="icp-eyebrow">Welcome back</span>
-    <h1 style="font-size:1.7rem; margin:8px 0 26px;">Log in</h1>
-    <form method="post" novalidate>
-      {% csrf_token %}
-      {% if form.non_field_errors %}
-        <div class="icp-alert icp-alert--error">{{ form.non_field_errors|join:", " }}</div>
-      {% endif %}
-      <div class="icp-field">
-        <label for="{{ form.username.id_for_label }}">Email</label>
-        {{ form.username }}
+
+<main class="flex-1 w-full bg-[#f9f9ff] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[calc(100vh-140px)]">
+  <div class="w-full max-w-5xl bg-white rounded-3xl shadow-[0_12px_40px_rgba(21,28,39,0.08)] border border-[#e7bdb7]/40 overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+    
+    <!-- Left Column: Login Form -->
+    <div class="p-8 sm:p-10 lg:p-12 flex flex-col justify-between">
+      <div>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdad5]/60 text-[#bb0004] text-xs font-bold uppercase tracking-wider mb-4">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">lock</span>
+          Student Portal
+        </span>
+        <h1 class="text-2xl sm:text-3xl text-[#151c27] font-extrabold tracking-tight">
+          Welcome Back to <span class="text-[#bb0004]">Redback</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-[#5d3f3b] mt-2 mb-8 leading-relaxed">
+          Sign in to access your internship dashboard, submit task deliverables, and unlock your verified certificate.
+        </p>
+
+        <!-- Form Errors -->
+        {% if form.non_field_errors %}
+          <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-2">
+            <span class="material-symbols-outlined text-base text-red-600 shrink-0">error</span>
+            <span>{{ form.non_field_errors|join:", " }}</span>
+          </div>
+        {% endif %}
+
+        <form method="post" novalidate class="space-y-5">
+          {% csrf_token %}
+          
+          <div>
+            <label for="{{ form.username.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">
+              Email Address *
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#bb0004]">
+                <span class="material-symbols-outlined text-lg">mail</span>
+              </div>
+              {{ form.username }}
+            </div>
+            {% for e in form.username.errors %}
+              <div class="text-red-500 text-xs mt-1 font-semibold">{{ e }}</div>
+            {% endfor %}
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label for="{{ form.password.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider">
+                Password *
+              </label>
+            </div>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#bb0004]">
+                <span class="material-symbols-outlined text-lg">lock</span>
+              </div>
+              {{ form.password }}
+            </div>
+            {% for e in form.password.errors %}
+              <div class="text-red-500 text-xs mt-1 font-semibold">{{ e }}</div>
+            {% endfor %}
+          </div>
+
+          <button type="submit" class="w-full bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-sm py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer border-0 flex items-center justify-center gap-2 mt-2">
+            <span>Sign In to Dashboard</span>
+            <span class="material-symbols-outlined text-lg">arrow_forward</span>
+          </button>
+        </form>
       </div>
-      <div class="icp-field">
-        <label for="{{ form.password.id_for_label }}">Password</label>
-        {{ form.password }}
+
+      <!-- Registration Footer Redirect -->
+      <div class="mt-8 pt-6 border-t border-[#e7bdb7]/30 text-center">
+        <p class="text-xs text-[#5d3f3b]">
+          New to Redback?
+          <a href="{% url 'accounts:register' %}" class="text-[#bb0004] font-bold hover:underline ml-1 no-underline">
+            Create an account →
+          </a>
+        </p>
       </div>
-      <button type="submit" class="icp-btn icp-btn--primary" style="width:100%;">Log in</button>
-    </form>
-    <p style="text-align:center; margin-top:20px; font-size:0.9rem; color:var(--c-muted);">
-      New here? <a href="{% url 'accounts:register' %}" style="color:var(--c-accent-ink); font-weight:500;">Create an account</a>
-    </p>
+    </div>
+
+    <!-- Right Column: Certificate Showcase Banner -->
+    <div class="bg-gradient-to-br from-[#101725] via-[#151c27] to-[#1e293b] text-white p-8 sm:p-10 lg:p-12 flex flex-col justify-between relative overflow-hidden">
+      <!-- Background Glow Effects -->
+      <div class="absolute top-0 right-0 w-80 h-80 bg-[#bb0004]/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-80 h-80 bg-[#1159c2]/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[#ffdad5] text-[11px] font-bold uppercase tracking-wider mb-6">
+          <span class="material-symbols-outlined text-sm text-[#bb0004]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+          Verified Internship Certificate
+        </span>
+
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
+          Earn Recognized <span class="text-[#ffdad5]">Certificates</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
+          Complete your internship task modules and get evaluated for authentic employer-verifiable certificates.
+        </p>
+      </div>
+
+      <!-- Interactive Certificate Card Graphic -->
+      <div class="my-8 relative z-10">
+        <div class="bg-white rounded-2xl p-5 shadow-2xl border-[3px] border-[#C9A227] transform -rotate-1 hover:rotate-0 transition-transform duration-500 text-center relative overflow-hidden" style="background-image: radial-gradient(circle at center, #ffffff 0%, #f9f9ff 100%);">
+          <!-- Inner Certificate Border -->
+          <div class="border border-dashed border-[#C9A227]/60 p-4 rounded-xl flex flex-col items-center">
+            <div class="w-8 h-8 rounded-full bg-[#bb0004] text-white font-extrabold text-sm flex items-center justify-center mb-1 shadow-sm">
+              R
+            </div>
+            <span class="text-[9px] font-extrabold uppercase tracking-widest text-[#151c27]">Redback Internship</span>
+            <span class="text-[7.5px] uppercase tracking-wider text-[#5d3f3b] mb-2">Certificate of Achievement</span>
+
+            <span class="text-[8px] text-[#5d3f3b]">This certifies that</span>
+            <h4 class="text-base text-[#bb0004] font-serif italic font-bold my-1">Student Candidate</h4>
+            <p class="text-[7.5px] text-[#5d3f3b] leading-tight px-2">has completed internship modules and achieved verified certification.</p>
+
+            <div class="flex items-center justify-between w-full mt-3 pt-2 border-t border-slate-200/80 text-[6.5px] text-[#5d3f3b]">
+              <span class="font-mono">ID: RBS/INT/930624</span>
+              <span class="font-bold text-[#bb0004]">Status: Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Bullet Points -->
+      <div class="relative z-10 space-y-3 pt-4 border-t border-slate-800">
+        <div class="flex items-center gap-2.5 text-xs text-slate-200">
+          <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-xs">check</span>
+          </div>
+          <span>100% Free Task Modules &amp; Learning Access</span>
+        </div>
+        <div class="flex items-center gap-2.5 text-xs text-slate-200">
+          <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-xs">check</span>
+          </div>
+          <span>Instant Credential Verification via QR &amp; ID</span>
+        </div>
+      </div>
+
+    </div>
+
   </div>
-</div>
+</main>
+
+{% include "core/_footer.html" %}
 {% endblock %}
