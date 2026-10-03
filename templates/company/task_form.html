@@ -1,32 +1,87 @@
-{% extends "base.html" %}
-{% block body %}
-{% include "company/_nav.html" %}
-<section class="icp-shell" style="padding: 44px 0 80px; max-width:640px;">
-  <span class="icp-eyebrow">{{ track.name }}</span>
-  <h1 style="font-size:1.6rem; margin:8px 0 26px;">{{ mode }} task module</h1>
-  <div class="icp-card" style="padding:30px;">
-    <form method="post">
+{% extends "company/_sidebar_layout.html" %}
+
+{% block company_title %}{{ mode }} Task Module — {{ track.name }}{% endblock %}
+
+{% block company_content %}
+<div class="max-w-3xl mx-auto space-y-6">
+
+  <!-- Header Card -->
+  <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+    <div>
+      <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
+        <a href="{% url 'company:track_list' %}" class="hover:text-[#bb0004] transition-colors no-underline">Tracks</a>
+        <span class="text-slate-300">/</span>
+        <a href="{% url 'company:task_list' track.pk %}" class="hover:text-[#bb0004] transition-colors no-underline">{{ track.name }}</a>
+      </div>
+      <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">{{ mode }} Task Module</h3>
+    </div>
+    <a href="{% url 'company:task_list' track.pk %}" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors no-underline flex items-center gap-1.5">
+      <span class="material-symbols-outlined text-base">arrow_back</span>
+      <span>Back to Tasks</span>
+    </a>
+  </div>
+
+  <!-- Form Card -->
+  <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs">
+    <form method="post" class="space-y-6">
       {% csrf_token %}
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-        <div class="icp-field"><label>Module Number</label>{{ form.module_number }}</div>
-        <div class="icp-field"><label>Display Order</label>{{ form.order }}</div>
+
+      <!-- Grid for Module Number and Order -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Module Number *</label>
+          {{ form.module_number }}
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Display Order Index *</label>
+          {{ form.order }}
+        </div>
       </div>
-      <div class="icp-field"><label>Module Title</label>{{ form.title }}</div>
-      <div class="icp-field"><label>Duration / Timeline Subtitle</label>{{ form.duration_info }}
-        <span style="font-size:0.8rem; color:var(--c-muted);">e.g. "Day 1 – Day 5 · High priority"</span>
+
+      <!-- Module Title -->
+      <div>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Module Title *</label>
+        {{ form.title }}
       </div>
-      <div class="icp-field"><label>Module Body Content / What You'll Do (1 point per line)</label>{{ form.body_points_input }}
-        <span style="font-size:0.8rem; color:var(--c-muted);">Enter each bullet point on a new line. You can add as many points as needed!</span>
+
+      <!-- Duration Subtitle -->
+      <div>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1">Duration / Timeline Subtitle *</label>
+        {{ form.duration_info }}
+        <p class="text-xs text-slate-500 mt-1">Example: "Day 1 – Day 5 · High Priority"</p>
       </div>
-      <div class="icp-field"><label>Submission Deliverables (1 item per line)</label>{{ form.deliverables_input }}
-        <span style="font-size:0.8rem; color:var(--c-muted);">Enter each required deliverable label on a new line (e.g. "Learning Notes Link", "LinkedIn Post Link").</span>
+
+      <!-- Module Body Points -->
+      <div>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1">Module Body Points (1 point per line) *</label>
+        {{ form.body_points_input }}
+        <p class="text-xs text-slate-500 mt-1">Enter each bullet point on a new line. You can add as many task points as needed!</p>
       </div>
-      <div class="icp-field"><label>Optional Notes / Additional Summary</label>{{ form.description }}</div>
-      <div style="display:flex; gap:12px; margin-top:20px;">
-        <button type="submit" class="icp-btn icp-btn--primary">Save task module</button>
-        <a href="{% url 'company:task_list' track.pk %}" class="icp-btn icp-btn--ghost">Cancel</a>
+
+      <!-- Required Deliverables -->
+      <div>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1">Submission Deliverables (1 item per line) *</label>
+        {{ form.deliverables_input }}
+        <p class="text-xs text-slate-500 mt-1">Enter each required deliverable label on a new line (e.g. "GitHub Repo Link", "LinkedIn Post Link").</p>
+      </div>
+
+      <!-- Description Notes -->
+      <div>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Optional Notes / Summary</label>
+        {{ form.description }}
+      </div>
+
+      <!-- Actions -->
+      <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
+        <button type="submit" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-md transition-all cursor-pointer border-0">
+          Save Task Module
+        </button>
+        <a href="{% url 'company:task_list' track.pk %}" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm px-6 py-3 rounded-xl transition-colors no-underline">
+          Cancel
+        </a>
       </div>
     </form>
   </div>
-</section>
+
+</div>
 {% endblock %}

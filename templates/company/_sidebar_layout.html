@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-sans text-[#151c27]">
+  
+  <!-- Mobile Header Bar -->
+  <header class="md:hidden sticky top-0 z-40 bg-[#101725] text-white px-4 py-3 flex items-center justify-between border-b border-slate-800 shadow-sm">
+    <a href="{% url 'company:overview' %}" class="flex items-center gap-2.5 no-underline">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#bb0004] to-[#e1251b] flex items-center justify-center text-white font-extrabold text-base shadow-sm">
+        R
+      </div>
+      <div class="flex flex-col">
+        <span class="text-base font-extrabold text-white leading-none">Redback</span>
+        <span class="text-[9px] font-bold text-[#ffdad5] uppercase tracking-wider mt-0.5">Company Admin</span>
+      </div>
+    </a>
+    <button id="company-sidebar-toggle" type="button" class="p-2 rounded-lg bg-slate-800 text-slate-200 hover:text-white focus:outline-none">
+      <span class="material-symbols-outlined text-2xl" id="sidebar-toggle-icon">menu</span>
+    </button>
+  </header>
+
+  <!-- Left Sidebar Navigation -->
+  <aside id="company-sidebar" class="fixed md:sticky top-0 inset-y-0 left-0 z-50 w-64 bg-[#101725] text-slate-300 flex flex-col justify-between border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shrink-0 h-screen overflow-y-auto">
+    
+    <div>
+      <!-- Company Brand Header -->
+      <div class="p-6 border-b border-slate-800/80 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#bb0004] via-[#e1251b] to-[#ff4d4d] flex items-center justify-center text-white font-extrabold text-xl shadow-md">
+          R
+        </div>
+        <div class="flex flex-col">
+          <span class="text-lg font-extrabold text-white tracking-tight leading-none">Redback</span>
+          <span class="text-[10px] font-bold text-[#ffdad5] bg-[#bb0004]/30 border border-[#bb0004]/50 px-2 py-0.5 rounded-md uppercase tracking-wider mt-1 w-max">Company Portal</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="px-3 py-6">
+        <div class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Main Menu</div>
+        <nav class="space-y-1">
+          <a href="{% url 'company:overview' %}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if request.resolver_match.url_name == 'overview' %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <span class="material-symbols-outlined text-xl">dashboard</span>
+            <span>Dashboard Overview</span>
+          </a>
+
+          <a href="{% url 'company:track_list' %}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if 'track' in request.resolver_match.url_name or 'task' in request.resolver_match.url_name %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <span class="material-symbols-outlined text-xl">grid_view</span>
+            <span>Internship Tracks</span>
+          </a>
+        </nav>
+
+        <div class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-8 mb-3">Templates &amp; Designs</div>
+        <nav class="space-y-1">
+          <a href="{% url 'company:offer_letter_template_upload' %}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if request.resolver_match.url_name == 'offer_letter_template_upload' %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <span class="material-symbols-outlined text-xl">description</span>
+            <span>Offer Letters</span>
+          </a>
+
+          <a href="{% url 'company:certificate_template_upload' %}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if request.resolver_match.url_name == 'certificate_template_upload' %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+            <span>Certificates</span>
+          </a>
+        </nav>
+
+        <div class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-8 mb-3">External Links</div>
+        <nav class="space-y-1">
+          <a href="{% url 'core:home' %}" target="_blank" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:bg-slate-800/70 hover:text-white transition-all no-underline">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">open_in_new</span>
+              <span>View Public Site</span>
+            </div>
+            <span class="material-symbols-outlined text-sm text-slate-400">arrow_outward</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Sidebar Bottom Staff User Card -->
+    <div class="p-4 border-t border-slate-800 bg-[#0c111c]">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3 overflow-hidden">
+          <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-bold text-sm shrink-0">
+            {{ request.user.email|first|upper }}
+          </div>
+          <div class="overflow-hidden">
+            <div class="text-xs font-bold text-white truncate" title="{{ request.user.email }}">{{ request.user.email }}</div>
+            <div class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Staff Admin
+            </div>
+          </div>
+        </div>
+        <a href="{% url 'company:logout' %}" class="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors flex items-center justify-center" title="Log out">
+          <span class="material-symbols-outlined text-xl">logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sidebar Overlay Backdrop for Mobile -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden md:hidden"></div>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <!-- Top Header Navigation Bar for Main Content -->
+    <header class="bg-white border-b border-slate-200/80 px-6 py-4 sticky top-0 z-30 flex items-center justify-between gap-4 shadow-2xs">
+      <div class="flex items-center gap-3">
+        <h2 class="text-lg font-extrabold text-[#151c27] tracking-tight m-0">
+          {% block company_title %}Company Dashboard{% endblock %}
+        </h2>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <a href="{% url 'company:track_create' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs transition-all flex items-center gap-1.5 no-underline">
+          <span class="material-symbols-outlined text-base">add</span>
+          <span>New Track</span>
+        </a>
+        <a href="{% url 'company:certificate_template_upload' %}" class="bg-[#f0f3ff] hover:bg-[#d9e2ff] text-[#1159c2] font-semibold text-xs px-4 py-2.5 rounded-xl transition-all flex items-center gap-1.5 no-underline">
+          <span class="material-symbols-outlined text-base">upload</span>
+          <span>Upload Design</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Page Alert Messages -->
+    {% if messages %}
+      <div class="px-6 pt-4 space-y-2">
+        {% for message in messages %}
+          <div class="p-4 rounded-xl text-sm font-medium border flex items-center justify-between shadow-xs {% if message.tags == 'success' %}bg-emerald-50 border-emerald-200 text-emerald-800{% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-800{% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %}">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-lg">
+                {% if message.tags == 'success' %}check_circle{% elif message.tags == 'error' %}error{% else %}info{% endif %}
+              </span>
+              <span>{{ message }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Dynamic Main Content -->
+    <main class="flex-1 p-6 md:p-8 max-w-[1400px] w-full mx-auto">
+      {% block company_content %}{% endblock %}
+    </main>
+  </div>
+
+</div>
+
+<!-- Interactive Mobile Sidebar Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('company-sidebar-toggle');
+    const sidebar = document.getElementById('company-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const toggleIcon = document.getElementById('sidebar-toggle-icon');
+
+    function openSidebar() {
+      sidebar.classList.remove('-translate-x-full');
+      backdrop.classList.remove('hidden');
+      if (toggleIcon) toggleIcon.textContent = 'close';
+    }
+
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      backdrop.classList.add('hidden');
+      if (toggleIcon) toggleIcon.textContent = 'menu';
+    }
+
+    if (toggleBtn && sidebar && backdrop) {
+      toggleBtn.addEventListener('click', function () {
+        const isClosed = sidebar.classList.contains('-translate-x-full');
+        if (isClosed) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      });
+
+      backdrop.addEventListener('click', closeSidebar);
+    }
+  });
+</script>
+{% endblock %}

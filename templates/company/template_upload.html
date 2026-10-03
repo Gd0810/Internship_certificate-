@@ -1,55 +1,137 @@
-{% extends "base.html" %}
-{% block body %}
-{% include "company/_nav.html" %}
-<section class="icp-shell" style="padding: 44px 0 80px; max-width:760px;">
-  <span class="icp-eyebrow">Design system</span>
-  <h1 style="font-size:1.8rem; margin:8px 0 10px;">{{ kind }} template</h1>
-  <p style="color:var(--c-muted); margin-bottom:28px; line-height:1.6;">
-    Upload a .zip containing <code>index.html</code> at its root (with your HTML, CSS and JS all in that
-    one file) plus an <code>img/</code> folder for logo, signature, seal and background images. Use
-    placeholders like <code>{% templatetag openvariable %}user_name{% templatetag closevariable %}</code>,
-    <code>{% templatetag openvariable %}track_name{% templatetag closevariable %}</code>,
-    <code>{% templatetag openvariable %}college_name{% templatetag closevariable %}</code>,
-    <code>{% templatetag openvariable %}score{% templatetag closevariable %}</code>,
-    <code>{% templatetag openvariable %}certificate_id{% templatetag closevariable %}</code> and
-    <code>{% templatetag openvariable %}date{% templatetag closevariable %}</code> — they're filled in with
-    real data automatically. Select <strong>Global (All Tracks)</strong> in the dropdown to automatically apply this template across all internship certificates/offer letters.
-  </p>
+{% extends "company/_sidebar_layout.html" %}
 
-  <div class="icp-card" style="padding:30px; margin-bottom:32px;">
-    <form method="post" enctype="multipart/form-data">
+{% block company_title %}{{ kind }} Template Management{% endblock %}
+
+{% block company_content %}
+<div class="max-w-4xl mx-auto space-y-6">
+
+  <!-- Header Card -->
+  <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+    <div>
+      <span class="text-xs font-bold text-[#1159c2] uppercase tracking-wider block mb-1">Design System</span>
+      <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">{{ kind }} Design Templates</h3>
+    </div>
+    <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1159c2] flex items-center justify-center font-bold">
+      <span class="material-symbols-outlined text-xl">upload_file</span>
+    </div>
+  </div>
+
+  <!-- Instruction Guidance Box -->
+  <div class="bg-gradient-to-r from-blue-900 to-[#101725] p-6 rounded-2xl text-white shadow-sm space-y-3">
+    <div class="flex items-center gap-2 text-[#d9e2ff] text-xs font-bold uppercase tracking-wider">
+      <span class="material-symbols-outlined text-sm">info</span>
+      <span>ZIP Package Requirements</span>
+    </div>
+    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+      Upload a <strong class="text-white">.zip package</strong> containing <code class="bg-slate-800 px-1.5 py-0.5 rounded text-amber-300">index.html</code> at its root level (with all CSS/JS in that single HTML file) plus an <code class="bg-slate-800 px-1.5 py-0.5 rounded text-amber-300">img/</code> folder for logo, signature, seal, and background assets.
+    </p>
+    <div class="pt-2 border-t border-slate-800 flex flex-wrap gap-2 text-[11px] text-slate-300">
+      <span class="font-bold text-white">Supported Placeholders:</span>
+      <code class="bg-slate-800/80 px-2 py-0.5 rounded text-sky-300">{% templatetag openvariable %}user_name{% templatetag closevariable %}</code>
+      <code class="bg-slate-800/80 px-2 py-0.5 rounded text-sky-300">{% templatetag openvariable %}track_name{% templatetag closevariable %}</code>
+      <code class="bg-slate-800/80 px-2 py-0.5 rounded text-sky-300">{% templatetag openvariable %}college_name{% templatetag closevariable %}</code>
+      <code class="bg-slate-800/80 px-2 py-0.5 rounded text-sky-300">{% templatetag openvariable %}intern_id{% templatetag closevariable %}</code>
+      <code class="bg-slate-800/80 px-2 py-0.5 rounded text-sky-300">{% templatetag openvariable %}certificate_id{% templatetag closevariable %}</code>
+      <code class="bg-slate-800/80 px-2 py-0.5 rounded text-sky-300">{% templatetag openvariable %}date{% templatetag closevariable %}</code>
+    </div>
+  </div>
+
+  <!-- Upload Form Card -->
+  <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs">
+    <h4 class="text-base font-bold text-[#151c27] mb-4">Upload New {{ kind }} Design</h4>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
       {% csrf_token %}
-      <div class="icp-field"><label>Target Track Scope</label>{{ form.track }}</div>
-      <div class="icp-field"><label>Template package (.zip)</label>{{ form.package }}
-        {% for e in form.package.errors %}<div class="icp-error">{{ e }}</div>{% endfor %}
+
+      <!-- Scope Selector -->
+      <div>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Target Track Scope</label>
+        {{ form.track }}
+        <p class="text-xs text-slate-500 mt-1">Select <strong>Global (All Tracks)</strong> to apply this design across all tracks without custom overrides.</p>
       </div>
-      <button type="submit" class="icp-btn icp-btn--primary">Upload &amp; activate</button>
+
+      <!-- File ZIP Input -->
+      <div>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Template Package (.zip) *</label>
+        <div class="p-4 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 hover:bg-blue-50/50 hover:border-blue-300 transition-all">
+          {{ form.package }}
+        </div>
+        {% for e in form.package.errors %}
+          <div class="text-red-500 text-xs mt-1 font-semibold">{{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- Submit Action -->
+      <div>
+        <button type="submit" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-md transition-all cursor-pointer border-0 flex items-center gap-2">
+          <span class="material-symbols-outlined text-lg">cloud_upload</span>
+          <span>Upload &amp; Activate Design</span>
+        </button>
+      </div>
     </form>
   </div>
 
-  <h3 style="font-size:1.05rem; margin-bottom:14px;">Recent uploads</h3>
-  <div class="icp-card">
-    <table class="icp-table">
-      <thead><tr><th>Scope / Track</th><th>Folder</th><th>Status</th><th>Uploaded</th></tr></thead>
-      <tbody>
-        {% for t in templates %}
-        <tr>
-          <td>
-            {% if t.track %}
-              <span style="font-weight:600; color:var(--c-ink);">{{ t.track.name }}</span>
-            {% else %}
-              <span class="icp-badge" style="background:#eef4fb; color:#0056b3; font-weight:700;">Global (All Tracks)</span>
-            {% endif %}
-          </td>
-          <td style="font-family:monospace; font-size:0.82rem;">{{ t.folder_path }}</td>
-          <td>{% if t.is_active %}<span class="icp-badge icp-badge--paid"><span class="icp-dot"></span>Active</span>{% else %}<span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Replaced</span>{% endif %}</td>
-          <td style="color:var(--c-muted); font-size:0.85rem;">{{ t.uploaded_at|date:"d M Y, H:i" }}</td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="4" style="text-align:center; color:var(--c-muted); padding:30px;">Nothing uploaded yet.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <!-- Recent Uploads Table -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+    <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+      <h4 class="text-base font-bold text-[#151c27]">Recently Uploaded Templates</h4>
+      <span class="text-xs text-slate-400 font-semibold">Active &amp; History</span>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+            <th class="py-3.5 px-6">Scope / Track</th>
+            <th class="py-3.5 px-6">Folder Slug</th>
+            <th class="py-3.5 px-6">Active Status</th>
+            <th class="py-3.5 px-6">Upload Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-xs text-[#151c27]">
+          {% for t in templates %}
+            <tr class="hover:bg-slate-50/50 transition-colors">
+              <td class="py-4 px-6">
+                {% if t.track %}
+                  <span class="font-bold text-[#151c27]">{{ t.track.name }}</span>
+                {% else %}
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-blue-50 text-[#1159c2] font-extrabold text-[11px]">
+                    <span class="material-symbols-outlined text-xs">public</span> Global (All Tracks)
+                  </span>
+                {% endif %}
+              </td>
+
+              <td class="py-4 px-6 font-mono text-slate-600 text-[11px]">
+                {{ t.folder_path }}
+              </td>
+
+              <td class="py-4 px-6">
+                {% if t.is_active %}
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Active (In Use)
+                  </span>
+                {% else %}
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500 text-[11px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Replaced
+                  </span>
+                {% endif %}
+              </td>
+
+              <td class="py-4 px-6 text-slate-400">
+                {{ t.uploaded_at|date:"d M Y, H:i" }}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="py-12 text-center text-slate-400">
+                <span class="material-symbols-outlined text-3xl text-slate-300 block mb-1">folder_off</span>
+                No {{ kind|lower }} design templates uploaded yet.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
-</section>
+
+</div>
 {% endblock %}
