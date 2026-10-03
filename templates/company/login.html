@@ -6,17 +6,21 @@
   <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#bb0004]/20 rounded-full blur-[120px] pointer-events-none"></div>
   <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#1159c2]/20 rounded-full blur-[120px] pointer-events-none"></div>
 
-  <div class="w-full max-w-md bg-[#151c27]/90 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl relative z-10">
+  <div class="w-full max-w-md bg-[#151c27]/95 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl relative z-10">
     <!-- Brand Header -->
     <div class="flex flex-col items-center text-center mb-8">
-      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#bb0004] via-[#e1251b] to-[#ff4d4d] flex items-center justify-center text-white font-extrabold text-2xl shadow-lg mb-3">
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#bb0004] via-[#e1251b] to-[#ff4d4d] flex items-center justify-center text-white font-extrabold text-2xl shadow-lg mb-3" style="color: #ffffff !important;">
         R
       </div>
-      <span class="text-xs font-bold text-[#ffdad5] uppercase tracking-widest bg-[#bb0004]/30 border border-[#bb0004]/50 px-3 py-1 rounded-full mb-2">
+      <span class="text-xs font-bold uppercase tracking-widest bg-[#bb0004]/40 border border-[#bb0004]/60 px-3 py-1 rounded-full mb-2" style="color: #ffffff !important;">
         Staff &amp; Executive Admin
       </span>
-      <h1 class="text-2xl font-extrabold text-white tracking-tight">Redback Company Portal</h1>
-      <p class="text-xs text-slate-400 mt-1">Sign in with authorized staff credentials</p>
+      <h1 class="text-2xl font-extrabold tracking-tight mt-1" style="color: #ffffff !important;">
+        Redback Company Portal
+      </h1>
+      <p class="text-xs mt-1" style="color: #cbd5e1 !important;">
+        Sign in with authorized staff credentials
+      </p>
     </div>
 
     <!-- Login Form -->
@@ -24,41 +28,49 @@
       {% csrf_token %}
 
       {% if form.non_field_errors %}
-        <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium flex items-center gap-2">
-          <span class="material-symbols-outlined text-base shrink-0">error</span>
+        <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium flex items-center gap-2" style="color: #fca5a5 !important;">
+          <span class="material-symbols-outlined text-base shrink-0" style="color: #fca5a5 !important;">error</span>
           <span>{{ form.non_field_errors|join:", " }}</span>
         </div>
       {% endif %}
 
       <div>
-        <label for="{{ form.username.id_for_label }}" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Staff Email Address</label>
+        <label for="{{ form.username.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: #e2e8f0 !important;">
+          Staff Email Address
+        </label>
         <div class="relative">
-          <span class="material-symbols-outlined absolute left-3.5 top-3 text-slate-400 text-lg">mail</span>
-          <input type="email" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" required class="w-full bg-slate-900/80 border border-slate-700 focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 rounded-xl pl-11 pr-4 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none transition-all" placeholder="admin@redback.com">
+          <span class="material-symbols-outlined absolute left-3.5 top-3 text-lg" style="color: #94a3b8 !important;">mail</span>
+          <input type="email" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" required class="w-full bg-slate-900/90 border border-slate-700 focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 rounded-xl pl-11 pr-4 py-2.5 text-white placeholder-slate-400 text-sm focus:outline-none transition-all" style="color: #ffffff !important;" placeholder="admin@redback.com">
         </div>
-        {% if form.username.errors %}<div class="text-red-400 text-xs mt-1 font-semibold">{{ form.username.errors.0 }}</div>{% endif %}
+        {% if form.username.errors %}
+          <div class="text-red-400 text-xs mt-1 font-semibold" style="color: #fca5a5 !important;">{{ form.username.errors.0 }}</div>
+        {% endif %}
       </div>
 
       <div>
-        <label for="{{ form.password.id_for_label }}" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Password</label>
+        <label for="{{ form.password.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: #e2e8f0 !important;">
+          Password
+        </label>
         <div class="relative">
-          <span class="material-symbols-outlined absolute left-3.5 top-3 text-slate-400 text-lg">lock</span>
-          <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" required class="w-full bg-slate-900/80 border border-slate-700 focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 rounded-xl pl-11 pr-4 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none transition-all" placeholder="••••••••">
+          <span class="material-symbols-outlined absolute left-3.5 top-3 text-lg" style="color: #94a3b8 !important;">lock</span>
+          <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" required class="w-full bg-slate-900/90 border border-slate-700 focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 rounded-xl pl-11 pr-4 py-2.5 text-white placeholder-slate-400 text-sm focus:outline-none transition-all" style="color: #ffffff !important;" placeholder="••••••••">
         </div>
-        {% if form.password.errors %}<div class="text-red-400 text-xs mt-1 font-semibold">{{ form.password.errors.0 }}</div>{% endif %}
+        {% if form.password.errors %}
+          <div class="text-red-400 text-xs mt-1 font-semibold" style="color: #fca5a5 !important;">{{ form.password.errors.0 }}</div>
+        {% endif %}
       </div>
 
-      <button type="submit" class="w-full bg-gradient-to-r from-[#bb0004] to-[#e1251b] hover:opacity-95 text-white font-bold text-sm py-3.5 rounded-xl shadow-lg transition-all cursor-pointer border-0 mt-2 flex items-center justify-center gap-2">
-        <span>Sign In to Company Dashboard</span>
-        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+      <button type="submit" class="w-full bg-gradient-to-r from-[#bb0004] to-[#e1251b] hover:opacity-95 text-white font-bold text-sm py-3.5 rounded-xl shadow-lg transition-all cursor-pointer border-0 mt-2 flex items-center justify-center gap-2" style="color: #ffffff !important;">
+        <span style="color: #ffffff !important;">Sign In to Company Dashboard</span>
+        <span class="material-symbols-outlined text-lg" style="color: #ffffff !important;">arrow_forward</span>
       </button>
     </form>
 
-    <!-- Footer Security Note -->
-    <div class="mt-8 pt-4 border-t border-slate-800/80 text-center">
-      <a href="{% url 'core:home' %}" class="text-xs text-slate-400 hover:text-white transition-colors no-underline flex items-center justify-center gap-1">
-        <span class="material-symbols-outlined text-sm">arrow_back</span>
-        <span>Return to Public Platform</span>
+    <!-- Footer Return Link -->
+    <div class="mt-8 pt-4 border-t border-slate-800 text-center">
+      <a href="{% url 'core:home' %}" class="text-xs transition-colors no-underline flex items-center justify-center gap-1" style="color: #94a3b8 !important;">
+        <span class="material-symbols-outlined text-sm" style="color: #94a3b8 !important;">arrow_back</span>
+        <span style="color: #94a3b8 !important;">Return to Public Platform</span>
       </a>
     </div>
   </div>

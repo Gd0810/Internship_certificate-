@@ -1030,9 +1030,6 @@
   .bg-\[\#151c27\] {
     background-color: #151c27;
   }
-  .bg-\[\#151c27\]\/90 {
-    background-color: color-mix(in oklab, #151c27 90%, transparent);
-  }
   .bg-\[\#151c27\]\/95 {
     background-color: color-mix(in oklab, #151c27 95%, transparent);
   }
@@ -1201,10 +1198,10 @@
       background-color: color-mix(in oklab, var(--color-slate-900) 60%, transparent);
     }
   }
-  .bg-slate-900\/80 {
-    background-color: color-mix(in srgb, oklch(20.8% 0.042 265.755) 80%, transparent);
+  .bg-slate-900\/90 {
+    background-color: color-mix(in srgb, oklch(20.8% 0.042 265.755) 90%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-slate-900) 80%, transparent);
+      background-color: color-mix(in oklab, var(--color-slate-900) 90%, transparent);
     }
   }
   .bg-transparent {
@@ -1741,8 +1738,8 @@
   .placeholder-\[\#8a8a86\]::placeholder {
     color: #8a8a86;
   }
-  .placeholder-slate-500::placeholder {
-    color: var(--color-slate-500);
+  .placeholder-slate-400::placeholder {
+    color: var(--color-slate-400);
   }
   .opacity-60 {
     opacity: 60%;
