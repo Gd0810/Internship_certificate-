@@ -55,5 +55,14 @@ class RegistrationForm(forms.Form):
 class StyledAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].widget.attrs.update({"class": INPUT_CLASSES, "placeholder": "Email", "autofocus": True})
-        self.fields["password"].widget.attrs.update({"class": INPUT_CLASSES, "placeholder": "Password"})
+        self.fields["username"].widget.attrs.update({
+            "class": INPUT_CLASSES + " !pl-11",
+            "style": "padding-left: 2.75rem !important;",
+            "placeholder": "Email",
+            "autofocus": True,
+        })
+        self.fields["password"].widget.attrs.update({
+            "class": INPUT_CLASSES + " !pl-11",
+            "style": "padding-left: 2.75rem !important;",
+            "placeholder": "Password",
+        })

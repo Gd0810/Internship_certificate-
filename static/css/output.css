@@ -1542,6 +1542,9 @@
   .pb-20 {
     padding-bottom: calc(var(--spacing) * 20);
   }
+  .\!pl-11 {
+    padding-left: calc(var(--spacing) * 11) !important;
+  }
   .pl-3 {
     padding-left: calc(var(--spacing) * 3);
   }
@@ -3034,6 +3037,9 @@ input[type="hidden"] {
   font-size: 0.92rem;
   text-decoration: none;
   transition: all 0.15s ease;
+}
+.relative > input.icp-input {
+  padding-left: 2.75rem !important;
 }
 @property --tw-translate-x {
   syntax: "*";
