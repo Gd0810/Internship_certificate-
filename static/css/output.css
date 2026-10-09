@@ -2557,10 +2557,11 @@ input[type="hidden"] {
 }
 .icp-btn--primary {
   background: var(--c-accent);
-  color: #fff;
+  color: #ffffff !important;
 }
 .icp-btn--primary:hover {
   background: var(--c-accent-ink);
+  color: #ffffff !important;
 }
 .icp-btn--primary:disabled {
   background: var(--c-muted);
@@ -2568,10 +2569,11 @@ input[type="hidden"] {
 }
 .icp-btn--dark {
   background: var(--c-charcoal);
-  color: #fff;
+  color: #ffffff !important;
 }
 .icp-btn--dark:hover {
   background: var(--c-charcoal-soft);
+  color: #ffffff !important;
 }
 .icp-btn--ghost {
   background: transparent;
@@ -2592,6 +2594,12 @@ input[type="hidden"] {
 }
 .icp-btn--danger:hover {
   background: var(--c-accent-tint);
+}
+button.text-white, a.text-white, .icp-btn--primary, .icp-btn--dark, .bg-primary, .bg-\[\#bb0004\], .bg-\[\#e1251b\], .bg-\[\#151c27\], .bg-\[\#1159c2\], [class*="bg-[#bb0004]"], [class*="bg-[#e1251b]"], [class*="bg-[#151c27]"], [class*="bg-[#1159c2]"], [class*="from-[#bb0004]"] {
+  color: #ffffff !important;
+}
+button.text-white *, a.text-white *, .icp-btn--primary *, .icp-btn--dark *, .bg-primary *, .bg-\[\#bb0004\] *, .bg-\[\#e1251b\] *, .bg-\[\#151c27\] *, .bg-\[\#1159c2\] *, [class*="bg-[#bb0004]"] *, [class*="bg-[#e1251b]"] *, [class*="bg-[#151c27]"] *, [class*="bg-[#1159c2]"] *, [class*="from-[#bb0004]"] * {
+  color: #ffffff !important;
 }
 .icp-card {
   background: var(--c-surface);
