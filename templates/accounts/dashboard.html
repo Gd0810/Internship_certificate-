@@ -1,611 +1,798 @@
 {% extends "base.html" %}
-{% block body %}
-<div class="icp-dash">
-  <aside class="icp-dash__side">
-    <a href="{% url 'core:home' %}" class="icp-brand"><span class="icp-brand__mark">R</span> Redback</a>
 
-    <div class="icp-dash__profile">
-      <span class="icp-avatar">{{ profile.full_name|first|upper }}</span>
-      <div>
-        <div style="color:#fff; font-weight:500;">{{ profile.full_name }}</div>
-        <div style="color:#9c9a96;">{{ profile.track.name }}</div>
+{% block title %}{{ profile.full_name }} | Student Dashboard{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row font-sans text-[#151c27]">
+  
+  <!-- Mobile Header Bar -->
+  <header class="md:hidden sticky top-0 z-40 bg-[#101725] text-white px-4 py-3 flex items-center justify-between border-b border-slate-800 shadow-sm">
+    <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 no-underline">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#bb0004] to-[#e1251b] flex items-center justify-center text-white font-extrabold text-base shadow-sm">
+        R
+      </div>
+      <div class="flex flex-col">
+        <span class="text-base font-extrabold text-white leading-none">Redback</span>
+        <span class="text-[9px] font-bold text-[#ffdad5] uppercase tracking-wider mt-0.5">Student Dashboard</span>
+      </div>
+    </a>
+    <button id="student-sidebar-toggle" type="button" class="p-2 rounded-lg bg-slate-800 text-slate-200 hover:text-white focus:outline-none">
+      <span class="material-symbols-outlined text-2xl" id="sidebar-toggle-icon">menu</span>
+    </button>
+  </header>
+
+  <!-- Left Sidebar Navigation -->
+  <aside id="student-sidebar" class="fixed md:sticky top-0 inset-y-0 left-0 z-50 w-64 bg-[#101725] text-slate-300 flex flex-col justify-between border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shrink-0 h-screen overflow-y-auto">
+    
+    <div>
+      <!-- Brand Header -->
+      <div class="p-6 border-b border-slate-800/80 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#bb0004] via-[#e1251b] to-[#ff4d4d] flex items-center justify-center text-white font-extrabold text-xl shadow-md">
+          R
+        </div>
+        <div class="flex flex-col">
+          <span class="text-lg font-extrabold text-white tracking-tight leading-none">Redback</span>
+          <span class="text-[10px] font-bold text-[#ffdad5] bg-[#bb0004]/30 border border-[#bb0004]/50 px-2 py-0.5 rounded-md uppercase tracking-wider mt-1 w-max">Student Portal</span>
+        </div>
+      </div>
+
+      <!-- Student Profile Card in Sidebar -->
+      <div class="p-4 mx-3 my-4 bg-slate-900/90 rounded-2xl border border-slate-800 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#bb0004] to-[#1159c2] text-white font-extrabold flex items-center justify-center text-base shrink-0 shadow-sm">
+          {{ profile.full_name|first|upper }}
+        </div>
+        <div class="overflow-hidden">
+          <div class="text-xs font-bold text-white truncate" title="{{ profile.full_name }}">{{ profile.full_name }}</div>
+          <div class="text-[10px] text-[#ffdad5] truncate" title="{{ profile.track.name }}">{{ profile.track.name }}</div>
+          <div class="text-[9px] text-slate-400 font-mono mt-0.5">{{ profile.intern_id }}</div>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div class="px-3 pb-6">
+        <div class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Navigation</div>
+        <nav class="space-y-1">
+          
+          <a href="?tab=dashboard" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if active_tab == 'dashboard' %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <span class="material-symbols-outlined text-xl">dashboard</span>
+            <span>Dashboard Overview</span>
+          </a>
+
+          <a href="?tab=task" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if active_tab == 'task' %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">fact_check</span>
+              <span>Task Modules</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if active_tab == 'task' %}bg-white/20 text-white{% else %}bg-slate-800 text-slate-300{% endif %}">
+              {{ profile.completed_tasks }}/{{ profile.total_tasks }}
+            </span>
+          </a>
+
+          <a href="?tab=offer-letter" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if active_tab == 'offer-letter' %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <span class="material-symbols-outlined text-xl">description</span>
+            <span>Offer Letter</span>
+          </a>
+
+          <a href="?tab=certificate" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if active_tab == 'certificate' %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+              <span>Certificate</span>
+            </div>
+            {% if profile.has_paid %}
+              <span class="material-symbols-outlined text-base text-emerald-400">verified</span>
+            {% else %}
+              <span class="material-symbols-outlined text-base text-amber-400">lock</span>
+            {% endif %}
+          </a>
+
+        </nav>
+
+        <div class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-8 mb-3">Public Portal</div>
+        <nav class="space-y-1">
+          <a href="{% url 'core:home' %}" target="_blank" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:bg-slate-800/70 hover:text-white transition-all no-underline">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-xl">open_in_new</span>
+              <span>View Public Site</span>
+            </div>
+            <span class="material-symbols-outlined text-sm text-slate-400">arrow_outward</span>
+          </a>
+        </nav>
       </div>
     </div>
 
-    <a href="?tab=dashboard" class="icp-tab {% if active_tab == 'dashboard' %}is-active{% endif %}">
-      <span class="icp-tab__dot"></span> Dashboard
-    </a>
-    <a href="?tab=offer-letter" class="icp-tab {% if active_tab == 'offer-letter' %}is-active{% endif %}">
-      <span class="icp-tab__dot"></span> Offer Letter
-    </a>
-    <a href="?tab=task" class="icp-tab {% if active_tab == 'task' %}is-active{% endif %}">
-      <span class="icp-tab__dot"></span> Task
-    </a>
-    <a href="?tab=certificate" class="icp-tab {% if active_tab == 'certificate' %}is-active{% endif %}">
-      <span class="icp-tab__dot"></span> Certificate
-    </a>
-
-    <form method="post" action="{% url 'accounts:logout' %}" style="margin-top:32px;">
-      {% csrf_token %}
-      <button type="submit" class="icp-tab" style="width:100%; border:none; background:none; cursor:pointer; text-align:left;">
-        <span class="icp-tab__dot"></span> Log out
-      </button>
-    </form>
+    <!-- Sidebar Bottom User Card & Logout -->
+    <div class="p-4 border-t border-slate-800 bg-[#0c111c]">
+      <form method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors border-0 bg-transparent cursor-pointer text-xs font-semibold">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-xl">logout</span>
+            <span>Sign Out</span>
+          </div>
+          <span class="text-[10px] font-mono text-slate-500">Exit</span>
+        </button>
+      </form>
+    </div>
   </aside>
 
-  <main class="icp-dash__main">
+  <!-- Sidebar Overlay Backdrop for Mobile -->
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden md:hidden"></div>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <!-- Top Header Navigation Bar -->
+    <header class="bg-white border-b border-slate-200/80 px-6 py-4 sticky top-0 z-30 flex items-center justify-between gap-4 shadow-2xs">
+      <div class="flex items-center gap-3">
+        <h2 class="text-lg font-extrabold text-[#151c27] tracking-tight m-0">
+          {% if active_tab == 'dashboard' %}Dashboard Overview
+          {% elif active_tab == 'offer-letter' %}Offer Letter Document
+          {% elif active_tab == 'task' %}Internship Task Modules
+          {% elif active_tab == 'certificate' %}Certificate &amp; Credentials
+          {% endif %}
+        </h2>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs font-mono font-bold text-[#151c27]">
+          <span class="text-slate-400 font-sans font-normal">ID:</span>
+          <span>{{ profile.intern_id }}</span>
+        </div>
+
+        <a href="?tab=task" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs transition-all flex items-center gap-1.5 no-underline">
+          <span class="material-symbols-outlined text-base">fact_check</span>
+          <span>Tasks</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Page Alert Messages -->
     {% if messages %}
-      {% for message in messages %}<div class="icp-alert icp-alert--{{ message.tags }}">{{ message }}</div>{% endfor %}
-    {% endif %}
-
-    {% if active_tab == 'dashboard' %}
-      <span class="icp-eyebrow">Overview</span>
-      <h1 style="font-size:1.7rem; margin:8px 0 4px;">Welcome back, {{ profile.full_name }}</h1>
-      <p style="color:var(--c-muted); margin-bottom:0;">{{ profile.track.name }} · {{ profile.college_name }}</p>
-
-      <div class="icp-stat-grid">
-        <div class="icp-card icp-stat">
-          <b>{{ profile.completed_tasks }}/{{ profile.total_tasks }}</b>
-          <span>Task modules completed</span>
-        </div>
-        <div class="icp-card icp-stat">
-          <b>{% if profile.has_paid %}Unlocked{% else %}Locked{% endif %}</b>
-          <span>Certificate status</span>
-        </div>
-        <div class="icp-card icp-stat">
-          <b>₹{{ profile.track.price }}</b>
-          <span>Certificate fee</span>
-        </div>
-      </div>
-
-      <div class="icp-card" style="padding:26px 28px; margin-bottom:24px;">
-        <h3 style="font-size:1.05rem; margin:0 0 14px;">Your progress</h3>
-        <div class="icp-progress"><div class="icp-progress__bar" style="width:{{ profile.progress_percent }}%;"></div></div>
-        <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:0.85rem; color:var(--c-muted);">
-          <span>{{ profile.progress_percent }}% complete</span>
-          <span>{{ profile.track.task_modules.count }} module{{ profile.track.task_modules.count|pluralize }} total</span>
-        </div>
-      </div>
-
-      <div class="icp-card" style="padding:26px 28px;">
-        <h3 style="font-size:1.05rem; margin:0 0 16px;">Your details</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px 24px; font-size:0.92rem;">
-          <div><span style="color:var(--c-muted);">Intern ID</span><br><strong style="color:var(--c-accent-ink); font-family:monospace;">{{ profile.intern_id }}</strong></div>
-          <div><span style="color:var(--c-muted);">Full name</span><br>{{ profile.full_name }}</div>
-          <div><span style="color:var(--c-muted);">Email</span><br>{{ profile.user.email }}</div>
-          <div><span style="color:var(--c-muted);">College</span><br>{{ profile.college_name }}</div>
-          <div><span style="color:var(--c-muted);">Degree</span><br>{{ profile.degree }}</div>
-          <div><span style="color:var(--c-muted);">Mobile</span><br>{{ profile.mobile_number }}</div>
-          <div><span style="color:var(--c-muted);">Track</span><br>{{ profile.track.name }}</div>
-        </div>
-      </div>
-
-    {% elif active_tab == 'offer-letter' %}
-      <span class="icp-eyebrow">Document</span>
-      <h1 style="font-size:1.7rem; margin:8px 0 20px;">Offer Letter</h1>
-      <div class="icp-doc-preview">
-        <div class="icp-doc-preview__frame">
-          <iframe src="{% url 'certificates:offer_letter_preview' %}" title="Offer letter preview"></iframe>
-        </div>
-        <div style="padding:18px 24px; display:flex; justify-content:flex-end;">
-          <a href="{% url 'certificates:offer_letter_download' %}" class="icp-btn icp-btn--dark">Download PDF</a>
-        </div>
-      </div>
-
-    {% elif active_tab == 'task' %}
-      <span class="icp-eyebrow">{{ profile.completed_tasks }} of {{ profile.total_tasks }} complete</span>
-      <h1 style="font-size:1.7rem; margin:8px 0 20px;">Task Modules</h1>
-      <div class="icp-progress" style="margin-bottom:28px;"><div class="icp-progress__bar" id="task-progress-bar" style="width:{{ profile.progress_percent }}%;"></div></div>
-
-      <style>
-      .icp-mod-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 18px;
-        padding: 24px 26px;
-        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
-        margin-bottom: 24px;
-        max-width: 680px;
-      }
-      .icp-mod-card__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 12px;
-      }
-      .icp-mod-num {
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: #0f172a;
-      }
-      .icp-mod-duration {
-        font-size: 0.86rem;
-        color: #64748b;
-        margin-top: 2px;
-      }
-      .icp-badge-pill {
-        display: inline-block;
-        padding: 5px 14px;
-        border-radius: 999px;
-        font-size: 0.82rem;
-        font-weight: 700;
-      }
-      .icp-badge-pill.is-completed {
-        background: #dcfce7;
-        color: #15803d;
-      }
-      .icp-badge-pill.is-progress {
-        background: #f1f5f9;
-        color: #475569;
-      }
-      .icp-mod-title {
-        font-size: 1.3rem;
-        font-weight: 800;
-        color: #0f172a;
-        margin: 14px 0 16px;
-        line-height: 1.3;
-      }
-      .icp-mod-section__label {
-        font-weight: 700;
-        font-size: 0.95rem;
-        color: #1e293b;
-        margin-bottom: 8px;
-      }
-      .icp-mod-bullets {
-        list-style-type: disc !important;
-        padding-left: 22px !important;
-        margin: 8px 0 0 0;
-        color: #334155;
-        font-size: 0.92rem;
-        line-height: 1.6;
-      }
-      .icp-mod-bullets li {
-        margin-bottom: 6px;
-        padding-left: 4px;
-      }
-      .icp-mod-bullets li::marker {
-        color: #0f172a;
-      }
-      .icp-mod-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 12px;
-      }
-      .icp-chip {
-        background: #f1f5f9;
-        border: 1px solid #e2e8f0;
-        color: #334155;
-        font-size: 0.84rem;
-        padding: 6px 14px;
-        border-radius: 8px;
-        font-weight: 500;
-      }
-      .icp-btn-edit-sub {
-        width: 100%;
-        background: #0f172a;
-        color: #ffffff;
-        border: none;
-        padding: 12px 18px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 0.92rem;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .icp-btn-edit-sub:hover {
-        background: #1e293b;
-      }
-      .icp-btn-toggle-comp {
-        width: 100%;
-        background: #ecfdf5;
-        color: #047857;
-        border: 1.5px solid #6ee7b7;
-        padding: 12px 18px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 0.92rem;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .icp-btn-toggle-comp:not(.is-completed) {
-        background: #f8fafc;
-        color: #475569;
-        border-color: #cbd5e1;
-      }
-      .icp-btn-toggle-comp:hover {
-        opacity: 0.95;
-      }
-
-      /* Modal Dialog Styling */
-      .icp-modal-backdrop {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(15, 23, 42, 0.65);
-        backdrop-filter: blur(4px);
-        z-index: 99999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-      }
-      .icp-modal-dialog {
-        background: #ffffff;
-        border-radius: 28px;
-        max-width: 500px;
-        width: 100%;
-        padding: 34px 38px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        animation: icpModalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        text-align: left;
-      }
-      @keyframes icpModalPop {
-        from { opacity: 0; transform: scale(0.95) translateY(10px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
-      }
-      .icp-modal-title {
-        font-size: 1.55rem;
-        font-weight: 800;
-        color: #0f172a;
-        margin: 0 0 6px;
-      }
-      .icp-modal-subtitle {
-        font-size: 0.94rem;
-        color: #64748b;
-        margin: 0 0 24px;
-        line-height: 1.45;
-      }
-      .icp-modal-btn-cancel {
-        flex: 1;
-        background: #f1f5f9;
-        color: #334155;
-        border: none;
-        padding: 14px 20px;
-        border-radius: 14px;
-        font-weight: 700;
-        font-size: 0.95rem;
-        cursor: pointer;
-        transition: background 0.15s ease;
-      }
-      .icp-modal-btn-cancel:hover {
-        background: #e2e8f0;
-      }
-      .icp-modal-btn-submit {
-        flex: 1;
-        background: #881337;
-        color: #ffffff;
-        border: none;
-        padding: 14px 20px;
-        border-radius: 14px;
-        font-weight: 700;
-        font-size: 0.95rem;
-        cursor: pointer;
-        transition: background 0.15s ease;
-      }
-      .icp-modal-btn-submit:hover {
-        background: #9f1239;
-      }
-      </style>
-
-      <div>
-        {% for row in task_rows %}
-        <div class="icp-mod-card" data-task-id="{{ row.task.id }}">
-          <div class="icp-mod-card__header">
-            <div>
-              <div class="icp-mod-num">Module {{ row.task.module_number }}</div>
-              <div class="icp-mod-duration">{{ row.task.duration_info|default:"Day 1 – Day 5 · High priority" }}</div>
-            </div>
-            <div>
-              <span class="icp-badge-pill {% if row.completed %}is-completed{% else %}is-progress{% endif %}" id="status-pill-{{ row.task.id }}">
-                {% if row.completed %}✓ Completed{% else %}In Progress{% endif %}
+      <div class="px-6 pt-4 space-y-2">
+        {% for message in messages %}
+          <div class="p-4 rounded-xl text-sm font-medium border flex items-center justify-between shadow-xs {% if message.tags == 'success' %}bg-emerald-50 border-emerald-200 text-emerald-800{% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-800{% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %}">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-lg">
+                {% if message.tags == 'success' %}check_circle{% elif message.tags == 'error' %}error{% else %}info{% endif %}
               </span>
+              <span>{{ message }}</span>
             </div>
           </div>
-
-          <h2 class="icp-mod-title">{{ row.task.title }}</h2>
-
-          {% if row.task.body_points %}
-          <div class="icp-mod-section">
-            <div class="icp-mod-section__label">What You'll Do:</div>
-            <ul class="icp-mod-bullets">
-              {% for point in row.task.body_points %}
-                <li>{{ point }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% elif row.task.description %}
-          <div class="icp-mod-section">
-            <div class="icp-mod-section__label">What You'll Do:</div>
-            <p style="color:#475569; font-size:0.92rem; line-height:1.6;">{{ row.task.description }}</p>
-          </div>
-          {% endif %}
-
-          {% if row.task.deliverables %}
-          <div class="icp-mod-section" style="margin-top:18px;">
-            <div class="icp-mod-section__label">Submission Deliverables:</div>
-            <div class="icp-mod-chips">
-              {% for deliv in row.deliverable_items %}
-                <span class="icp-chip">{{ deliv.name }}</span>
-              {% endfor %}
-            </div>
-          </div>
-          {% endif %}
-
-          <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
-            {% if row.task.deliverables %}
-            <button type="button" class="icp-btn-edit-sub" data-open-modal="{{ row.task.id }}">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline; vertical-align:middle; margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              Edit Submission
-            </button>
-            {% endif %}
-            <button type="button" class="icp-btn-toggle-comp {% if row.completed %}is-completed{% endif %}" data-task-complete="{{ row.task.id }}" id="btn-complete-{{ row.task.id }}">
-              {% if row.completed %}✓ Completed{% else %}Mark as Completed{% endif %}
-            </button>
-          </div>
-        </div>
-
-        <!-- Deliverables Submission Modal -->
-        {% if row.task.deliverables %}
-        <div class="icp-modal-backdrop" id="modal-{{ row.task.id }}" style="display:none;">
-          <div class="icp-modal-dialog">
-            <h2 class="icp-modal-title">Submit Module Deliverables</h2>
-            <p class="icp-modal-subtitle">Provide the required links for: <strong style="color: #881337;">{{ row.task.title }}</strong></p>
-
-            <form class="icp-modal-form" data-task-id="{{ row.task.id }}">
-              {% for deliv in row.deliverable_items %}
-                <div style="margin-bottom:18px; text-align:left;">
-                  <label style="font-weight:700; color:#334155; font-size:0.92rem; margin-bottom:6px; display:block;">{{ deliv.name }} *</label>
-                  <input type="text" class="icp-modal-sub-input"
-                         data-deliv-name="{{ deliv.name }}"
-                         placeholder="https://..."
-                         value="{{ deliv.value }}"
-                         style="width:100%; padding:13px 16px; border:1.5px solid #cbd5e1; border-radius:14px; font-size:0.92rem; color:#0f172a; box-sizing:border-box; background:#ffffff; outline:none; transition:border-color 0.15s ease;">
-                </div>
-              {% endfor %}
-
-              <div style="display:flex; gap:8px; font-size:0.86rem; color:#475569; margin:6px 0 24px; text-align:left;">
-                <span style="color:#0284c7; font-weight:700;">Tip:</span>
-                <span>Please make sure to tag <strong style="color:#0284c7;">Redback</strong> in your post.</span>
-              </div>
-
-              <div style="display:flex; gap:14px; margin-top:20px;">
-                <button type="button" class="icp-modal-btn-cancel" data-close-modal="{{ row.task.id }}">Cancel</button>
-                <button type="button" class="icp-modal-btn-submit" data-task-save="{{ row.task.id }}">Submit Work</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        {% endif %}
-
-        {% empty %}
-        <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No task modules published for this track yet.</div>
         {% endfor %}
       </div>
-
-      <div id="all-done-banner" class="icp-alert icp-alert--success" style="display:{% if profile.all_tasks_completed %}block{% else %}none{% endif %}; margin-top:20px;">
-        All task modules complete — head to the Certificate tab to unlock your certificate.
-        <a href="?tab=certificate" style="font-weight:600; margin-left:6px;">Go there →</a>
-      </div>
-
-    {% elif active_tab == 'certificate' %}
-      <span class="icp-eyebrow">Document</span>
-      <h1 style="font-size:1.7rem; margin:8px 0 20px;">Certificate</h1>
-
-      {% if profile.has_paid %}
-        <div class="icp-doc-preview">
-          <div class="icp-doc-preview__frame">
-            <iframe src="{% url 'certificates:certificate_preview' %}" title="Certificate preview"></iframe>
-          </div>
-          <div style="padding:18px 24px; display:flex; justify-content:space-between; align-items:center;">
-            <span class="icp-badge icp-badge--paid"><span class="icp-dot"></span>Certificate ID: {{ profile.certificate_id }}</span>
-            <a href="{% url 'certificates:certificate_download' %}" class="icp-btn icp-btn--dark">Download PDF</a>
-          </div>
-        </div>
-      {% elif not profile.all_tasks_completed %}
-        <div class="icp-card icp-locked-panel">
-          <span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Locked</span>
-          <h3 style="margin:16px 0 8px;">Finish your task modules first</h3>
-          <p style="color:var(--c-muted); max-width:44ch; margin:0 auto 20px;">You've completed {{ profile.completed_tasks }} of {{ profile.total_tasks }} modules for {{ profile.track.name }}.</p>
-          <a href="?tab=task" class="icp-btn icp-btn--ghost">Go to Task tab</a>
-        </div>
-      {% else %}
-        <div class="icp-card icp-locked-panel">
-          <span class="icp-badge icp-badge--locked"><span class="icp-dot"></span>Payment required</span>
-          <div class="icp-price">₹{{ profile.track.price }}</div>
-          <p style="color:var(--c-muted); max-width:44ch; margin:0 auto 26px;">Unlock your {{ profile.track.name }} certificate with a one-time payment via Razorpay.</p>
-          <button id="pay-btn" class="icp-btn icp-btn--primary">Pay &amp; Unlock Certificate</button>
-          <p id="pay-error" class="icp-error" style="display:none; margin-top:14px;"></p>
-        </div>
-      {% endif %}
     {% endif %}
-  </main>
+
+    <!-- Main Dynamic Content -->
+    <main class="flex-1 p-6 md:p-8 max-w-[1400px] w-full mx-auto space-y-8">
+      
+      <!-- TAB 1: OVERVIEW / DASHBOARD -->
+      {% if active_tab == 'dashboard' %}
+        
+        <!-- Welcome Hero Banner -->
+        <div class="bg-gradient-to-r from-[#101725] via-[#151c27] to-[#1e293b] rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-[#bb0004]/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <span class="px-3 py-1 rounded-full bg-[#bb0004]/40 border border-[#bb0004]/60 text-white font-bold text-xs uppercase tracking-wider" style="color: #ffffff !important;">
+                Student Learning Center
+              </span>
+              <h1 class="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight text-white" style="color: #ffffff !important;">
+                Welcome back, <span class="text-[#ffdad5]" style="color: #ffdad5 !important;">{{ profile.full_name }}</span>
+              </h1>
+              <p class="text-slate-300 text-xs sm:text-sm mt-1 max-w-xl leading-relaxed">
+                {{ profile.track.name }} · {{ profile.college_name }}
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3 shrink-0">
+              <a href="?tab=task" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition-all flex items-center gap-2 no-underline">
+                <span class="material-symbols-outlined text-lg">play_circle</span>
+                <span>Continue Tasks</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Module Tasks</span>
+              <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#1159c2] flex items-center justify-center">
+                <span class="material-symbols-outlined text-xl">fact_check</span>
+              </div>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+              <span class="text-3xl font-extrabold text-[#151c27]">{{ profile.completed_tasks }}/{{ profile.total_tasks }}</span>
+              <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">{{ profile.progress_percent }}% Complete</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Certificate Status</span>
+              <div class="w-10 h-10 rounded-xl {% if profile.has_paid %}bg-emerald-100 text-emerald-600{% else %}bg-amber-100 text-amber-600{% endif %} flex items-center justify-center">
+                <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+              </div>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+              <span class="text-xl font-extrabold text-[#151c27]">
+                {% if profile.has_paid %}Unlocked{% else %}Locked{% endif %}
+              </span>
+              {% if profile.has_paid %}
+                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Verified</span>
+              {% else %}
+                <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">Pending</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Intern ID</span>
+              <div class="w-10 h-10 rounded-xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center">
+                <span class="material-symbols-outlined text-xl">badge</span>
+              </div>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+              <span class="text-lg font-mono font-extrabold text-[#bb0004]">{{ profile.intern_id }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Certificate Fee</span>
+              <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-xl">payments</span>
+              </div>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+              <span class="text-3xl font-extrabold text-[#151c27]">₹{{ profile.track.price }}</span>
+              <span class="text-xs font-bold text-slate-500">One-time</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Overall Progress Card -->
+        <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-lg font-bold text-[#151c27]">Track Module Progress</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Overall task completion progress in {{ profile.track.name }}</p>
+            </div>
+            <span class="text-base font-extrabold text-[#bb0004]">{{ profile.progress_percent }}%</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200 mb-3">
+            <div class="h-full bg-gradient-to-r from-[#1159c2] via-[#bb0004] to-[#e1251b] transition-all duration-500 rounded-full" style="width: {{ profile.progress_percent }}%;"></div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span>{{ profile.completed_tasks }} of {{ profile.total_tasks }} modules finished</span>
+            <a href="?tab=task" class="font-bold text-[#bb0004] hover:underline no-underline flex items-center gap-1">
+              <span>Go to Task Modules</span>
+              <span class="material-symbols-outlined text-xs">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Registration & Profile Details Card -->
+        <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs">
+          <h3 class="text-lg font-bold text-[#151c27] mb-6">Student Registration Details</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Intern ID</span>
+              <span class="font-mono font-extrabold text-[#bb0004] text-base block">{{ profile.intern_id }}</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Full Name</span>
+              <span class="font-bold text-[#151c27] text-base block">{{ profile.full_name }}</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Email Address</span>
+              <span class="font-semibold text-slate-700 text-sm block truncate" title="{{ profile.user.email }}">{{ profile.user.email }}</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Mobile Number</span>
+              <span class="font-semibold text-slate-700 text-sm block">{{ profile.mobile_number }}</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">College / University</span>
+              <span class="font-medium text-[#151c27] text-sm block truncate" title="{{ profile.college_name }}">{{ profile.college_name }}</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Degree</span>
+              <span class="font-medium text-[#151c27] text-sm block">{{ profile.degree }}</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Track Domain</span>
+              <span class="font-bold text-[#1159c2] text-sm block truncate" title="{{ profile.track.name }}">{{ profile.track.name }}</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Enrolled Date</span>
+              <span class="font-medium text-slate-700 text-sm block">{{ profile.created_at|date:"d M Y" }}</span>
+            </div>
+          </div>
+        </div>
+
+      <!-- TAB 2: OFFER LETTER -->
+      {% elif active_tab == 'offer-letter' %}
+
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold text-[#bb0004] uppercase tracking-wider block mb-1">Official Document</span>
+              <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">Offer Letter Preview</h3>
+            </div>
+            <a href="{% url 'certificates:offer_letter_download' %}" class="bg-[#151c27] hover:bg-[#bb0004] text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-xs transition-all flex items-center gap-2 no-underline">
+              <span class="material-symbols-outlined text-lg">download</span>
+              <span>Download Offer Letter (PDF)</span>
+            </a>
+          </div>
+
+          <div class="p-6 bg-slate-100/70 flex justify-center">
+            <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 min-h-[700px] flex flex-col">
+              <iframe src="{% url 'certificates:offer_letter_preview' %}" class="w-full h-[750px] border-0"></iframe>
+            </div>
+          </div>
+        </div>
+
+      <!-- TAB 3: TASK MODULES -->
+      {% elif active_tab == 'task' %}
+
+        <!-- Tasks Header & Progress Card -->
+        <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-bold text-[#1159c2] uppercase tracking-wider block mb-1">Module Evaluation</span>
+              <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">Internship Tasks &amp; Deliverables</h3>
+            </div>
+            <div class="px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#1159c2] text-xs font-bold flex items-center gap-1.5 shrink-0">
+              <span class="material-symbols-outlined text-base">fact_check</span>
+              <span>{{ profile.completed_tasks }} of {{ profile.total_tasks }} Modules Completed</span>
+            </div>
+          </div>
+
+          <!-- Task Progress Bar -->
+          <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+            <div id="task-progress-bar" class="h-full bg-gradient-to-r from-[#1159c2] to-[#bb0004] transition-all duration-500 rounded-full" style="width: {{ profile.progress_percent }}%;"></div>
+          </div>
+        </div>
+
+        <!-- Task Modules Cards List -->
+        <div class="space-y-6">
+          {% for row in task_rows %}
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all space-y-5" data-task-id="{{ row.task.id }}">
+              
+              <!-- Module Card Header -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-[#d9e2ff] text-[#1159c2] font-extrabold text-base flex items-center justify-center shrink-0">
+                    {{ row.task.module_number }}
+                  </div>
+                  <div>
+                    <h4 class="text-base font-extrabold text-[#151c27]">Module {{ row.task.module_number }}</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">{{ row.task.duration_info|default:"Day 1 – Day 5 · High priority" }}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <span id="status-pill-{{ row.task.id }}" class="px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 {% if row.completed %}bg-emerald-50 text-emerald-700 border border-emerald-200{% else %}bg-slate-100 text-slate-600 border border-slate-200{% endif %}">
+                    {% if row.completed %}
+                      <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Completed
+                    {% else %}
+                      <span class="w-2 h-2 rounded-full bg-slate-400"></span> In Progress
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Module Title -->
+              <h3 class="text-lg font-extrabold text-[#151c27] tracking-tight">{{ row.task.title }}</h3>
+
+              <!-- What You'll Do Section -->
+              {% if row.task.body_points %}
+                <div>
+                  <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2.5">What You'll Do:</h5>
+                  <ul class="space-y-2 text-xs sm:text-sm text-slate-700 list-none p-0">
+                    {% for point in row.task.body_points %}
+                      <li class="flex items-start gap-2.5">
+                        <span class="material-symbols-outlined text-base text-[#1159c2] mt-0.5 shrink-0">check_circle</span>
+                        <span>{{ point }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% elif row.task.description %}
+                <div>
+                  <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">What You'll Do:</h5>
+                  <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">{{ row.task.description }}</p>
+                </div>
+              {% endif %}
+
+              <!-- Submission Deliverables -->
+              {% if row.task.deliverables %}
+                <div class="pt-2">
+                  <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2.5">Required Deliverables:</h5>
+                  <div class="flex flex-wrap gap-2">
+                    {% for deliv in row.deliverable_items %}
+                      <span class="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm text-slate-400">link</span>
+                        <span>{{ deliv.name }}</span>
+                      </span>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+              <!-- Action Buttons -->
+              <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
+                {% if row.task.deliverables %}
+                  <button type="button" data-open-modal="{{ row.task.id }}" class="flex-1 bg-[#151c27] hover:bg-slate-800 text-white font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border-0">
+                    <span class="material-symbols-outlined text-base">upload_file</span>
+                    <span>Edit Submission Links</span>
+                  </button>
+                {% endif %}
+
+                <button type="button" id="btn-complete-{{ row.task.id }}" data-task-complete="{{ row.task.id }}" data-completed="{% if row.completed %}true{% else %}false{% endif %}" class="flex-1 font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border {% if row.completed %}bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100{% else %}bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200{% endif %}">
+                  <span>{% if row.completed %}✓ Module Completed{% else %}Mark as Completed{% endif %}</span>
+                </button>
+              </div>
+
+              <!-- Modal Popup for Deliverables Submission -->
+              {% if row.task.deliverables %}
+                <div id="modal-{{ row.task.id }}" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+                  <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 text-left border border-slate-200">
+                    <div>
+                      <h3 class="text-xl font-extrabold text-[#151c27]">Submit Module Deliverables</h3>
+                      <p class="text-xs text-slate-500 mt-1">Provide links for: <strong class="text-[#bb0004]">{{ row.task.title }}</strong></p>
+                    </div>
+
+                    <form class="space-y-4">
+                      {% for deliv in row.deliverable_items %}
+                        <div>
+                          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{{ deliv.name }} *</label>
+                          <input type="text" data-deliv-name="{{ deliv.name }}" value="{{ deliv.value }}" placeholder="https://..." class="icp-modal-sub-input w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm text-[#151c27] focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 outline-none transition-all">
+                        </div>
+                      {% endfor %}
+
+                      <div class="p-3 rounded-xl bg-blue-50 border border-blue-100 text-xs text-blue-800 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base text-[#1159c2]">lightbulb</span>
+                        <span>Please make sure to tag <strong class="text-[#1159c2]">Redback</strong> in your post/submissions.</span>
+                      </div>
+
+                      <div class="flex items-center gap-3 pt-2">
+                        <button type="button" data-close-modal="{{ row.task.id }}" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 rounded-xl transition-colors cursor-pointer border-0">
+                          Cancel
+                        </button>
+                        <button type="button" data-task-save="{{ row.task.id }}" class="flex-1 bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs py-3 rounded-xl shadow-md transition-all cursor-pointer border-0">
+                          Submit Deliverables
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              {% endif %}
+
+            </div>
+          {% empty %}
+            <div class="bg-white p-12 rounded-2xl border border-slate-200 text-center text-slate-400">
+              <span class="material-symbols-outlined text-4xl block mb-2 text-slate-300">assignment_late</span>
+              No task modules published for this track yet.
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- All Done Banner -->
+        <div id="all-done-banner" class="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-bold flex items-center justify-between" style="display:{% if profile.all_tasks_completed %}flex{% else %}none{% endif %};">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-2xl text-emerald-600">verified</span>
+            <span>All task modules completed! Head to the Certificate tab to unlock your certificate.</span>
+          </div>
+          <a href="?tab=certificate" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl no-underline shrink-0">
+            Go to Certificate →
+          </a>
+        </div>
+
+      <!-- TAB 4: CERTIFICATE -->
+      {% elif active_tab == 'certificate' %}
+
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold text-[#bb0004] uppercase tracking-wider block mb-1">Verified Credentials</span>
+              <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">Certificate of Completion</h3>
+            </div>
+            
+            {% if profile.has_paid %}
+              <a href="{% url 'certificates:certificate_download' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 no-underline">
+                <span class="material-symbols-outlined text-lg">download</span>
+                <span>Download Certificate (PDF)</span>
+              </a>
+            {% endif %}
+          </div>
+
+          {% if profile.has_paid %}
+            <div class="p-6 bg-slate-100/70 flex justify-center">
+              <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 min-h-[700px] flex flex-col">
+                <iframe src="{% url 'certificates:certificate_preview' %}" class="w-full h-[750px] border-0"></iframe>
+              </div>
+            </div>
+          {% elif not profile.all_tasks_completed %}
+            <div class="p-12 text-center max-w-md mx-auto space-y-4">
+              <div class="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-3xl">lock</span>
+              </div>
+              <h3 class="text-xl font-extrabold text-[#151c27]">Finish Your Task Modules First</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                You've completed {{ profile.completed_tasks }} of {{ profile.total_tasks }} modules for {{ profile.track.name }}. Complete all modules to unlock certificate payment &amp; issuance.
+              </p>
+              <a href="?tab=task" class="inline-flex items-center gap-2 bg-[#151c27] hover:bg-slate-800 text-white font-bold text-xs px-6 py-3 rounded-xl no-underline shadow-xs">
+                <span>Go to Task Modules</span>
+                <span class="material-symbols-outlined text-base">arrow_forward</span>
+              </a>
+            </div>
+          {% else %}
+            <div class="p-12 text-center max-w-md mx-auto space-y-4">
+              <div class="w-16 h-16 rounded-full bg-[#ffdad5] text-[#bb0004] flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+              </div>
+              <h3 class="text-xl font-extrabold text-[#151c27]">Unlock Verified Certificate</h3>
+              <div class="text-3xl font-extrabold text-[#bb0004]">₹{{ profile.track.price }}</div>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                Unlock your official {{ profile.track.name }} certificate with a one-time verification fee.
+              </p>
+              <button id="pay-btn" type="button" class="w-full bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all cursor-pointer border-0">
+                Pay &amp; Unlock Certificate
+              </button>
+              <p id="pay-error" class="text-red-500 text-xs font-semibold" style="display:none;"></p>
+            </div>
+          {% endif %}
+        </div>
+
+      {% endif %}
+
+    </main>
+  </div>
+
 </div>
 
+<!-- Interactive Mobile Sidebar & Razorpay / AJAX Logic -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-function getCookie(name) {
-  const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-  return match ? match.pop() : '';
-}
-const csrftoken = getCookie('csrftoken');
+  function getCookie(name) {
+    const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return match ? match.pop() : '';
+  }
+  const csrftoken = getCookie('csrftoken');
 
-// --- Modal Dialog & Task Submission Handling ---
-document.querySelectorAll('[data-open-modal]').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    const taskId = btn.getAttribute('data-open-modal');
-    const modal = document.getElementById('modal-' + taskId);
-    if (modal) modal.style.display = 'flex';
-  });
-});
+  document.addEventListener('DOMContentLoaded', function () {
+    // Sidebar Mobile Toggle
+    const toggleBtn = document.getElementById('student-sidebar-toggle');
+    const sidebar = document.getElementById('student-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const toggleIcon = document.getElementById('sidebar-toggle-icon');
 
-document.querySelectorAll('[data-close-modal]').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    const taskId = btn.getAttribute('data-close-modal');
-    const modal = document.getElementById('modal-' + taskId);
-    if (modal) modal.style.display = 'none';
-  });
-});
-
-document.querySelectorAll('.icp-modal-backdrop').forEach(function (backdrop) {
-  backdrop.addEventListener('click', function (e) {
-    if (e.target === backdrop) {
-      backdrop.style.display = 'none';
-    }
-  });
-});
-
-document.querySelectorAll('[data-task-save]').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    const taskId = btn.getAttribute('data-task-save');
-    const modal = document.getElementById('modal-' + taskId);
-    const deliverables = {};
-    if (modal) {
-      modal.querySelectorAll('.icp-modal-sub-input').forEach(function (input) {
-        const delivName = input.getAttribute('data-deliv-name');
-        if (delivName) {
-          deliverables[delivName] = input.value.trim();
+    if (toggleBtn && sidebar && backdrop) {
+      toggleBtn.addEventListener('click', function () {
+        const isClosed = sidebar.classList.contains('-translate-x-full');
+        if (isClosed) {
+          sidebar.classList.remove('-translate-x-full');
+          backdrop.classList.remove('hidden');
+          if (toggleIcon) toggleIcon.textContent = 'close';
+        } else {
+          sidebar.classList.add('-translate-x-full');
+          backdrop.classList.add('hidden');
+          if (toggleIcon) toggleIcon.textContent = 'menu';
         }
+      });
+      backdrop.addEventListener('click', function () {
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+        if (toggleIcon) toggleIcon.textContent = 'menu';
       });
     }
 
-    btn.disabled = true;
-    const origText = btn.textContent;
-    btn.textContent = 'Submitting...';
+    // Modal dialog handling
+    document.querySelectorAll('[data-open-modal]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const taskId = btn.getAttribute('data-open-modal');
+        const modal = document.getElementById('modal-' + taskId);
+        if (modal) modal.classList.remove('hidden');
+      });
+    });
 
-    fetch(`/accounts/tasks/${taskId}/submit/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken,
-      },
-      body: JSON.stringify({ deliverables: deliverables }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        btn.disabled = false;
-        btn.textContent = origText;
-        if (data.ok) {
-          btn.textContent = '✓ Submitted!';
-          setTimeout(function () {
+    document.querySelectorAll('[data-close-modal]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const taskId = btn.getAttribute('data-close-modal');
+        const modal = document.getElementById('modal-' + taskId);
+        if (modal) modal.classList.add('hidden');
+      });
+    });
+
+    // Save Deliverables
+    document.querySelectorAll('[data-task-save]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const taskId = btn.getAttribute('data-task-save');
+        const modal = document.getElementById('modal-' + taskId);
+        const deliverables = {};
+        if (modal) {
+          modal.querySelectorAll('.icp-modal-sub-input').forEach(function (input) {
+            const delivName = input.getAttribute('data-deliv-name');
+            if (delivName) deliverables[delivName] = input.value.trim();
+          });
+        }
+
+        btn.disabled = true;
+        const origText = btn.textContent;
+        btn.textContent = 'Submitting...';
+
+        fetch(`/accounts/tasks/${taskId}/submit/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+          },
+          body: JSON.stringify({ deliverables: deliverables }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            btn.disabled = false;
             btn.textContent = origText;
-            if (modal) modal.style.display = 'none';
-          }, 800);
-        }
+            if (data.ok) {
+              btn.textContent = '✓ Submitted!';
+              setTimeout(function () {
+                btn.textContent = origText;
+                if (modal) modal.classList.add('hidden');
+              }, 800);
+            }
+          });
       });
-  });
-});
+    });
 
-document.querySelectorAll('[data-task-complete]').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    const taskId = btn.getAttribute('data-task-complete');
-    const modal = document.getElementById('modal-' + taskId);
-    const deliverables = {};
-    if (modal) {
-      modal.querySelectorAll('.icp-modal-sub-input').forEach(function (input) {
-        const delivName = input.getAttribute('data-deliv-name');
-        if (delivName) {
-          deliverables[delivName] = input.value.trim();
-        }
-      });
-    }
+    // Toggle Task Complete Status
+    document.querySelectorAll('[data-task-complete]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const taskId = btn.getAttribute('data-task-complete');
+        const isCurrentlyDone = btn.getAttribute('data-completed') === 'true';
+        const targetState = !isCurrentlyDone;
 
-    const isCurrentlyDone = btn.classList.contains('is-completed');
-
-    fetch(`/accounts/tasks/${taskId}/submit/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken,
-      },
-      body: JSON.stringify({
-        deliverables: deliverables,
-        mark_complete: !isCurrentlyDone,
-      }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (!data.ok) return;
-        btn.classList.toggle('is-completed', data.is_completed);
-        btn.textContent = data.is_completed ? '✓ Completed' : 'Mark as Completed';
-
-        const pill = document.getElementById('status-pill-' + taskId);
-        if (pill) {
-          pill.classList.toggle('is-completed', data.is_completed);
-          pill.classList.toggle('is-progress', !data.is_completed);
-          pill.textContent = data.is_completed ? '✓ Completed' : 'In Progress';
+        const modal = document.getElementById('modal-' + taskId);
+        const deliverables = {};
+        if (modal) {
+          modal.querySelectorAll('.icp-modal-sub-input').forEach(function (input) {
+            const delivName = input.getAttribute('data-deliv-name');
+            if (delivName) deliverables[delivName] = input.value.trim();
+          });
         }
 
-        const pct = data.total_count ? Math.round((data.completed_count / data.total_count) * 100) : 0;
-        const bar = document.getElementById('task-progress-bar');
-        if (bar) bar.style.width = pct + '%';
-        const banner = document.getElementById('all-done-banner');
-        if (banner) banner.style.display = data.all_completed ? 'block' : 'none';
+        btn.disabled = true;
+
+        fetch(`/accounts/tasks/${taskId}/submit/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+          },
+          body: JSON.stringify({
+            deliverables: deliverables,
+            mark_complete: targetState,
+          }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            btn.disabled = false;
+            if (!data.ok) return;
+
+            btn.setAttribute('data-completed', data.is_completed ? 'true' : 'false');
+            btn.innerHTML = data.is_completed
+              ? `<span>✓ Module Completed</span>`
+              : `<span>Mark as Completed</span>`;
+
+            if (data.is_completed) {
+              btn.className = "flex-1 font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100";
+            } else {
+              btn.className = "flex-1 font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200";
+            }
+
+            const pill = document.getElementById('status-pill-' + taskId);
+            if (pill) {
+              pill.innerHTML = data.is_completed
+                ? `<span class="w-2 h-2 rounded-full bg-emerald-600"></span> Completed`
+                : `<span class="w-2 h-2 rounded-full bg-slate-400"></span> In Progress`;
+
+              if (data.is_completed) {
+                pill.className = "px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200";
+              } else {
+                pill.className = "px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 bg-slate-100 text-slate-600 border border-slate-200";
+              }
+            }
+
+            const pct = data.total_count ? Math.round((data.completed_count / data.total_count) * 100) : 0;
+            const bar = document.getElementById('task-progress-bar');
+            if (bar) bar.style.width = pct + '%';
+            const banner = document.getElementById('all-done-banner');
+            if (banner) banner.style.display = data.all_completed ? 'flex' : 'none';
+          })
+          .catch((err) => {
+            btn.disabled = false;
+            console.error('Error toggling task completion:', err);
+          });
       });
-  });
-});
+    });
 
-// --- Razorpay checkout flow ---
-const payBtn = document.getElementById('pay-btn');
-if (payBtn) {
-  payBtn.addEventListener('click', function () {
-    payBtn.disabled = true;
-    payBtn.textContent = 'Starting payment…';
-    const errorEl = document.getElementById('pay-error');
-    errorEl.style.display = 'none';
+    // Razorpay Flow
+    const payBtn = document.getElementById('pay-btn');
+    if (payBtn) {
+      payBtn.addEventListener('click', function () {
+        payBtn.disabled = true;
+        payBtn.textContent = 'Starting payment…';
+        const errorEl = document.getElementById('pay-error');
+        if (errorEl) errorEl.style.display = 'none';
 
-    fetch('/payments/create-order/', { method: 'POST', headers: { 'X-CSRFToken': csrftoken } })
-      .then((r) => r.json())
-      .then((order) => {
-        if (!order.ok) throw new Error(order.error || 'Could not start payment.');
+        fetch('/payments/create-order/', { method: 'POST', headers: { 'X-CSRFToken': csrftoken } })
+          .then((r) => r.json())
+          .then((order) => {
+            if (!order.ok) throw new Error(order.error || 'Could not start payment.');
 
-        const rzp = new Razorpay({
-          key: order.key_id,
-          amount: order.amount,
-          currency: order.currency,
-          name: order.name,
-          order_id: order.order_id,
-          prefill: { name: order.profile_name, email: order.email, contact: order.contact },
-          theme: { color: '#F80101' },
-          handler: function (response) {
-            fetch('/payments/verify/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
-              body: JSON.stringify(response),
-            })
-              .then((r) => r.json())
-              .then((result) => {
-                if (result.ok) {
-                  window.location.href = '?tab=certificate';
-                } else {
-                  errorEl.textContent = result.error || 'Payment verification failed.';
-                  errorEl.style.display = 'block';
+            const rzp = new Razorpay({
+              key: order.key_id,
+              amount: order.amount,
+              currency: order.currency,
+              name: order.name,
+              order_id: order.order_id,
+              prefill: { name: order.profile_name, email: order.email, contact: order.contact },
+              theme: { color: '#bb0004' },
+              handler: function (response) {
+                fetch('/payments/verify/', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                  body: JSON.stringify(response),
+                })
+                  .then((r) => r.json())
+                  .then((result) => {
+                    if (result.ok) {
+                      window.location.href = '?tab=certificate';
+                    } else {
+                      if (errorEl) {
+                        errorEl.textContent = result.error || 'Payment verification failed.';
+                        errorEl.style.display = 'block';
+                      }
+                      payBtn.disabled = false;
+                      payBtn.textContent = 'Pay & Unlock Certificate';
+                    }
+                  });
+              },
+              modal: {
+                ondismiss: function () {
                   payBtn.disabled = false;
                   payBtn.textContent = 'Pay & Unlock Certificate';
-                }
-              });
-          },
-          modal: {
-            ondismiss: function () {
-              payBtn.disabled = false;
-              payBtn.textContent = 'Pay & Unlock Certificate';
-            },
-          },
-        });
-        rzp.open();
-      })
-      .catch((err) => {
-        errorEl.textContent = err.message;
-        errorEl.style.display = 'block';
-        payBtn.disabled = false;
-        payBtn.textContent = 'Pay & Unlock Certificate';
+                },
+              },
+            });
+            rzp.open();
+          })
+          .catch((err) => {
+            if (errorEl) {
+              errorEl.textContent = err.message;
+              errorEl.style.display = 'block';
+            }
+            payBtn.disabled = false;
+            payBtn.textContent = 'Pay & Unlock Certificate';
+          });
       });
+    }
   });
-}
 </script>
 {% endblock %}
