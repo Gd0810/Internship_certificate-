@@ -56,6 +56,12 @@ class InternshipTrack(models.Model):
         help_text="Amount charged to unlock the certificate for this track.",
     )
     is_active = models.BooleanField(default=True)
+    source_link = models.CharField(
+        max_length=500,
+        blank=True,
+        default="",
+        help_text="Optional Google Drive link or resource URL for track materials",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -93,6 +99,12 @@ class TaskModule(models.Model):
     description = models.TextField(blank=True, help_text="General summary or notes")
     body_points = models.JSONField(default=list, blank=True, help_text="List of bullet points for 'What You'll Do'")
     deliverables = models.JSONField(default=list, blank=True, help_text="List of deliverable field labels expected from interns")
+    source_link = models.CharField(
+        max_length=500,
+        blank=True,
+        default="",
+        help_text="Optional Google Drive link or resource URL for module files and learning materials",
+    )
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 

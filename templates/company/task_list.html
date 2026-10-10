@@ -70,6 +70,13 @@
                     <span class="material-symbols-outlined text-xs">upload_file</span>
                     {{ task.deliverables|length }} Deliverable{{ task.deliverables|length|pluralize }}
                   </span>
+                  {% if task.source_link %}
+                    <a href="{{ task.source_link }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-blue-50 hover:bg-blue-100 text-[#1159c2] text-[11px] font-semibold transition-colors no-underline" title="{{ task.source_link }}">
+                      <span class="material-symbols-outlined text-xs">folder_open</span>
+                      <span>Drive Source</span>
+                      <span class="material-symbols-outlined text-[10px]">open_in_new</span>
+                    </a>
+                  {% endif %}
                 </div>
               </td>
 

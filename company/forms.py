@@ -21,7 +21,7 @@ class CategoryForm(forms.ModelForm):
 class TrackForm(forms.ModelForm):
     class Meta:
         model = InternshipTrack
-        fields = ["name", "category", "description", "track_image", "points", "price", "is_active"]
+        fields = ["name", "category", "description", "track_image", "points", "price", "source_link", "is_active"]
         widgets = {
             "name": forms.TextInput(attrs={"class": INPUT, "placeholder": "e.g. Generative AI"}),
             "category": forms.Select(attrs={"class": INPUT}),
@@ -32,17 +32,26 @@ class TrackForm(forms.ModelForm):
                 "placeholder": "e.g. Prompt Engineering & APIs, RAG & Vector Databases, AI Agents & Automation"
             }),
             "price": forms.NumberInput(attrs={"class": INPUT, "step": "0.01"}),
+            "source_link": forms.TextInput(attrs={"class": INPUT, "placeholder": "https://drive.google.com/drive/folders/... (Optional)"}),
             "is_active": forms.CheckboxInput(attrs={"class": "icp-checkbox"}),
         }
         labels = {
             "track_image": "Track Image / Icon",
             "points": "Track Points / Skills (Comma-separated)",
             "category": "Track Category",
+            "source_link": "Track Resource / Google Drive Link (Optional)",
         }
         help_texts = {
             "points": "Add points/skills separated by comma (,). Each point will be displayed as an individual chip on the track card.",
             "category": "Select a category for filtering and navigation.",
+            "source_link": "Optional Google Drive link or resource folder for track materials.",
         }
+
+    def clean_source_link(self):
+        val = (self.cleaned_data.get("source_link") or "").strip()
+        if val and not (val.startswith("http://") or val.startswith("https://")):
+            val = "https://" + val
+        return val
 
 
 class TaskModuleForm(forms.ModelForm):
@@ -67,13 +76,20 @@ class TaskModuleForm(forms.ModelForm):
 
     class Meta:
         model = TaskModule
-        fields = ["module_number", "title", "duration_info", "description", "order"]
+        fields = ["module_number", "title", "duration_info", "source_link", "description", "order"]
         widgets = {
             "module_number": forms.NumberInput(attrs={"class": INPUT, "min": 1}),
             "title": forms.TextInput(attrs={"class": INPUT, "placeholder": "e.g. Mobile Development Fundamentals"}),
             "duration_info": forms.TextInput(attrs={"class": INPUT, "placeholder": "e.g. Day 1 – Day 5 · High priority"}),
+            "source_link": forms.TextInput(attrs={"class": INPUT, "placeholder": "https://drive.google.com/drive/folders/... (Optional Drive Link)"}),
             "description": forms.Textarea(attrs={"class": INPUT, "rows": 2, "placeholder": "Optional summary or overview"}),
             "order": forms.NumberInput(attrs={"class": INPUT}),
+        }
+        labels = {
+            "source_link": "Module Source / Google Drive Link (Optional)",
+        }
+        help_texts = {
+            "source_link": "Paste a Google Drive or cloud resource link. Interns will see a direct button to access these materials on their dashboard.",
         }
 
     def __init__(self, *args, **kwargs):
@@ -81,6 +97,12 @@ class TaskModuleForm(forms.ModelForm):
         if self.instance and self.instance.pk:
             self.fields["body_points_input"].initial = self.instance.body_points_text
             self.fields["deliverables_input"].initial = self.instance.deliverables_text
+
+    def clean_source_link(self):
+        val = (self.cleaned_data.get("source_link") or "").strip()
+        if val and not (val.startswith("http://") or val.startswith("https://")):
+            val = "https://" + val
+        return val
 
     def clean(self):
         cleaned_data = super().clean()

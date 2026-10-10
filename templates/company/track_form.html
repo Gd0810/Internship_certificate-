@@ -72,6 +72,20 @@
         {% if form.price.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.price.errors.0 }}</div>{% endif %}
       </div>
 
+      <!-- Track Source / Resource Link (Optional) -->
+      <div>
+        <label for="{{ form.source_link.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1 flex items-center justify-between">
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-[#1159c2]">folder_open</span>
+            <span>Track Source / Google Drive Link (Optional)</span>
+          </span>
+          <span class="text-[11px] font-semibold text-slate-400 lowercase">optional</span>
+        </label>
+        {{ form.source_link }}
+        <p class="text-xs text-slate-500 mt-1">Paste an optional Google Drive folder link containing track-wide resources and learning templates.</p>
+        {% if form.source_link.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.source_link.errors.0 }}</div>{% endif %}
+      </div>
+
       <!-- Active Toggle -->
       <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3">
         {{ form.is_active }}

@@ -49,6 +49,21 @@
         <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1">Duration / Timeline Subtitle *</label>
         {{ form.duration_info }}
         <p class="text-xs text-slate-500 mt-1">Example: "Day 1 – Day 5 · High Priority"</p>
+        {% if form.duration_info.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.duration_info.errors.0 }}</div>{% endif %}
+      </div>
+
+      <!-- Module Source / Google Drive Link (Optional) -->
+      <div>
+        <label for="{{ form.source_link.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1 flex items-center justify-between">
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-[#1159c2]">folder_open</span>
+            <span>Module Source / Google Drive Link (Optional)</span>
+          </span>
+          <span class="text-[11px] font-semibold text-slate-400 lowercase">optional</span>
+        </label>
+        {{ form.source_link }}
+        <p class="text-xs text-slate-500 mt-1">Paste a Google Drive folder/file link or resource URL (e.g. drive.google.com/...). This will appear as a clickable source resource button on the student's dashboard.</p>
+        {% if form.source_link.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.source_link.errors.0 }}</div>{% endif %}
       </div>
 
       <!-- Module Body Points -->
