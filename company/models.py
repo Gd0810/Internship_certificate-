@@ -3,11 +3,47 @@ from django.utils.text import slugify
 from django.core.validators import MinValueValidator
 
 
+class TrackCategory(models.Model):
+    """Category grouping for internship tracks (e.g. AI & Machine Learning, Web Dev)."""
+
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=120, unique=True, blank=True)
+    description = models.TextField(blank=True, default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Track Categories"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.name)[:110]
+            slug = base
+            n = 1
+            while TrackCategory.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                n += 1
+                slug = f"{base}-{n}"
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+
 class InternshipTrack(models.Model):
     """A company-defined internship program that users can enroll in."""
 
     name = models.CharField(max_length=140)
     slug = models.SlugField(max_length=160, unique=True, blank=True)
+    category = models.ForeignKey(
+        TrackCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="tracks",
+        help_text="Category for this internship track"
+    )
     description = models.TextField()
     track_image = models.ImageField(upload_to="track_images/", blank=True, null=True, help_text="Optional icon or image for this track")
     points = models.TextField(

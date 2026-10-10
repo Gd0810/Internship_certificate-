@@ -16,8 +16,8 @@ from payments.models import Payment
 from certificates.models import CertificateTemplate, OfferLetterTemplate
 from certificates.template_engine import extract_template_package, TemplatePackageError
 from .decorators import company_staff_required
-from .forms import TrackForm, TaskModuleForm, TemplateUploadForm
-from .models import InternshipTrack, TaskModule
+from .forms import TrackForm, TaskModuleForm, TemplateUploadForm, CategoryForm
+from .models import InternshipTrack, TaskModule, TrackCategory
 
 logger = logging.getLogger("company")
 
@@ -92,6 +92,43 @@ def track_delete(request, pk):
     track.delete()
     messages.success(request, "Track deleted.")
     return redirect("company:track_list")
+
+
+# -------------------------------------------------------- Track Categories ----
+@company_staff_required
+def category_list(request):
+    categories = TrackCategory.objects.all().order_by("name")
+    return render(request, "company/category_list.html", {"categories": categories})
+
+
+@company_staff_required
+def category_create(request):
+    form = CategoryForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Track category created.")
+        return redirect("company:category_list")
+    return render(request, "company/category_form.html", {"form": form, "mode": "Create"})
+
+
+@company_staff_required
+def category_edit(request, pk):
+    category = get_object_or_404(TrackCategory, pk=pk)
+    form = CategoryForm(request.POST or None, instance=category)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Category updated.")
+        return redirect("company:category_list")
+    return render(request, "company/category_form.html", {"form": form, "mode": "Edit", "category": category})
+
+
+@company_staff_required
+@require_POST
+def category_delete(request, pk):
+    category = get_object_or_404(TrackCategory, pk=pk)
+    category.delete()
+    messages.success(request, "Category deleted.")
+    return redirect("company:category_list")
 
 
 # ----------------------------------------------------------- Task modules ----

@@ -1,5 +1,5 @@
 from django import forms
-from .models import InternshipTrack, TaskModule
+from .models import InternshipTrack, TaskModule, TrackCategory
 
 INPUT = (
     "icp-input w-full rounded-lg border border-[--c-border] bg-white px-4 py-2.5 "
@@ -8,12 +8,23 @@ INPUT = (
 )
 
 
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = TrackCategory
+        fields = ["name", "description"]
+        widgets = {
+            "name": forms.TextInput(attrs={"class": INPUT, "placeholder": "e.g. AI & Machine Learning"}),
+            "description": forms.Textarea(attrs={"class": INPUT, "rows": 3, "placeholder": "Brief description of this category"}),
+        }
+
+
 class TrackForm(forms.ModelForm):
     class Meta:
         model = InternshipTrack
-        fields = ["name", "description", "track_image", "points", "price", "is_active"]
+        fields = ["name", "category", "description", "track_image", "points", "price", "is_active"]
         widgets = {
             "name": forms.TextInput(attrs={"class": INPUT, "placeholder": "e.g. Generative AI"}),
+            "category": forms.Select(attrs={"class": INPUT}),
             "description": forms.Textarea(attrs={"class": INPUT, "rows": 3, "placeholder": "Program summary or overview"}),
             "track_image": forms.FileInput(attrs={"class": INPUT}),
             "points": forms.Textarea(attrs={
@@ -26,9 +37,11 @@ class TrackForm(forms.ModelForm):
         labels = {
             "track_image": "Track Image / Icon",
             "points": "Track Points / Skills (Comma-separated)",
+            "category": "Track Category",
         }
         help_texts = {
             "points": "Add points/skills separated by comma (,). Each point will be displayed as an individual chip on the track card.",
+            "category": "Select a category for filtering and navigation.",
         }
 
 

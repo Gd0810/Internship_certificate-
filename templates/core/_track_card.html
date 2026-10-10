@@ -1,39 +1,74 @@
-<div class="icp-landing-track-card">
-  <div class="icp-landing-track-card__icon">
+<div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden group">
+  <!-- Track Header / Image -->
+  <div class="relative h-44 bg-gradient-to-br from-[#151c27] via-slate-800 to-[#bb0004] overflow-hidden">
     {% if track.track_image %}
-      <img src="{{ track.track_image.url }}" alt="{{ track.name }}">
+      <img src="{{ track.track_image.url }}" alt="{{ track.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
     {% else %}
-      {% if forloop.counter0|default:0 == 0 %}
-        <!-- AI Icon -->
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 14a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"></path></svg>
-      {% elif forloop.counter0 == 1 %}
-        <!-- Security Shield Icon -->
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-      {% elif forloop.counter0 == 2 %}
-        <!-- Cloud Server Icon -->
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="6" rx="2"></rect><rect x="4" y="14" width="16" height="6" rx="2"></rect></svg>
-      {% else %}
-        <!-- Monitor Icon -->
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-      {% endif %}
-    {% endif %}
-  </div>
-
-  <h3 class="icp-landing-track-card__title">{{ track.name }}</h3>
-  <p class="icp-landing-track-card__desc">{{ track.description }}</p>
-
-  {% if track.points_list %}
-  <div class="icp-landing-track-card__points">
-    {% for point in track.points_list %}
-      <div class="icp-landing-point-chip">
-        <svg class="icp-chip-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        <span>{{ point }}</span>
+      <div class="w-full h-full flex flex-col items-center justify-center text-white/90 p-4 text-center">
+        <span class="material-symbols-outlined text-4xl mb-1 text-[#ffdad5]">school</span>
+        <span class="text-xs font-bold uppercase tracking-wider text-white/80">Redback Internship</span>
       </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+    {% endif %}
 
-  <div class="icp-landing-track-card__footer">
-    <a href="{% url 'accounts:register' %}?track={{ track.slug }}" class="icp-landing-track-card__btn">Apply Free →</a>
+    {% if track.category %}
+      <div class="absolute top-3 left-3 bg-[#151c27]/80 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">
+        {{ track.category.name }}
+      </div>
+    {% endif %}
+
+    
+  </div>
+
+  <!-- Content Body -->
+  <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+    <div>
+      <h3 class="font-extrabold text-[#151c27] text-base leading-snug group-hover:text-[#bb0004] transition-colors line-clamp-2 m-0">
+        <a href="{% url 'accounts:register' %}?track={{ track.slug }}" class="no-underline text-inherit">
+          {{ track.name }}
+        </a>
+      </h3>
+
+      <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed m-0">
+        {{ track.description }}
+      </p>
+
+      <div class="flex items-center gap-3 mt-3 text-[11px] text-slate-500 font-semibold">
+        <div class="flex items-center gap-1 text-[#1159c2]">
+          <span class="material-symbols-outlined text-sm">view_module</span>
+          <span>{{ track.task_modules.count }} Module{{ track.task_modules.count|pluralize }}</span>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Skills Chips -->
+    {% if track.points_list %}
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        {% for point in track.points_list|slice:":3" %}
+          <span class="inline-block text-[10px] font-medium bg-[#f0f3ff] text-[#1159c2] px-2 py-0.5 rounded-md border border-[#1159c2]/10">
+            {{ point }}
+          </span>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Card Footer -->
+    <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+      <div>
+        <span class="text-[10px] text-slate-400 block font-medium">Program Fee</span>
+        <span class="text-base font-extrabold text-[#151c27]">
+          {% if track.price > 0 %}
+            ₹{{ track.price }}
+          {% else %}
+            Free
+          {% endif %}
+        </span>
+      </div>
+
+      <a href="{% url 'accounts:register' %}?track={{ track.slug }}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs hover:shadow-md transition-all duration-200 flex items-center gap-1.5 no-underline shrink-0" style="color: #ffffff !important;">
+        <span style="color: #ffffff !important;">Enroll Now</span>
+        <span class="material-symbols-outlined text-sm" style="color: #ffffff !important;">arrow_forward</span>
+      </a>
+    </div>
   </div>
 </div>

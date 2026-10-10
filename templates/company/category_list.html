@@ -1,0 +1,96 @@
+{% extends "company/_sidebar_layout.html" %}
+
+{% block company_title %}Track Categories — Company Portal{% endblock %}
+
+{% block company_content %}
+<div class="space-y-6">
+
+  <!-- Header Card -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+    <div>
+      <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">Track Categories</h3>
+      <p class="text-xs text-slate-500 mt-0.5">Manage domain categories used for filtering internship tracks on the public portal</p>
+    </div>
+    <a href="{% url 'company:category_create' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition-all flex items-center gap-2 shrink-0 no-underline" style="color: #ffffff !important;">
+      <span class="material-symbols-outlined text-lg">add_circle</span>
+      <span style="color: #ffffff !important;">Add New Category</span>
+    </a>
+  </div>
+
+  <!-- Category Table Container -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+            <th class="py-3.5 px-6">Category Name</th>
+            <th class="py-3.5 px-6">Slug</th>
+            <th class="py-3.5 px-6">Assigned Tracks</th>
+            <th class="py-3.5 px-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-xs text-[#151c27]">
+          {% for cat in categories %}
+            <tr class="hover:bg-slate-50/50 transition-colors">
+              <td class="py-4 px-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-blue-50 text-[#1159c2] font-bold flex items-center justify-center text-sm shrink-0">
+                    <span class="material-symbols-outlined text-lg">category</span>
+                  </div>
+                  <div>
+                    <div class="font-bold text-[#151c27] text-sm">{{ cat.name }}</div>
+                    {% if cat.description %}
+                      <div class="text-[11px] text-slate-500 line-clamp-1 max-w-xs">{{ cat.description }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+
+              <td class="py-4 px-6 font-mono text-slate-500 text-[11px]">
+                {{ cat.slug }}
+              </td>
+
+              <td class="py-4 px-6">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-xs">
+                  <span class="material-symbols-outlined text-sm">grid_view</span>
+                  <span>{{ cat.tracks.count }} Track{{ cat.tracks.count|pluralize }}</span>
+                </span>
+              </td>
+
+              <td class="py-4 px-6 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <a href="{% url 'company:category_edit' cat.pk %}" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors no-underline flex items-center gap-1">
+                    <span class="material-symbols-outlined text-base">edit</span>
+                    <span>Edit</span>
+                  </a>
+
+                  <form method="post" action="{% url 'company:category_delete' cat.pk %}" onsubmit="return confirm('Delete this category? Tracks in this category will become unassigned.');" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs transition-colors flex items-center gap-1 border-0 cursor-pointer">
+                      <span class="material-symbols-outlined text-base">delete</span>
+                      <span>Delete</span>
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="py-12 text-center text-slate-400">
+                <span class="material-symbols-outlined text-4xl block mb-2 text-slate-300">category</span>
+                <p class="font-medium text-sm text-slate-600">No categories created yet</p>
+                <p class="text-xs text-slate-400 mt-1">Create categories like "AI & Machine Learning" or "Web Development" to organize tracks.</p>
+                <a href="{% url 'company:category_create' %}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-[#bb0004] text-white text-xs font-bold no-underline" style="color: #ffffff !important;">
+                  <span class="material-symbols-outlined text-base">add</span>
+                  <span style="color: #ffffff !important;">Add First Category</span>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

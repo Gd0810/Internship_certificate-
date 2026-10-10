@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import JsonResponse
-from company.models import InternshipTrack
+from company.models import InternshipTrack, TrackCategory
 from accounts.models import InternProfile
 
 
@@ -48,10 +48,72 @@ def home(request):
 
 
 def track_list(request):
-    tracks_qs = InternshipTrack.objects.filter(is_active=True).order_by("name")
+    search_query = request.GET.get("q", "").strip()
+    selected_categories = [c for c in request.GET.getlist("category") if c]
+    selected_modules = [m for m in request.GET.getlist("modules") if m]
+    sort_option = request.GET.get("sort", "newest")
+
+    tracks_qs = InternshipTrack.objects.filter(is_active=True).select_related("category").annotate(
+        modules_count=Count("task_modules", distinct=True)
+    )
+
+    if search_query:
+        tracks_qs = tracks_qs.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(points__icontains=search_query) |
+            Q(category__name__icontains=search_query)
+        )
+
+    if selected_categories:
+        tracks_qs = tracks_qs.filter(category__slug__in=selected_categories)
+
+    if selected_modules:
+        module_q = Q()
+        for mod in selected_modules:
+            if mod.endswith("+"):
+                try:
+                    val = int(mod[:-1])
+                    module_q |= Q(modules_count__gte=val)
+                except ValueError:
+                    pass
+            elif mod.isdigit():
+                module_q |= Q(modules_count=int(mod))
+        if module_q:
+            tracks_qs = tracks_qs.filter(module_q)
+
+    # Sorting options
+    if sort_option == "oldest":
+        tracks_qs = tracks_qs.order_by("created_at")
+    elif sort_option == "title_asc":
+        tracks_qs = tracks_qs.order_by("name")
+    elif sort_option == "title_desc":
+        tracks_qs = tracks_qs.order_by("-name")
+    elif sort_option == "popular":
+        tracks_qs = tracks_qs.order_by("-price", "-created_at")
+    else:  # newest
+        tracks_qs = tracks_qs.order_by("-created_at")
+
+    categories = TrackCategory.objects.annotate(
+        track_count=Count("tracks", filter=Q(tracks__is_active=True))
+    ).order_by("name")
+
     paginator = Paginator(tracks_qs, 9)
     page_obj = paginator.get_page(request.GET.get("page"))
-    return render(request, "core/track_list.html", {"page_obj": page_obj})
+
+    return render(
+        request,
+        "core/track_list.html",
+        {
+            "page_obj": page_obj,
+            "categories": categories,
+            "search_query": search_query,
+            "selected_categories": selected_categories,
+            "selected_modules": selected_modules,
+            "sort_option": sort_option,
+            "total_count": tracks_qs.count(),
+        },
+    )
 
 
 def track_detail(request, slug):

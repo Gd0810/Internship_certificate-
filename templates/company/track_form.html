@@ -29,6 +29,14 @@
         {% if form.name.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.name.errors.0 }}</div>{% endif %}
       </div>
 
+      <!-- Track Category -->
+      <div>
+        <label for="{{ form.category.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Track Category</label>
+        {{ form.category }}
+        {% if form.category.help_text %}<div class="text-[11px] text-slate-400 mt-1">{{ form.category.help_text }}</div>{% endif %}
+        {% if form.category.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.category.errors.0 }}</div>{% endif %}
+      </div>
+
       <!-- Description -->
       <div>
         <label for="{{ form.description.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Description *</label>

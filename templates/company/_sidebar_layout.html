@@ -47,6 +47,11 @@
             <span class="material-symbols-outlined text-xl">grid_view</span>
             <span>Internship Tracks</span>
           </a>
+
+          <a href="{% url 'company:category_list' %}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all no-underline {% if 'category' in request.resolver_match.url_name %}bg-[#bb0004] text-white shadow-md font-bold{% else %}text-slate-300 hover:bg-slate-800/70 hover:text-white{% endif %}">
+            <span class="material-symbols-outlined text-xl">category</span>
+            <span>Track Categories</span>
+          </a>
         </nav>
 
         <div class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-8 mb-3">Templates &amp; Designs</div>
