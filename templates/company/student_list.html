@@ -1,0 +1,254 @@
+{% extends "company/_sidebar_layout.html" %}
+
+{% block company_title %}Registered Students — Company Portal{% endblock %}
+
+{% block company_content %}
+<div class="space-y-6">
+
+  <!-- Header Card -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+    <div>
+      <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">Registered Interns &amp; Students</h3>
+      <p class="text-xs text-slate-500 mt-0.5">View and manage enrolled interns, track completion deliverables, and certificate statuses</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 text-[#1159c2] text-xs font-bold border border-blue-200/60">
+        <span class="material-symbols-outlined text-sm">school</span>
+        <span>{{ total_count }} Student{{ total_count|pluralize }}</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Stats Metric Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Enrolled</span>
+        <div class="w-9 h-9 rounded-xl bg-blue-50 text-[#1159c2] flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg">group</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-[#151c27]">{{ stats.total }}</span>
+        <span class="text-[11px] font-semibold text-slate-500">All registered</span>
+      </div>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Verified &amp; Paid</span>
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-emerald-700">{{ stats.paid }}</span>
+        <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Certificate Unlocked</span>
+      </div>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending Payment</span>
+        <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg">pending</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-amber-700">{{ stats.unpaid }}</span>
+        <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">In Progress</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+    <form method="get" class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+      
+      <!-- Search Input -->
+      <div class="relative flex-1">
+        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">search</span>
+        <input
+          type="text"
+          name="q"
+          value="{{ search_query }}"
+          placeholder="Search by student name, email, Intern ID, phone, college..."
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-[#151c27] placeholder-slate-400 focus:outline-none focus:border-[#bb0004] focus:bg-white transition-all"
+        />
+      </div>
+
+      <!-- Track Filter -->
+      <div class="min-w-[180px]">
+        <select
+          name="track"
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-[#151c27] focus:outline-none focus:border-[#bb0004] focus:bg-white cursor-pointer"
+        >
+          <option value="">All Tracks</option>
+          {% for t in tracks %}
+            <option value="{{ t.id }}" {% if track_filter == t.id|stringformat:"s" %}selected{% endif %}>{{ t.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Payment Status Filter -->
+      <div class="min-w-[150px]">
+        <select
+          name="status"
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-[#151c27] focus:outline-none focus:border-[#bb0004] focus:bg-white cursor-pointer"
+        >
+          <option value="">All Statuses</option>
+          <option value="paid" {% if status_filter == 'paid' %}selected{% endif %}>Verified &amp; Paid</option>
+          <option value="unpaid" {% if status_filter == 'unpaid' %}selected{% endif %}>Pending Payment</option>
+        </select>
+      </div>
+
+      <!-- Submit & Reset Buttons -->
+      <div class="flex items-center gap-2">
+        <button type="submit" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-xs transition-all cursor-pointer border-0 flex items-center gap-1.5" style="color: #ffffff !important;">
+          <span class="material-symbols-outlined text-base" style="color: #ffffff !important;">filter_alt</span>
+          <span style="color: #ffffff !important;">Filter</span>
+        </button>
+        {% if search_query or track_filter or status_filter %}
+          <a href="{% url 'company:student_list' %}" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs px-3.5 py-2.5 rounded-xl transition-colors no-underline">
+            Reset
+          </a>
+        {% endif %}
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Students Data Table -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+            <th class="py-3.5 px-6">Student Information</th>
+            <th class="py-3.5 px-6">Intern ID</th>
+            <th class="py-3.5 px-6">Track Domain</th>
+            <th class="py-3.5 px-6">College / Degree</th>
+            <th class="py-3.5 px-6">Task Progress</th>
+            <th class="py-3.5 px-6">Status</th>
+            <th class="py-3.5 px-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-xs text-[#151c27]">
+          {% for student in page_obj %}
+            <tr class="hover:bg-slate-50/60 transition-colors group">
+              <!-- Student Info -->
+              <td class="py-4 px-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-[#ffdad5] text-[#bb0004] font-bold flex items-center justify-center text-xs shrink-0 shadow-2xs">
+                    {{ student.full_name|first|upper }}
+                  </div>
+                  <div>
+                    <a href="{% url 'company:student_detail' student.pk %}" class="font-bold text-[#151c27] group-hover:text-[#bb0004] transition-colors no-underline text-sm block">
+                      {{ student.full_name }}
+                    </a>
+                    <div class="text-[11px] text-slate-400 font-mono">{{ student.user.email }}</div>
+                    {% if student.mobile_number %}
+                      <div class="text-[10px] text-slate-400">{{ student.mobile_number }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+
+              <!-- Intern ID -->
+              <td class="py-4 px-6 font-mono font-bold text-[#151c27]">
+                <span class="inline-block bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md border border-slate-200/60 text-[11px]">
+                  {{ student.intern_id|default:"Pending" }}
+                </span>
+              </td>
+
+              <!-- Track Domain -->
+              <td class="py-4 px-6 font-semibold text-[#1159c2]">
+                <div class="font-bold">{{ student.track.name }}</div>
+                {% if student.track.category %}
+                  <div class="text-[10px] text-slate-400 font-normal">{{ student.track.category.name }}</div>
+                {% endif %}
+              </td>
+
+              <!-- College & Degree -->
+              <td class="py-4 px-6">
+                <div class="font-medium text-[#151c27] max-w-xs truncate" title="{{ student.college_name }}">{{ student.college_name }}</div>
+                <div class="text-[11px] text-slate-400">{{ student.degree }}</div>
+              </td>
+
+              <!-- Task Progress -->
+              <td class="py-4 px-6">
+                <div class="space-y-1 min-w-[120px]">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-slate-700">{{ student.completed_tasks }}/{{ student.total_tasks }}</span>
+                    <span class="text-slate-400 font-semibold">{{ student.progress_percent }}%</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/80">
+                    <div class="h-full bg-gradient-to-r from-[#1159c2] to-[#bb0004] rounded-full" style="width: {{ student.progress_percent }}%;"></div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Status -->
+              <td class="py-4 px-6">
+                {% if student.has_paid %}
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Verified &amp; Paid
+                  </span>
+                {% else %}
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending
+                  </span>
+                {% endif %}
+              </td>
+
+              <!-- Actions -->
+              <td class="py-4 px-6 text-right">
+                <a href="{% url 'company:student_detail' student.pk %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-[#bb0004] hover:text-white text-slate-700 font-bold text-xs transition-all no-underline shadow-2xs group/btn">
+                  <span>Details</span>
+                  <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-0.5 transition-transform">arrow_forward</span>
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="py-14 text-center text-slate-400">
+                <span class="material-symbols-outlined text-4xl block mb-2 text-slate-300">group_off</span>
+                <p class="font-bold text-sm text-slate-600">No registered students found</p>
+                <p class="text-xs text-slate-400 mt-1">Try clearing your search query or selecting a different track filter.</p>
+                {% if search_query or track_filter or status_filter %}
+                  <a href="{% url 'company:student_list' %}" class="inline-block mt-3 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl no-underline">
+                    Clear all filters
+                  </a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+      <div class="flex items-center justify-between p-4 border-t border-slate-100 text-xs text-slate-500">
+        <div>
+          Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </div>
+        <div class="flex items-center gap-2">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if track_filter %}&track={{ track_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold no-underline">
+              Previous
+            </a>
+          {% endif %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if track_filter %}&track={{ track_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold no-underline">
+              Next
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}

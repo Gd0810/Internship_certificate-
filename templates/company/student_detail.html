@@ -1,0 +1,318 @@
+{% extends "company/_sidebar_layout.html" %}
+
+{% block company_title %}{{ student.full_name }} — Student Details{% endblock %}
+
+{% block company_content %}
+<div class="space-y-6">
+
+  <!-- Header Card with Back Action -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 rounded-2xl bg-[#ffdad5] text-[#bb0004] font-extrabold flex items-center justify-center text-xl shrink-0 shadow-sm border border-[#bb0004]/20">
+        {{ student.full_name|first|upper }}
+      </div>
+      <div>
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <h2 class="text-xl font-extrabold text-[#151c27] tracking-tight m-0">{{ student.full_name }}</h2>
+          <span class="font-mono text-xs font-bold bg-slate-100 text-slate-800 px-2.5 py-0.5 rounded-lg border border-slate-200">
+            {{ student.intern_id|default:"Pending ID" }}
+          </span>
+          {% if student.has_paid %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Verified &amp; Paid
+            </span>
+          {% else %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 text-xs font-bold border border-amber-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending Payment
+            </span>
+          {% endif %}
+        </div>
+        <p class="text-xs text-slate-400 mt-1 m-0">
+          Enrolled in <span class="font-bold text-[#1159c2]">{{ student.track.name }}</span> on {{ student.created_at|date:"d M Y, h:i A" }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Top Action Buttons -->
+    <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+      <a href="{% url 'company:student_list' %}" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors no-underline flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-base">arrow_back</span>
+        <span>Back to Students</span>
+      </a>
+
+      <!-- Preview Offer Letter -->
+      <a href="{% url 'company:student_offer_letter_preview' student.pk %}" target="_blank" class="px-4 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1159c2] font-bold text-xs transition-colors no-underline flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-base">description</span>
+        <span>Offer Letter</span>
+      </a>
+
+      <!-- Preview Certificate -->
+      <a href="{% url 'company:student_certificate_preview' student.pk %}" target="_blank" class="px-4 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-xs transition-colors no-underline flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+        <span>Certificate</span>
+      </a>
+
+      <!-- Toggle Payment Form -->
+      <form method="post" action="{% url 'company:student_toggle_payment' student.pk %}" class="inline">
+        {% csrf_token %}
+        <button type="submit" class="px-4 py-2.5 rounded-xl {% if student.has_paid %}bg-amber-50 hover:bg-amber-100 text-amber-700{% else %}bg-emerald-600 hover:bg-emerald-700 text-white{% endif %} font-bold text-xs transition-all cursor-pointer border-0 flex items-center gap-1.5" {% if not student.has_paid %}style="color: #ffffff !important;"{% endif %}>
+          <span class="material-symbols-outlined text-base">{% if student.has_paid %}money_off{% else %}payments{% endif %}</span>
+          <span>{% if student.has_paid %}Mark as Unpaid{% else %}Verify &amp; Mark Paid{% endif %}</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Key Summary Metrics -->
+  <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+    <!-- Metric 1: Track -->
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Domain Track</span>
+      <div class="mt-2 text-base font-extrabold text-[#1159c2] truncate" title="{{ student.track.name }}">
+        {{ student.track.name }}
+      </div>
+      <span class="text-[11px] text-slate-400">
+        {{ student.track.category.name|default:"General Track" }}
+      </span>
+    </div>
+
+    <!-- Metric 2: Progress -->
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div class="flex items-center justify-between">
+        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Module Progress</span>
+        <span class="text-xs font-extrabold text-[#bb0004]">{{ student.progress_percent }}%</span>
+      </div>
+      <div class="mt-2 text-lg font-extrabold text-[#151c27]">
+        {{ student.completed_tasks }} of {{ student.total_tasks }} Done
+      </div>
+      <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1 border border-slate-200">
+        <div class="h-full bg-gradient-to-r from-[#1159c2] to-[#bb0004] rounded-full" style="width: {{ student.progress_percent }}%;"></div>
+      </div>
+    </div>
+
+    <!-- Metric 3: Fee & Payment -->
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Certificate Fee</span>
+      <div class="mt-2 text-lg font-extrabold text-[#151c27]">
+        ₹{{ student.track.price }}
+      </div>
+      <span class="text-[11px] font-bold {% if student.has_paid %}text-emerald-600{% else %}text-amber-600{% endif %}">
+        {% if student.has_paid %}Payment Completed{% else %}Unpaid / Incomplete{% endif %}
+      </span>
+    </div>
+
+    <!-- Metric 4: Certificate ID -->
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Certificate ID</span>
+      <div class="mt-2 text-xs font-mono font-bold text-[#151c27] truncate" title="{{ student.certificate_id|default:'Not generated' }}">
+        {{ student.certificate_id|default:"Pending unlock" }}
+      </div>
+      <span class="text-[11px] text-slate-400">
+        {% if student.certificate_id %}Verifiable in portal{% else %}Generates on payment{% endif %}
+      </span>
+    </div>
+  </div>
+
+  <!-- Detailed Sections Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
+    <!-- Left Column: Personal & Academic Details & Payments -->
+    <div class="space-y-6 lg:col-span-1">
+      
+      <!-- Student Bio Card -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <h4 class="font-extrabold text-[#151c27] text-sm uppercase tracking-wider m-0 pb-3 border-b border-slate-100 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#bb0004] text-lg">badge</span>
+          <span>Personal &amp; Academic Info</span>
+        </h4>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <span class="text-slate-400 font-medium block text-[11px]">Full Name</span>
+            <span class="font-bold text-[#151c27] text-sm">{{ student.full_name }}</span>
+          </div>
+
+          <div>
+            <span class="text-slate-400 font-medium block text-[11px]">Email Address</span>
+            <span class="font-mono text-slate-700 select-all">{{ student.user.email }}</span>
+          </div>
+
+          <div>
+            <span class="text-slate-400 font-medium block text-[11px]">Mobile Number</span>
+            <span class="font-semibold text-slate-700">{{ student.mobile_number|default:"Not provided" }}</span>
+          </div>
+
+          <div>
+            <span class="text-slate-400 font-medium block text-[11px]">College / University</span>
+            <span class="font-semibold text-slate-700">{{ student.college_name }}</span>
+          </div>
+
+          <div>
+            <span class="text-slate-400 font-medium block text-[11px]">Degree / Major</span>
+            <span class="font-semibold text-slate-700">{{ student.degree }}</span>
+          </div>
+
+          <div>
+            <span class="text-slate-400 font-medium block text-[11px]">Intern ID</span>
+            <span class="font-mono font-bold text-[#1159c2]">{{ student.intern_id }}</span>
+          </div>
+
+          <div>
+            <span class="text-slate-400 font-medium block text-[11px]">Registration Date</span>
+            <span class="text-slate-600">{{ student.created_at|date:"F j, Y · g:i A" }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment History Card -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <h4 class="font-extrabold text-[#151c27] text-sm uppercase tracking-wider m-0 pb-3 border-b border-slate-100 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#1159c2] text-lg">receipt_long</span>
+          <span>Payment History</span>
+        </h4>
+
+        {% if payments %}
+          <div class="space-y-3">
+            {% for pay in payments %}
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
+                <div class="flex items-center justify-between font-bold">
+                  <span class="text-[#151c27]">₹{{ pay.amount }}</span>
+                  <span class="{% if pay.status == 'paid' %}text-emerald-700 bg-emerald-100/60{% else %}text-amber-700 bg-amber-100/60{% endif %} px-2 py-0.5 rounded text-[10px] uppercase font-bold">
+                    {{ pay.status }}
+                  </span>
+                </div>
+                <div class="text-[10px] text-slate-400 font-mono">Order: {{ pay.razorpay_order_id }}</div>
+                {% if pay.razorpay_payment_id %}
+                  <div class="text-[10px] text-slate-400 font-mono">Pay ID: {{ pay.razorpay_payment_id }}</div>
+                {% endif %}
+                <div class="text-[10px] text-slate-400">{{ pay.created_at|date:"d M Y, h:i A" }}</div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="py-4 text-center text-slate-400 text-xs">
+            <span class="material-symbols-outlined text-2xl text-slate-300 block mb-1">payments</span>
+            No online transactions recorded.
+            {% if student.has_paid %}
+              <p class="text-emerald-600 font-semibold mt-1">Manually verified by company staff.</p>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- Right Column: Task Modules & Deliverable Submissions -->
+    <div class="space-y-6 lg:col-span-2">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-6">
+        
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <h4 class="font-extrabold text-[#151c27] text-base tracking-tight m-0">Task Modules &amp; Submissions</h4>
+            <p class="text-xs text-slate-400 mt-0.5 m-0">Review student's submitted project deliverables and completion milestones</p>
+          </div>
+          <span class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1 rounded-xl">
+            {{ student.completed_tasks }}/{{ student.total_tasks }} Modules Done
+          </span>
+        </div>
+
+        <div class="space-y-4">
+          {% for row in task_rows %}
+            <div class="p-5 rounded-2xl border {% if row.is_completed %}border-emerald-200 bg-emerald-50/20{% else %}border-slate-200 bg-white{% endif %} transition-all space-y-4">
+              
+              <!-- Module Header -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl {% if row.is_completed %}bg-emerald-100 text-emerald-700{% else %}bg-slate-100 text-slate-600{% endif %} font-extrabold flex items-center justify-center text-xs shrink-0">
+                    M{{ row.task.module_number }}
+                  </div>
+                  <div>
+                    <h5 class="text-sm font-extrabold text-[#151c27] m-0">{{ row.task.title }}</h5>
+                    <span class="text-[11px] text-slate-400 font-medium">{{ row.task.duration_info|default:"Self-paced module" }}</span>
+                  </div>
+                </div>
+
+                <!-- Status & Action Toggle -->
+                <div class="flex items-center gap-2 self-start sm:self-auto">
+                  {% if row.is_completed %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-[11px] font-bold">
+                      <span class="material-symbols-outlined text-sm">check_circle</span>
+                      <span>Completed</span>
+                    </span>
+                  {% else %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-[11px] font-bold">
+                      <span class="material-symbols-outlined text-sm">hourglass_empty</span>
+                      <span>Pending</span>
+                    </span>
+                  {% endif %}
+
+                  <!-- Staff Toggle Form -->
+                  <form method="post" action="{% url 'company:student_toggle_task' student.pk row.task.id %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer border transition-colors {% if row.is_completed %}bg-white border-slate-200 text-slate-600 hover:bg-slate-50{% else %}bg-emerald-600 border-emerald-600 text-white hover:bg-emerald-700{% endif %}" {% if not row.is_completed %}style="color: #ffffff !important;"{% endif %}>
+                      {% if row.is_completed %}Mark Pending{% else %}Mark Complete{% endif %}
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              {% if row.completed_at %}
+                <div class="text-[11px] text-emerald-700 flex items-center gap-1 font-medium">
+                  <span class="material-symbols-outlined text-sm">event_available</span>
+                  <span>Completed on {{ row.completed_at|date:"F j, Y, h:i A" }}</span>
+                </div>
+              {% endif %}
+
+              <!-- What You'll Do Points -->
+              {% if row.task.body_points %}
+                <div class="space-y-1.5 text-xs text-slate-600">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Module Syllabus / Tasks:</span>
+                  <ul class="list-disc list-inside space-y-1 pl-1 text-[11px] text-slate-600">
+                    {% for pt in row.task.body_points %}
+                      <li>{{ pt }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+
+              <!-- Student Submission Links Section -->
+              <div class="pt-3 border-t border-slate-100">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">Student Submitted Deliverables:</span>
+                {% if row.submission_data %}
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {% for label, link in row.submission_data.items %}
+                      <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase truncate">{{ label }}</span>
+                        {% if "http" in link %}
+                          <a href="{{ link }}" target="_blank" rel="noopener noreferrer" class="font-bold text-[#1159c2] hover:underline truncate block flex items-center gap-1 mt-0.5">
+                            <span class="material-symbols-outlined text-xs">link</span>
+                            <span class="truncate">{{ link }}</span>
+                          </a>
+                        {% else %}
+                          <span class="font-medium text-slate-700 block truncate mt-0.5">{{ link }}</span>
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <div class="p-3 rounded-xl bg-slate-50 text-slate-400 text-xs text-center">
+                    No deliverables submitted yet for this module.
+                  </div>
+                {% endif %}
+              </div>
+
+            </div>
+          {% empty %}
+            <div class="py-8 text-center text-slate-400 text-xs">
+              No task modules configured for this track yet.
+            </div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

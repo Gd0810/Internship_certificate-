@@ -48,18 +48,18 @@
     </div>
 
     <!-- Stat 2: Interns -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
+    <a href="{% url 'company:student_list' %}" class="bg-white p-6 rounded-2xl border border-slate-200/80 hover:border-[#1159c2]/50 shadow-xs hover:shadow-md transition-all no-underline block group">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Registered Interns</span>
-        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+        <span class="text-xs font-bold text-slate-400 group-hover:text-[#1159c2] transition-colors uppercase tracking-wider">Registered Interns</span>
+        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
           <span class="material-symbols-outlined text-xl">group</span>
         </div>
       </div>
       <div class="mt-4 flex items-baseline justify-between">
         <span class="text-3xl font-extrabold text-[#151c27]">{{ stats.interns }}</span>
-        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Students Enrolled</span>
+        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">View All Students →</span>
       </div>
-    </div>
+    </a>
 
     <!-- Stat 3: Paid Certificates -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
@@ -139,7 +139,10 @@
         <h3 class="text-base font-bold text-[#151c27]">Recent Registered Interns</h3>
         <p class="text-xs text-slate-500 mt-0.5">Latest student profiles enrolled in internship tracks</p>
       </div>
-      <span class="text-xs font-semibold text-slate-400">Showing last 10</span>
+      <a href="{% url 'company:student_list' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#bb0004] hover:text-[#e1251b] transition-colors no-underline">
+        <span>View All Interns</span>
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+      </a>
     </div>
 
     <div class="overflow-x-auto">
@@ -151,18 +154,21 @@
             <th class="py-3.5 px-6">Modules Progress</th>
             <th class="py-3.5 px-6">Certificate Status</th>
             <th class="py-3.5 px-6">Enrolled Date</th>
+            <th class="py-3.5 px-6 text-right">Action</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 text-xs text-[#151c27]">
           {% for p in recent_interns %}
-            <tr class="hover:bg-slate-50/50 transition-colors">
+            <tr class="hover:bg-slate-50/50 transition-colors group">
               <td class="py-4 px-6">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-full bg-[#ffdad5] text-[#bb0004] font-bold flex items-center justify-center text-xs shrink-0">
                     {{ p.full_name|first|upper }}
                   </div>
                   <div>
-                    <div class="font-bold text-[#151c27]">{{ p.full_name }}</div>
+                    <a href="{% url 'company:student_detail' p.pk %}" class="font-bold text-[#151c27] group-hover:text-[#bb0004] transition-colors no-underline block">
+                      {{ p.full_name }}
+                    </a>
                     <div class="text-[11px] text-slate-400 font-mono">{{ p.user.email }}</div>
                   </div>
                 </div>
@@ -195,6 +201,13 @@
 
               <td class="py-4 px-6 text-slate-400">
                 {{ p.created_at|date:"d M Y" }}
+              </td>
+
+              <td class="py-4 px-6 text-right">
+                <a href="{% url 'company:student_detail' p.pk %}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#bb0004] hover:text-white text-slate-700 font-bold text-xs transition-colors no-underline">
+                  <span>Details</span>
+                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                </a>
               </td>
             </tr>
           {% empty %}

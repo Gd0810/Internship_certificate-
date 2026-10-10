@@ -7,7 +7,11 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from accounts.forms import StyledAuthenticationForm
@@ -15,9 +19,11 @@ from accounts.models import InternProfile
 from payments.models import Payment
 from certificates.models import CertificateTemplate, OfferLetterTemplate
 from certificates.template_engine import extract_template_package, TemplatePackageError
+from certificates.rendering import render_offer_letter, render_certificate
+from certificates.views import _inject_preview_styles
 from .decorators import company_staff_required
 from .forms import TrackForm, TaskModuleForm, TemplateUploadForm, CategoryForm
-from .models import InternshipTrack, TaskModule, TrackCategory
+from .models import InternshipTrack, TaskModule, TrackCategory, UserTaskProgress
 
 logger = logging.getLogger("company")
 
@@ -240,3 +246,147 @@ def offer_letter_template_upload(request):
         "form": form, "kind": "Offer Letter", "templates": templates,
         "action_name": "company:offer_letter_template_upload",
     })
+
+
+# ------------------------------------------------------------- Students ----
+@company_staff_required
+def student_list(request):
+    search_query = request.GET.get("q", "").strip()
+    track_filter = request.GET.get("track", "").strip()
+    status_filter = request.GET.get("status", "").strip()
+
+    students_qs = InternProfile.objects.select_related("user", "track", "track__category").order_by("-created_at")
+
+    if search_query:
+        students_qs = students_qs.filter(
+            Q(full_name__icontains=search_query) |
+            Q(user__email__icontains=search_query) |
+            Q(intern_id__icontains=search_query) |
+            Q(college_name__icontains=search_query) |
+            Q(mobile_number__icontains=search_query)
+        )
+
+    if track_filter:
+        students_qs = students_qs.filter(track_id=track_filter)
+
+    if status_filter == "paid":
+        students_qs = students_qs.filter(has_paid=True)
+    elif status_filter == "unpaid":
+        students_qs = students_qs.filter(has_paid=False)
+
+    total_count = students_qs.count()
+    paginator = Paginator(students_qs, 15)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
+    tracks = InternshipTrack.objects.all().order_by("name")
+
+    stats = {
+        "total": InternProfile.objects.count(),
+        "paid": InternProfile.objects.filter(has_paid=True).count(),
+        "unpaid": InternProfile.objects.filter(has_paid=False).count(),
+    }
+
+    return render(
+        request,
+        "company/student_list.html",
+        {
+            "page_obj": page_obj,
+            "tracks": tracks,
+            "search_query": search_query,
+            "track_filter": track_filter,
+            "status_filter": status_filter,
+            "total_count": total_count,
+            "stats": stats,
+        },
+    )
+
+
+@company_staff_required
+def student_detail(request, pk):
+    student = get_object_or_404(
+        InternProfile.objects.select_related("user", "track", "track__category"),
+        pk=pk,
+    )
+
+    tasks = list(student.track.task_modules.all().order_by("module_number", "order", "id"))
+    progress_map = {
+        p.task_id: p for p in UserTaskProgress.objects.filter(profile=student)
+    }
+
+    task_rows = []
+    for task in tasks:
+        prog = progress_map.get(task.id)
+        task_rows.append({
+            "task": task,
+            "progress": prog,
+            "is_completed": bool(prog and prog.is_completed),
+            "completed_at": prog.completed_at if prog else None,
+            "submission_data": prog.submission_data if prog else {},
+        })
+
+    payments = student.payments.all().order_by("-created_at")
+
+    return render(
+        request,
+        "company/student_detail.html",
+        {
+            "student": student,
+            "task_rows": task_rows,
+            "payments": payments,
+        },
+    )
+
+
+@company_staff_required
+@require_POST
+def student_toggle_payment(request, pk):
+    student = get_object_or_404(InternProfile, pk=pk)
+    student.has_paid = not student.has_paid
+    if student.has_paid and not student.certificate_id:
+        student.generate_certificate_id()
+    student.save()
+    messages.success(
+        request,
+        f"Payment status updated for {student.full_name}: {'Verified & Paid' if student.has_paid else 'Pending Payment'}."
+    )
+    return redirect("company:student_detail", pk=pk)
+
+
+@company_staff_required
+@require_POST
+def student_toggle_task(request, pk, task_id):
+    student = get_object_or_404(InternProfile, pk=pk)
+    task = get_object_or_404(TaskModule, pk=task_id, track=student.track)
+
+    prog, _ = UserTaskProgress.objects.get_or_create(profile=student, task=task)
+    prog.is_completed = not prog.is_completed
+    if prog.is_completed:
+        prog.completed_at = timezone.now()
+    else:
+        prog.completed_at = None
+    prog.save()
+
+    messages.success(
+        request,
+        f"Module {task.module_number} ('{task.title}') marked as {'Completed' if prog.is_completed else 'Pending'} for {student.full_name}."
+    )
+    return redirect("company:student_detail", pk=pk)
+
+
+@company_staff_required
+def student_offer_letter_preview(request, pk):
+    student = get_object_or_404(InternProfile, pk=pk)
+    html = render_offer_letter(student)
+    if html is None:
+        return HttpResponse("<p style='font-family:sans-serif;padding:40px;color:#8a8a86;'>Offer letter template not configured for this track.</p>")
+    return HttpResponse(_inject_preview_styles(html))
+
+
+@company_staff_required
+def student_certificate_preview(request, pk):
+    student = get_object_or_404(InternProfile, pk=pk)
+    html = render_certificate(student)
+    if html is None:
+        return HttpResponse("<p style='font-family:sans-serif;padding:40px;color:#8a8a86;'>Certificate template not configured for this track.</p>")
+    return HttpResponse(_inject_preview_styles(html))
+
