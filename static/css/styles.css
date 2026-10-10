@@ -132,6 +132,59 @@ a.text-white *,
   color: #ffffff !important;
 }
 
+/* Modern Filter Sidebar Styles */
+.icp-filter-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+.icp-filter-label:hover {
+  background-color: #f8fafc;
+}
+.icp-filter-label.is-active {
+  background-color: #fef2f2;
+}
+.icp-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.icp-custom-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.icp-filter-label:hover .icp-custom-checkbox {
+  border-color: #94a3b8;
+}
+.icp-filter-input:checked + .icp-custom-checkbox {
+  background-color: #bb0004 !important;
+  border-color: #bb0004 !important;
+}
+.icp-custom-checkbox svg {
+  display: none;
+  width: 12px;
+  height: 12px;
+  stroke: #ffffff;
+  stroke-width: 3;
+}
+.icp-filter-input:checked + .icp-custom-checkbox svg {
+  display: block;
+}
+
+
 
 /* ---------------------------------------------------------------- cards */
 .icp-card {

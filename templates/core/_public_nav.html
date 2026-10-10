@@ -37,7 +37,16 @@
 
     <!-- Desktop Right CTA Buttons -->
     <div class="hidden md:flex items-center gap-3">
-      {% if request.user.is_authenticated %}
+      {% if request.user.is_authenticated and request.user.is_staff %}
+        <a href="{% url 'company:overview' %}" class="bg-[#151c27] hover:bg-slate-800 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-1.5 no-underline" style="color: #ffffff !important;">
+          <span class="material-symbols-outlined text-[18px]" style="color: #ffffff !important;">business</span>
+          <span style="color: #ffffff !important;">Company Portal</span>
+        </a>
+        <a href="{% url 'accounts:register' %}" class="bg-gradient-to-r from-[#bb0004] to-[#e1251b] hover:opacity-95 text-white text-xs sm:text-sm font-bold px-4.5 py-2.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-1.5 no-underline" style="color: #ffffff !important;">
+          <span style="color: #ffffff !important;">Student Register</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </a>
+      {% elif request.user.is_authenticated %}
         <a href="{% url 'accounts:dashboard' %}" class="bg-[#151c27] hover:bg-[#bb0004] text-white font-bold text-xs sm:text-sm px-4.5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2 no-underline" style="color: #ffffff !important;">
           <span class="material-symbols-outlined text-[18px]" style="color: #ffffff !important;">dashboard</span>
           <span style="color: #ffffff !important;">My Dashboard</span>
@@ -77,7 +86,16 @@
       </a>
 
       <div class="pt-3 mt-1 border-t border-[#e7bdb7]/20 flex flex-col gap-2">
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and request.user.is_staff %}
+          <a href="{% url 'company:overview' %}" class="w-full bg-[#151c27] hover:bg-slate-800 text-white text-sm font-bold py-3 rounded-xl shadow-sm text-center flex items-center justify-center gap-2 no-underline" style="color: #ffffff !important;">
+            <span class="material-symbols-outlined text-[18px]" style="color: #ffffff !important;">business</span>
+            <span style="color: #ffffff !important;">Company Portal</span>
+          </a>
+          <a href="{% url 'accounts:register' %}" class="w-full bg-[#bb0004] text-white text-sm font-bold py-3 rounded-xl shadow-md text-center flex items-center justify-center gap-2 no-underline" style="color: #ffffff !important;">
+            <span style="color: #ffffff !important;">Student Register</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </a>
+        {% elif request.user.is_authenticated %}
           <a href="{% url 'accounts:dashboard' %}" class="w-full bg-[#151c27] hover:bg-[#bb0004] text-white text-sm font-bold py-3 rounded-xl shadow-sm text-center flex items-center justify-center gap-2 no-underline" style="color: #ffffff !important;">
             <span class="material-symbols-outlined text-[18px]" style="color: #ffffff !important;">dashboard</span>
             <span style="color: #ffffff !important;">My Dashboard</span>

@@ -21,11 +21,9 @@ logger = logging.getLogger("accounts")
 
 
 def register(request):
-    if request.user.is_authenticated:
-        if request.user.is_staff:
-            return redirect("company:overview")
-        if hasattr(request.user, "intern_profile"):
-            return redirect("accounts:dashboard")
+    # Only redirect to student dashboard if the logged-in user is an enrolled student
+    if request.user.is_authenticated and hasattr(request.user, "intern_profile"):
+        return redirect("accounts:dashboard")
 
     track_slug = request.GET.get("track")
     initial_data = {}

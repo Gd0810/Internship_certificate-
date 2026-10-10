@@ -5,33 +5,53 @@
 <section class="bg-[#faf8f5] min-h-screen py-10 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto space-y-6">
 
-    <!-- Top Bar: Title & Search (Top Left) & Sort Dropdown (Top Right) -->
+    <!-- Page Header Header Breadcrumb / Title -->
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2">
+      <div>
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#bb0004] bg-[#ffdad5]/50 px-3 py-1 rounded-full mb-2">
+          <span class="material-symbols-outlined text-sm">workspace_premium</span>
+          <span>Verified Certification Tracks</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-[#151c27] tracking-tight m-0">
+          Explore Internship Programs
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1.5 max-w-2xl m-0 leading-relaxed">
+          Select an industry-vetted technical track, complete real-world module deliverables, and earn your verified certificate and credentials.
+        </p>
+      </div>
+    </div>
+
+    <!-- Filter Form -->
     <form id="track-filter-form" method="get" action="{% url 'core:track_list' %}" class="space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-        <!-- Top Left Search Input -->
-        <div class="relative flex-1 max-w-md">
+      
+      <!-- Top Action Bar: Search (Left) & Sort (Right) -->
+      <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Search Input (Top Left) -->
+        <div class="relative flex-1 max-w-lg">
           <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xl pointer-events-none">search</span>
           <input
             type="text"
             name="q"
             value="{{ search_query }}"
             placeholder="Search tracks by title, skill, or category..."
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-xs sm:text-sm text-[#151c27] placeholder-slate-400 focus:outline-none focus:border-[#bb0004] focus:bg-white transition-all"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-10 py-2.5 text-xs sm:text-sm text-[#151c27] placeholder-slate-400 focus:outline-none focus:border-[#bb0004] focus:bg-white transition-all shadow-2xs"
           />
           {% if search_query %}
-            <a href="{% url 'core:track_list' %}" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs no-underline font-bold">Clear</a>
+            <a href="?{% for cat in selected_categories %}category={{ cat }}&{% endfor %}{% for m in selected_modules %}modules={{ m }}&{% endfor %}sort={{ sort_option }}" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors" title="Clear search">
+              <span class="material-symbols-outlined text-base">close</span>
+            </a>
           {% endif %}
         </div>
 
-        <!-- Top Right Sort Dropdown -->
-        <div class="flex items-center gap-3 shrink-0">
-          <label for="sort-select" class="text-xs font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap hidden sm:inline-block">Sort by:</label>
-          <div class="relative">
+        <!-- Sort Dropdown (Top Right) -->
+        <div class="flex items-center gap-3 shrink-0 self-end md:self-auto">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap hidden sm:inline-block">Sort by:</span>
+          <div class="relative min-w-[210px]">
             <select
               id="sort-select"
               name="sort"
               onchange="document.getElementById('track-filter-form').submit();"
-              class="appearance-none bg-slate-50 border border-slate-200 text-[#151c27] text-xs sm:text-sm font-semibold rounded-xl pl-4 pr-10 py-2.5 focus:outline-none focus:border-[#bb0004] focus:bg-white cursor-pointer transition-all"
+              class="w-full appearance-none bg-slate-50 border border-slate-200 text-[#151c27] text-xs sm:text-sm font-semibold rounded-xl pl-4 pr-10 py-2.5 focus:outline-none focus:border-[#bb0004] focus:bg-white cursor-pointer transition-all shadow-2xs"
             >
               <option value="newest" {% if sort_option == 'newest' %}selected{% endif %}>Release Date (newest first)</option>
               <option value="oldest" {% if sort_option == 'oldest' %}selected{% endif %}>Release Date (oldest first)</option>
@@ -39,112 +59,233 @@
               <option value="title_desc" {% if sort_option == 'title_desc' %}selected{% endif %}>Course Title (z-a)</option>
               <option value="popular" {% if sort_option == 'popular' %}selected{% endif %}>Most Popular / Featured</option>
             </select>
-            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">expand_more</span>
+            <span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">expand_more</span>
           </div>
         </div>
       </div>
 
-      <!-- Main Layout: Sidebar Left & Track Grid Right -->
+      <!-- Main Two-Column Layout -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
 
-        <!-- Left Sidebar Filters -->
-        <aside class="lg:col-span-1 space-y-6 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+        <!-- ========================================================
+             LEFT SIDEBAR FILTER
+             ======================================================== -->
+        <aside class="lg:col-span-1 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-6 lg:sticky lg:top-28">
           
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h4 class="font-extrabold text-[#151c27] text-sm uppercase tracking-wider flex items-center gap-2 m-0">
-              <span class="material-symbols-outlined text-lg text-[#bb0004]">tune</span>
-              <span>Filter Tracks</span>
-            </h4>
+          <!-- Filter Header -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-lg bg-[#ffdad5] text-[#bb0004] flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-lg">tune</span>
+              </span>
+              <div>
+                <h3 class="font-extrabold text-[#151c27] text-sm tracking-tight m-0">Filter Tracks</h3>
+                {% if selected_categories or selected_modules %}
+                  <span class="text-[10px] text-slate-400 font-medium">
+                    {{ selected_categories|length|add:selected_modules|length }} active filter{{ selected_categories|length|add:selected_modules|length|pluralize }}
+                  </span>
+                {% else %}
+                  <span class="text-[10px] text-slate-400 font-medium">Refine your results</span>
+                {% endif %}
+              </div>
+            </div>
+
             {% if selected_categories or selected_modules or search_query %}
-              <a href="{% url 'core:track_list' %}" class="text-[11px] text-[#bb0004] font-bold hover:underline">Reset All</a>
+              <a href="{% url 'core:track_list' %}" class="inline-flex items-center gap-1 text-[11px] font-bold text-[#bb0004] hover:text-[#e1251b] transition-colors no-underline group" title="Reset all filters">
+                <span class="material-symbols-outlined text-xs group-hover:rotate-180 transition-transform duration-300">restart_alt</span>
+                <span>Reset</span>
+              </a>
             {% endif %}
           </div>
 
-          <!-- Sidebar Filter 1: Track Category -->
+          <!-- Section 1: Track Category -->
           <div class="space-y-3">
-            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 m-0">Category</h5>
-            <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#151c27] m-0 flex items-center gap-1.5">
+                <span>Category</span>
+              </h4>
+              <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                {{ categories|length }}
+              </span>
+            </div>
+
+            <div class="space-y-1.5 max-h-72 overflow-y-auto pr-1">
               {% for cat in categories %}
-                <label class="flex items-center justify-between text-xs text-[#151c27] hover:text-[#bb0004] cursor-pointer group select-none">
-                  <div class="flex items-center gap-2.5">
+                <label class="icp-filter-label group {% if cat.slug in selected_categories %}is-active{% endif %}">
+                  <div class="icp-checkbox-wrapper">
                     <input
                       type="checkbox"
                       name="category"
                       value="{{ cat.slug }}"
+                      class="icp-filter-input hidden"
                       {% if cat.slug in selected_categories %}checked{% endif %}
                       onchange="document.getElementById('track-filter-form').submit();"
-                      class="w-4 h-4 rounded text-[#bb0004] border-slate-300 focus:ring-[#bb0004] cursor-pointer"
                     />
-                    <span class="font-medium {% if cat.slug in selected_categories %}font-bold text-[#bb0004]{% endif %}">{{ cat.name }}</span>
+                    <span class="icp-custom-checkbox">
+                      <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span class="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors {% if cat.slug in selected_categories %}font-bold text-[#bb0004]{% endif %}">
+                      {{ cat.name }}
+                    </span>
                   </div>
-                  <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full group-hover:bg-[#ffdad5] group-hover:text-[#bb0004] transition-colors">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full transition-colors {% if cat.slug in selected_categories %}bg-[#bb0004] text-white{% else %}bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700{% endif %}">
                     {{ cat.track_count }}
                   </span>
                 </label>
               {% empty %}
-                <p class="text-xs text-slate-400">No categories available.</p>
+                <div class="py-4 text-center text-slate-400 text-xs">
+                  No categories found.
+                </div>
               {% endfor %}
             </div>
           </div>
 
-          <!-- Sidebar Filter 2: Modules Count -->
-          <div class="space-y-3 pt-4 border-t border-slate-100">
-            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-700 m-0">Modules Count</h5>
-            <div class="space-y-2">
-              <label class="flex items-center justify-between text-xs text-[#151c27] hover:text-[#bb0004] cursor-pointer select-none">
-                <div class="flex items-center gap-2.5">
+          <!-- Section 2: Modules Count -->
+          <div class="space-y-3 pt-5 border-t border-slate-100">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#151c27] m-0 flex items-center gap-1.5">
+                <span>Modules Count</span>
+              </h4>
+            </div>
+
+            <div class="space-y-1.5">
+              <!-- 3 Modules -->
+              <label class="icp-filter-label group {% if '3' in selected_modules %}is-active{% endif %}">
+                <div class="icp-checkbox-wrapper">
                   <input
                     type="checkbox"
                     name="modules"
                     value="3"
+                    class="icp-filter-input hidden"
                     {% if '3' in selected_modules %}checked{% endif %}
                     onchange="document.getElementById('track-filter-form').submit();"
-                    class="w-4 h-4 rounded text-[#bb0004] border-slate-300 focus:ring-[#bb0004] cursor-pointer"
                   />
-                  <span class="font-medium {% if '3' in selected_modules %}font-bold text-[#bb0004]{% endif %}">3 Modules</span>
+                  <span class="icp-custom-checkbox">
+                    <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors {% if '3' in selected_modules %}font-bold text-[#bb0004]{% endif %}">
+                      3 Modules
+                    </span>
+                  </div>
                 </div>
+                <span class="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md">
+                  Standard
+                </span>
               </label>
 
-              <label class="flex items-center justify-between text-xs text-[#151c27] hover:text-[#bb0004] cursor-pointer select-none">
-                <div class="flex items-center gap-2.5">
+              <!-- 4 Modules -->
+              <label class="icp-filter-label group {% if '4' in selected_modules %}is-active{% endif %}">
+                <div class="icp-checkbox-wrapper">
                   <input
                     type="checkbox"
                     name="modules"
                     value="4"
+                    class="icp-filter-input hidden"
                     {% if '4' in selected_modules %}checked{% endif %}
                     onchange="document.getElementById('track-filter-form').submit();"
-                    class="w-4 h-4 rounded text-[#bb0004] border-slate-300 focus:ring-[#bb0004] cursor-pointer"
                   />
-                  <span class="font-medium {% if '4' in selected_modules %}font-bold text-[#bb0004]{% endif %}">4 Modules</span>
+                  <span class="icp-custom-checkbox">
+                    <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors {% if '4' in selected_modules %}font-bold text-[#bb0004]{% endif %}">
+                      4 Modules
+                    </span>
+                  </div>
                 </div>
+                <span class="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md">
+                  Intermediate
+                </span>
               </label>
 
-              <label class="flex items-center justify-between text-xs text-[#151c27] hover:text-[#bb0004] cursor-pointer select-none">
-                <div class="flex items-center gap-2.5">
+              <!-- 5+ Modules -->
+              <label class="icp-filter-label group {% if '5+' in selected_modules %}is-active{% endif %}">
+                <div class="icp-checkbox-wrapper">
                   <input
                     type="checkbox"
                     name="modules"
                     value="5+"
+                    class="icp-filter-input hidden"
                     {% if '5+' in selected_modules %}checked{% endif %}
                     onchange="document.getElementById('track-filter-form').submit();"
-                    class="w-4 h-4 rounded text-[#bb0004] border-slate-300 focus:ring-[#bb0004] cursor-pointer"
                   />
-                  <span class="font-medium {% if '5+' in selected_modules %}font-bold text-[#bb0004]{% endif %}">5+ Modules</span>
+                  <span class="icp-custom-checkbox">
+                    <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors {% if '5+' in selected_modules %}font-bold text-[#bb0004]{% endif %}">
+                      5+ Modules
+                    </span>
+                  </div>
                 </div>
+                <span class="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md">
+                  Comprehensive
+                </span>
               </label>
             </div>
           </div>
 
-        </aside>
-
-        <!-- Right Main Content Area: Track Cards Grid -->
-        <main class="lg:col-span-3 space-y-6">
-          <div class="flex items-center justify-between">
-            <h2 class="text-lg font-extrabold text-[#151c27] tracking-tight m-0">
-              Showing {{ total_count }} Track{{ total_count|pluralize }}
-            </h2>
+          <!-- Quick Tip in Sidebar -->
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200/60 text-[11px] text-slate-500 leading-relaxed space-y-1">
+            <div class="font-bold text-[#151c27] flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm text-[#1159c2]">info</span>
+              <span>Self-Paced Learning</span>
+            </div>
+            <p class="m-0">All tracks allow self-paced submission with instant review feedback and automated certificate generation.</p>
           </div>
 
+        </aside>
+
+
+        <!-- ========================================================
+             RIGHT MAIN CONTENT AREA: TRACK CARDS & ACTIVE PILLS
+             ======================================================== -->
+        <main class="lg:col-span-3 space-y-6">
+
+          <!-- Active Filter Pills Bar (if filters or search active) -->
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-extrabold text-[#151c27] tracking-tight m-0">
+                Available Programs
+              </h2>
+              <span class="text-xs font-bold text-slate-500 bg-white border border-slate-200 px-2.5 py-0.5 rounded-full shadow-2xs">
+                {{ total_count }} Track{{ total_count|pluralize }}
+              </span>
+            </div>
+
+            <!-- Active Pills -->
+            {% if selected_categories or selected_modules or search_query %}
+              <div class="flex flex-wrap items-center gap-2">
+                {% if search_query %}
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-[#151c27] text-xs font-semibold border border-slate-200">
+                    <span class="text-slate-400">Search:</span>
+                    <span>"{{ search_query }}"</span>
+                  </span>
+                {% endif %}
+
+                {% for cat in categories %}
+                  {% if cat.slug in selected_categories %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdad5]/70 text-[#bb0004] text-xs font-semibold border border-[#bb0004]/20">
+                      <span>{{ cat.name }}</span>
+                    </span>
+                  {% endif %}
+                {% endfor %}
+
+                {% for m in selected_modules %}
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-[#1159c2] text-xs font-semibold border border-blue-200">
+                    <span>{{ m }} Modules</span>
+                  </span>
+                {% endfor %}
+
+                <a href="{% url 'core:track_list' %}" class="text-xs font-bold text-[#bb0004] hover:underline ml-1">
+                  Clear all
+                </a>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Tracks Grid -->
           {% if page_obj.object_list %}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {% for track in page_obj %}
@@ -152,28 +293,41 @@
               {% endfor %}
             </div>
 
-            <!-- Pagination -->
+            <!-- Pagination Bar -->
             {% if page_obj.has_other_pages %}
-              <div class="flex items-center justify-center gap-3 pt-8">
+              <div class="flex items-center justify-center gap-3 pt-8 pb-4">
                 {% if page_obj.has_previous %}
-                  <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% for cat in selected_categories %}&category={{ cat }}{% endfor %}{% for m in selected_modules %}&modules={{ m }}{% endfor %}&sort={{ sort_option }}" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:border-[#bb0004] hover:text-[#bb0004] transition-colors no-underline">Previous</a>
+                  <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% for cat in selected_categories %}&category={{ cat }}{% endfor %}{% for m in selected_modules %}&modules={{ m }}{% endfor %}&sort={{ sort_option }}" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:border-[#bb0004] hover:text-[#bb0004] transition-colors no-underline shadow-2xs">
+                    Previous
+                  </a>
                 {% endif %}
 
-                <span class="text-xs text-slate-500 font-medium">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                <span class="text-xs text-slate-500 font-medium px-2">
+                  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
 
                 {% if page_obj.has_next %}
-                  <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% for cat in selected_categories %}&category={{ cat }}{% endfor %}{% for m in selected_modules %}&modules={{ m }}{% endfor %}&sort={{ sort_option }}" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:border-[#bb0004] hover:text-[#bb0004] transition-colors no-underline">Next</a>
+                  <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% for cat in selected_categories %}&category={{ cat }}{% endfor %}{% for m in selected_modules %}&modules={{ m }}{% endfor %}&sort={{ sort_option }}" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:border-[#bb0004] hover:text-[#bb0004] transition-colors no-underline shadow-2xs">
+                    Next
+                  </a>
                 {% endif %}
               </div>
             {% endif %}
 
           {% else %}
-            <!-- Empty State -->
-            <div class="bg-white rounded-2xl border border-slate-200/80 p-12 text-center space-y-3">
-              <span class="material-symbols-outlined text-5xl text-slate-300">search_off</span>
-              <h3 class="text-base font-bold text-[#151c27]">No tracks matched your criteria</h3>
-              <p class="text-xs text-slate-500 max-w-sm mx-auto">Try clearing your category or module filters, or searching for a different domain keyword.</p>
-              <a href="{% url 'core:track_list' %}" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#bb0004] text-white text-xs font-bold no-underline" style="color: #ffffff !important;">
+            <!-- Empty Results State -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 p-12 text-center space-y-4 shadow-xs">
+              <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
+                <span class="material-symbols-outlined text-3xl">search_off</span>
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-[#151c27]">No tracks matched your filters</h3>
+                <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1 leading-relaxed">
+                  We couldn't find any internship tracks matching your current filters. Try resetting the category or module filters to see all available tracks.
+                </p>
+              </div>
+              <a href="{% url 'core:track_list' %}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#bb0004] text-white text-xs font-bold no-underline shadow-md hover:bg-[#e1251b] transition-all" style="color: #ffffff !important;">
+                <span class="material-symbols-outlined text-sm" style="color: #ffffff !important;">refresh</span>
                 <span style="color: #ffffff !important;">Reset All Filters</span>
               </a>
             </div>
