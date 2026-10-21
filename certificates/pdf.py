@@ -168,6 +168,9 @@ def _preprocess_html_for_pdf(html: str) -> str:
     # Strip external Google Fonts stylesheets to avoid xhtml2pdf Windows temp file permission errors
     html = re.sub(r'<link[^>]*fonts\.googleapis\.com[^>]*>', '', html, flags=re.IGNORECASE)
 
+    # Strip @media screen blocks so screen-only preview styles never affect the PDF
+    html = re.sub(r'@media\s+screen\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', '', html, flags=re.DOTALL | re.IGNORECASE)
+
     is_cert = "certificate" in html.lower() and "offer" not in html.lower()
 
     if is_cert:
@@ -188,6 +191,8 @@ def _preprocess_html_for_pdf(html: str) -> str:
   html, body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
   .page-wrap, .letter-wrap, .sheet, .letter { max-width: 100% !important; margin: 0 auto !important; padding: 0 !important; box-shadow: none !important; min-height: 0 !important; }
   img { max-width: 100% !important; }
+  .sign-table { margin-bottom: 24px !important; }
+  .acceptance-box { margin-top: 26px !important; }
 </style>
 """
 

@@ -36,11 +36,127 @@ PREVIEW_CONTAINER_STYLE = """
 </style>
 """
 
+OFFER_PREVIEW_EXTRA_STYLE = """
+<style id="platform-preview-offer-spacing">
+  .letter {
+    min-height: 1140px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .letter-table {
+    min-height: 1140px !important;
+    height: 100% !important;
+    flex: 1 1 auto !important;
+  }
+  .strip-red {
+    height: 100% !important;
+    background-color: #bb0004 !important;
+  }
+  .content-cell {
+    height: 100% !important;
+    padding: 48px 48px 44px 42px !important;
+  }
+  .header-block {
+    margin-bottom: 28px !important;
+    padding-bottom: 10px !important;
+  }
+  .org-title {
+    font-size: 21px !important;
+    margin-bottom: 8px !important;
+    letter-spacing: 1px !important;
+  }
+  .doc-title {
+    font-size: 15px !important;
+    letter-spacing: 3px !important;
+  }
+  .meta-table {
+    margin-bottom: 24px !important;
+    font-size: 13.5px !important;
+    line-height: 1.85 !important;
+  }
+  .meta-table td {
+    padding: 5px 0 !important;
+  }
+  .subject-bar {
+    margin: 24px 0 26px 0 !important;
+    padding: 12px 18px !important;
+    font-size: 14px !important;
+    letter-spacing: 0.3px !important;
+  }
+  .salutation {
+    font-size: 14px !important;
+    margin-bottom: 18px !important;
+  }
+  p.body-p {
+    font-size: 13.5px !important;
+    line-height: 1.85 !important;
+    margin-bottom: 20px !important;
+    letter-spacing: 0.15px !important;
+  }
+  .terms-section {
+    margin: 24px 0 26px 0 !important;
+  }
+  .terms-heading {
+    font-size: 13.5px !important;
+    margin-bottom: 14px !important;
+    letter-spacing: 1px !important;
+  }
+  .terms-list {
+    font-size: 13px !important;
+    line-height: 1.85 !important;
+    padding-left: 22px !important;
+  }
+  .terms-list li {
+    margin-bottom: 12px !important;
+  }
+  .sign-table {
+    margin-top: 26px !important;
+  }
+  .sig-img {
+    height: 58px !important;
+    margin: 8px 0 6px 0 !important;
+  }
+  .sig-name {
+    font-size: 13.5px !important;
+  }
+  .sig-company {
+    font-size: 12.5px !important;
+    margin-top: 4px !important;
+  }
+  .sig-web {
+    font-size: 12px !important;
+    margin-top: 4px !important;
+  }
+  .acceptance-box {
+    margin-top: 36px !important;
+  }
+  .acceptance-title {
+    font-size: 13px !important;
+    margin-bottom: 10px !important;
+    letter-spacing: 1px !important;
+  }
+  .acceptance-text {
+    font-size: 12.5px !important;
+    line-height: 1.7 !important;
+    margin-bottom: 18px !important;
+  }
+  .acceptance-table {
+    font-size: 13px !important;
+  }
+  .acceptance-table td {
+    padding-top: 8px !important;
+  }
+</style>
+"""
+
 
 def _inject_preview_styles(html: str) -> str:
+    combined = PREVIEW_CONTAINER_STYLE
+    if "offer" in html.lower():
+        combined = f"{PREVIEW_CONTAINER_STYLE}\n{OFFER_PREVIEW_EXTRA_STYLE}"
     if "</head>" in html:
-        return html.replace("</head>", f"{PREVIEW_CONTAINER_STYLE}</head>")
-    return f"{PREVIEW_CONTAINER_STYLE}{html}"
+        return html.replace("</head>", f"{combined}</head>")
+    return f"{combined}{html}"
 
 
 @login_required
