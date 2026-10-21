@@ -104,8 +104,8 @@ class Command(BaseCommand):
         track_web = created_tracks[3]  # Full Stack Development
 
         # 2. Set up Default Templates
-        CertificateTemplate.objects.create(track=None, folder_path="default-seed", is_active=True)
-        OfferLetterTemplate.objects.create(track=None, folder_path="default-seed", is_active=True)
+        CertificateTemplate.objects.create(track=None, folder_path="default-cfe8f3a2", is_active=True)
+        OfferLetterTemplate.objects.create(track=None, folder_path="default-c43d595d", is_active=True)
         self.stdout.write(self.style.SUCCESS("Default certificate & offer-letter templates activated."))
 
         # 3. Create the 3 Accounts

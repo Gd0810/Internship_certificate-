@@ -63,9 +63,12 @@ def _django_link_callback(uri, rel):
             if os.path.isfile(png_candidate):
                 return png_candidate
             basename = os.path.basename(png_candidate)
-            default_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-seed", "img", basename)
+            default_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-c43d595d", "img", basename)
             if os.path.isfile(default_fallback):
                 return default_fallback
+            seed_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-seed", "img", basename)
+            if os.path.isfile(seed_fallback):
+                return seed_fallback
             cert_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "certificate", "default-cfe8f3a2", "img", basename)
             if os.path.isfile(cert_fallback):
                 return cert_fallback
@@ -74,14 +77,17 @@ def _django_link_callback(uri, rel):
                 return cert_fallback_seed
         return path
 
-    # If requested image isn't found directly, try finding raster fallback in default seed folders
+    # If requested image isn't found directly, try finding raster fallback in default folders
     if path.lower().endswith(".png") or path.lower().endswith(".jpg") or path.lower().endswith(".svg"):
         basename = os.path.basename(path)
         if basename.endswith(".svg"):
             basename = basename[:-4] + ".png"
-        default_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-seed", "img", basename)
+        default_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-c43d595d", "img", basename)
         if os.path.isfile(default_fallback):
             return default_fallback
+        seed_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-seed", "img", basename)
+        if os.path.isfile(seed_fallback):
+            return seed_fallback
         cert_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "certificate", "default-cfe8f3a2", "img", basename)
         if os.path.isfile(cert_fallback):
             return cert_fallback
@@ -94,6 +100,49 @@ def _django_link_callback(uri, rel):
 
 import re
 
+_poppins_registered = False
+
+
+def _ensure_poppins_fonts():
+    global _poppins_registered
+    if _poppins_registered:
+        return
+    try:
+        from reportlab.pdfbase import pdfmetrics
+        from reportlab.pdfbase.ttfonts import TTFont
+        import xhtml2pdf.context as x2p_ctx
+
+        font_dir = os.path.join(settings.BASE_DIR, "static", "fonts")
+        reg_path = os.path.join(font_dir, "Poppins-Regular.ttf")
+        bold_path = os.path.join(font_dir, "Poppins-Bold.ttf")
+
+        if not os.path.isfile(reg_path):
+            alt_dir = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-c43d595d", "fonts")
+            reg_path = os.path.join(alt_dir, "Poppins-Regular.ttf")
+            bold_path = os.path.join(alt_dir, "Poppins-Bold.ttf")
+
+        if os.path.isfile(reg_path) and os.path.isfile(bold_path):
+            pdfmetrics.registerFont(TTFont("Poppins", reg_path))
+            pdfmetrics.registerFont(TTFont("Poppins-Bold", bold_path))
+            x2p_ctx.addMapping("poppins", 0, 0, "Poppins")
+            x2p_ctx.addMapping("poppins", 1, 0, "Poppins-Bold")
+            x2p_ctx.addMapping("poppins", 0, 1, "Poppins")
+            x2p_ctx.addMapping("poppins", 1, 1, "Poppins-Bold")
+
+            orig_init = x2p_ctx.pisaContext.__init__
+            if not getattr(orig_init, "_poppins_patched", False):
+                def patched_init(self, *args, **kwargs):
+                    orig_init(self, *args, **kwargs)
+                    self.fontList["poppins"] = "Poppins"
+                patched_init._poppins_patched = True
+                x2p_ctx.pisaContext.__init__ = patched_init
+
+            _poppins_registered = True
+            logger.info("Successfully registered Poppins fonts with ReportLab and xhtml2pdf.")
+    except Exception as exc:
+        logger.warning("Could not register Poppins font: %s", exc)
+
+
 def _preprocess_html_for_pdf(html: str) -> str:
     """
     Ensures any uploaded company template (using flexbox, large margins, or custom CSS)
@@ -103,6 +152,8 @@ def _preprocess_html_for_pdf(html: str) -> str:
       3. Forcing standard A4 page dimensions and non-zero margins (@page).
       4. Injecting CSS normalizers for font size, line-height, and element margins so content fits on 1 page.
     """
+    _ensure_poppins_fonts()
+
     root_vars = {}
     for match in re.finditer(r"--([a-zA-Z0-9_-]+)\s*:\s*([^;}]+)", html):
         root_vars[match.group(1)] = match.group(2).strip()
@@ -113,6 +164,9 @@ def _preprocess_html_for_pdf(html: str) -> str:
 
     # Disable flexbox declarations that cause vertical stacking in xhtml2pdf
     html = re.sub(r'display:\s*flex;?', 'display: block;', html, flags=re.IGNORECASE)
+
+    # Strip external Google Fonts stylesheets to avoid xhtml2pdf Windows temp file permission errors
+    html = re.sub(r'<link[^>]*fonts\.googleapis\.com[^>]*>', '', html, flags=re.IGNORECASE)
 
     is_cert = "certificate" in html.lower() and "offer" not in html.lower()
 
@@ -127,23 +181,12 @@ def _preprocess_html_for_pdf(html: str) -> str:
 </style>
 """
     else:
-        a4_style = "@page { size: A4 portrait; margin: 6mm 10mm 6mm 10mm; }"
+        a4_style = "@page { size: A4 portrait; margin: 6mm 8mm 6mm 8mm; }"
         scale_override = """
 <style>
-  @page { size: A4 portrait; margin: 6mm 10mm 6mm 10mm; }
-  html, body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; font-size: 11.5px !important; }
-  .page-wrap, .letter-wrap, .sheet, .letter { max-width: 100% !important; margin: 0 auto !important; padding: 0 !important; box-shadow: none !important; }
-  .content { padding: 12px 18px 8px !important; }
-  h1, h1.title { font-size: 20px !important; margin: 0 0 10px !important; }
-  .meta-block, .subject, .salutation, p, p.body-text, .closing { font-size: 11.5px !important; line-height: 1.4 !important; margin-bottom: 8px !important; }
-  .letterhead { margin-bottom: 12px !important; }
-  .signature-block { margin-top: 8px !important; }
-  .signature-block img.signature { height: 36px !important; }
-  .doc-footer { margin-top: 10px !important; padding-top: 6px !important; }
-  .bar-top, .bar-bottom { height: 12px !important; display: block !important; }
-  .corner-bottom, img.corner-bottom { display: none !important; }
-  img.logo { height: 40px !important; }
-  img.seal { height: 44px !important; }
+  @page { size: A4 portrait; margin: 6mm 8mm 6mm 8mm; }
+  html, body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
+  .page-wrap, .letter-wrap, .sheet, .letter { max-width: 100% !important; margin: 0 auto !important; padding: 0 !important; box-shadow: none !important; min-height: 0 !important; }
   img { max-width: 100% !important; }
 </style>
 """
@@ -162,6 +205,7 @@ def _preprocess_html_for_pdf(html: str) -> str:
 def _render_xhtml2pdf(html: str) -> bytes:
     from xhtml2pdf import pisa
 
+    _ensure_poppins_fonts()
     buffer = io.BytesIO()
     result = pisa.CreatePDF(html, dest=buffer, link_callback=_django_link_callback)
     if result.err:
