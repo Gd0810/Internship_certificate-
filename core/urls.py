@@ -9,4 +9,5 @@ urlpatterns = [
     path("tracks/<slug:slug>/", views.track_detail, name="track_detail"),
     path("about/", views.about, name="about"),
     path("verify/", views.verify, name="verify"),
+    path("verify/<path:query_id>/", views.verify, name="verify_direct"),
 ]

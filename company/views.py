@@ -385,7 +385,7 @@ def student_offer_letter_preview(request, pk):
 @company_staff_required
 def student_certificate_preview(request, pk):
     student = get_object_or_404(InternProfile, pk=pk)
-    html = render_certificate(student)
+    html = render_certificate(student, request=request)
     if html is None:
         return HttpResponse("<p style='font-family:sans-serif;padding:40px;color:#8a8a86;'>Certificate template not configured for this track.</p>")
     return HttpResponse(_inject_preview_styles(html))

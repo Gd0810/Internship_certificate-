@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4 landscape; margin: 8mm; }
+  * { margin:0; padding:0; box-sizing: border-box; }
+  body {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    background: #faf8f5;
+    color: #2f2f2f;
+    width: 100%;
+  }
+  .sheet { width: 100%; padding: 18px; background: #faf8f5; }
+  .frame-table { width: 100%; border-collapse: collapse; }
+  .frame-cell { border: 3px solid #535353; padding: 24px 45px 18px; text-align: center; background: #ffffff; }
+  .brand-table { width: 100%; margin-bottom: 12px; }
+  .brand-table td { text-align: center; vertical-align: middle; }
+  .brand-table img { width: auto; height: 135px; max-width: 340px; }
+  
+  .cert-prefix { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 23px; font-weight: 700; color: #22262a; margin-bottom: 2px; letter-spacing: 0.5px; }
+  .cert-main-title { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 44px; font-weight: 800; color: #bb0004; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+  
+  .presented-to { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 14px; font-weight: 500; color: #4b5563; margin-bottom: 6px; letter-spacing: 0.5px; }
+  .candidate-name { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 32px; font-weight: 800; color: #151c27; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  
+  .body-content { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 14.5px; color: #374151; line-height: 1.6; max-width: 780px; margin: 0 auto 6px; }
+  .track-highlight { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 17px; font-weight: 800; color: #bb0004; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; }
+  
+  .footer-table { width: 100%; margin-top: 8px; border-collapse: collapse; }
+  .footer-table td { width: 220px; text-align: center; vertical-align: bottom; padding-top: 6px; }
+  .cert-no-label { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 11px; font-weight: 700; color: #151c27; margin-bottom: 5px; letter-spacing: 0.5px; }
+  .sig-line { border-top: 1px solid #535353; margin-top: 4px; padding-top: 6px; font-family:'DejaVu Sans', Arial, sans-serif; font-size: 11px; color:#8a8a86; }
+  .date-value { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 13.5px; padding-bottom: 8px; font-weight: 600; }
+  .meta { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 10.5px; color: #8a8a86; margin-top: 16px; letter-spacing: 0.5px; }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@media print {
+  html, body { background: #ffffff !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+  .page-wrap, .letter-wrap, .cert-wrap, .sheet, .letter, .certificate { max-width: 100% !important; margin: 0 auto !important; box-shadow: none !important; }
+}
+</style>
+</head>
+<body>
+  <div class="sheet">
+    <table class="frame-table"><tr><td class="frame-cell">
+        <table class="brand-table"><tr>
+          <td style="width:auto; text-align:center;"><img src="img/redbackOG.png" alt="Redback IT Solutions Private Limited" style="height: 135px; width: auto; max-width: 340px;"></td>
+        </tr></table>
+
+        <div class="cert-prefix">Certificate of</div>
+        <div class="cert-main-title">INTERNSHIP</div>
+        <div class="presented-to">Presented to</div>
+        <div class="candidate-name">{{user_name}}</div>
+        <div class="body-content">
+          This certificate confirms for his active participation<br>
+          in the Internship, with <strong>Redback IT Solutions Private Limited</strong>.
+        </div>
+        <div class="track-highlight">{{track_name}}</div>
+
+        <table class="footer-table"><tr>
+          <td class="qr-col" style="width: 26%; text-align: center; vertical-align: bottom;">
+            <div class="cert-no-label">CRET NO : {{certificate_id}}</div>
+            <div style="text-align: center; padding: 1px 0;">
+              <img src="{{qr_code_data_uri}}" onerror="if (this.src != '{{qr_code_file_url}}') this.src='{{qr_code_file_url}}';" width="72" height="72" alt="Verification QR Code" style="width: 72px; height: 72px; border: 1px solid #c8c2b5; padding: 2px; background: #ffffff; display: inline-block;">
+            </div>
+            <div style="font-family:'DejaVu Sans', Arial, sans-serif; font-size: 10px; color: #8a8a86; margin-top: 4px; letter-spacing: 0.5px;">Scan to Verify</div>
+          </td>
+          <td style="width: 4%;"></td>
+          <td class="sig-col" style="width: 38%; text-align: center; vertical-align: bottom; padding: 0 35px;">
+            <div style="text-align: center; padding-bottom: 2px;">
+              <img src="img/sivapriya mam sign-01.png" alt="signature" style="height: 56px; width: auto; max-width: 170px;">
+            </div>
+            <div class="sig-line">Program Director</div>
+          </td>
+          <td style="width: 4%;"></td>
+          <td class="date-col" style="width: 28%; text-align: center; vertical-align: bottom; padding: 0 25px;">
+            <div class="date-value">{{date}}</div>
+            <div class="sig-line">Date of Issued</div>
+          </td>
+        </tr></table>
+
+        <div class="meta">Intern ID: {{profile.intern_id}} &nbsp;&middot;&nbsp; Verify at {{verify_url}} &nbsp;&middot;&nbsp; Scan QR to Verify</div>
+    </td></tr></table>
+  </div>
+</body>
+</html>

@@ -28,7 +28,25 @@ SECRET_KEY = config("DJANGO_SECRET_KEY", default="dev-only-insecure-key-change-m
 # without extra setup. Set DJANGO_DEBUG=False (and everything else in
 # .env.example) before deploying anywhere reachable from the internet.
 DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
-ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", default="127.0.0.1,localhost,testserver", cast=Csv())
+ALLOWED_HOSTS = config(
+    "DJANGO_ALLOWED_HOSTS",
+    default="127.0.0.1,localhost,testserver,192.168.1.127,wwr45z0g-8000.inc1.devtunnels.ms,.devtunnels.ms,*",
+    cast=Csv()
+)
+if DEBUG and "*" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS = list(ALLOWED_HOSTS) + ["*"]
+
+CSRF_TRUSTED_ORIGINS = list(config(
+    "CSRF_TRUSTED_ORIGINS",
+    default="https://wwr45z0g-8000.inc1.devtunnels.ms,https://*.devtunnels.ms,http://127.0.0.1:8000,http://localhost:8000,http://192.168.1.127:8000",
+    cast=Csv()
+))
+
+# Base URL encoded in certificate QR codes for instant mobile scanning
+CERTIFICATE_VERIFY_BASE_URL = config(
+    "CERTIFICATE_VERIFY_BASE_URL",
+    default="https://wwr45z0g-8000.inc1.devtunnels.ms"
+)
 
 # The company portal is intentionally reached through an unlisted, random-looking
 # URL prefix rather than a guessable "/company/" path. Override in production via env.
@@ -153,7 +171,7 @@ USE_TZ = True
 # --------------------------------------------------------------------------
 # Static & media
 # --------------------------------------------------------------------------
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
@@ -161,7 +179,7 @@ STORAGES = {
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Folder (under MEDIA_ROOT) where company-uploaded certificate/offer-letter
@@ -226,5 +244,6 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "SAMEORIGIN"
-    SECURE_REFERRER_POLICY = "same-origin"
-    CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
+    prod_origins = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
+    if prod_origins:
+        CSRF_TRUSTED_ORIGINS = list(set(CSRF_TRUSTED_ORIGINS + list(prod_origins)))

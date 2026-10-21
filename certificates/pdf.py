@@ -66,9 +66,12 @@ def _django_link_callback(uri, rel):
             default_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-seed", "img", basename)
             if os.path.isfile(default_fallback):
                 return default_fallback
-            cert_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "certificate", "default-seed", "img", basename)
+            cert_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "certificate", "default-cfe8f3a2", "img", basename)
             if os.path.isfile(cert_fallback):
                 return cert_fallback
+            cert_fallback_seed = os.path.join(settings.MEDIA_ROOT, "templates", "certificate", "default-seed", "img", basename)
+            if os.path.isfile(cert_fallback_seed):
+                return cert_fallback_seed
         return path
 
     # If requested image isn't found directly, try finding raster fallback in default seed folders
@@ -79,9 +82,12 @@ def _django_link_callback(uri, rel):
         default_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "offer_letter", "default-seed", "img", basename)
         if os.path.isfile(default_fallback):
             return default_fallback
-        cert_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "certificate", "default-seed", "img", basename)
+        cert_fallback = os.path.join(settings.MEDIA_ROOT, "templates", "certificate", "default-cfe8f3a2", "img", basename)
         if os.path.isfile(cert_fallback):
             return cert_fallback
+        cert_fallback_seed = os.path.join(settings.MEDIA_ROOT, "templates", "certificate", "default-seed", "img", basename)
+        if os.path.isfile(cert_fallback_seed):
+            return cert_fallback_seed
 
     return uri
 

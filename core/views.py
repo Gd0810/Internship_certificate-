@@ -128,8 +128,8 @@ def about(request):
     return render(request, "core/about.html")
 
 
-def verify(request):
-    raw_query = request.GET.get("intern_id", "").strip()
+def verify(request, query_id=None):
+    raw_query = (query_id or request.GET.get("intern_id", "") or request.GET.get("certificate_id", "")).strip()
     profile, searched, error_message = _lookup_intern_profile(raw_query)
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest" or request.GET.get("format") == "json":
@@ -157,6 +157,11 @@ def verify(request):
                 "error": error_message or f"No record found for '{raw_query}'."
             })
 
+    from django.conf import settings
+    public_base_url = getattr(settings, "CERTIFICATE_VERIFY_BASE_URL", "").strip().rstrip("/")
+    if not public_base_url:
+        public_base_url = request.build_absolute_uri("/").rstrip("/")
+
     return render(
         request,
         "core/verify.html",
@@ -165,6 +170,7 @@ def verify(request):
             "profile": profile,
             "searched": searched,
             "error_message": error_message,
+            "public_base_url": public_base_url,
         },
     )
 

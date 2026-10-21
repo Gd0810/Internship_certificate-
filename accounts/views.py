@@ -112,10 +112,32 @@ def dashboard(request):
             "deliverable_items": deliverable_items,
         })
 
+    linkedin_share_url = ""
+    linkedin_share_text = ""
+    linkedin_add_cert_url = ""
+    verify_url = ""
+    if profile.has_paid:
+        try:
+            from certificates.qr import get_verification_url
+            from urllib.parse import quote
+            verify_url = get_verification_url(profile, request=request)
+            track_name = profile.track.name if profile.track else "Internship Program"
+            share_text = (
+                f"This is my internship certificate I completed in {track_name} with Redback IT Solutions Private Limited! 🎓🚀\n\n"
+                f"#Internship #Certificate #Redback #Learning #CareerGrowth"
+            )
+            linkedin_share_text = share_text
+            linkedin_share_url = f"https://www.linkedin.com/feed/?shareActive=true&text={quote(share_text)}"
+        except Exception:
+            pass
+
     context = {
         "profile": profile,
         "active_tab": tab,
         "task_rows": task_rows,
+        "linkedin_share_url": linkedin_share_url,
+        "linkedin_share_text": linkedin_share_text,
+        "verify_url": verify_url,
     }
     return render(request, "accounts/dashboard.html", context)
 

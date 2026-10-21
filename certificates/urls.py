@@ -8,4 +8,5 @@ urlpatterns = [
     path("offer-letter/download/", views.offer_letter_download, name="offer_letter_download"),
     path("certificate/preview/", views.certificate_preview, name="certificate_preview"),
     path("certificate/download/", views.certificate_download, name="certificate_download"),
+    path("certificate/image/", views.certificate_image, name="certificate_image"),
 ]

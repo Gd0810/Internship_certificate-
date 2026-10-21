@@ -24,7 +24,7 @@ from django.conf import settings
 
 ALLOWED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"}
 REQUIRED_ENTRY = "index.html"
-PLACEHOLDER_RE = re.compile(r"\{\{\s*([a-zA-Z0-9_]+)\s*\}\}")
+PLACEHOLDER_RE = re.compile(r"\{\{\s*([a-zA-Z0-9_]+(?:\s*\.\s*[a-zA-Z0-9_]+)*)\s*\}\}")
 
 
 class TemplatePackageError(ValueError):
@@ -166,9 +166,54 @@ def render_template_html(folder_path: Path, context: dict, media_url_prefix: str
     html = index_path.read_text(encoding="utf-8")
 
     def substitute(match):
-        key = match.group(1)
-        value = context.get(key, "")
-        return escape(str(value))
+        raw_key = re.sub(r"\s+", "", match.group(1))
+
+        def _format(val, key):
+            if val is None:
+                return ""
+            val_str = str(val)
+            if (
+                key in {"qr_code", "qr_code_html", "qr_code_img", "qr_code_data_uri", "qr_code_url", "profile.qr_code_data_uri", "profile.qr_code_url"}
+                or key.endswith("_html")
+                or key.endswith("_uri")
+                or val_str.startswith("data:image/")
+            ):
+                return val_str
+            return escape(val_str)
+
+        # 1. Exact match in context
+        if raw_key in context:
+            return _format(context[raw_key], raw_key)
+
+        # 2. Case-insensitive exact match
+        lower_key = raw_key.lower()
+        if lower_key in context:
+            return _format(context[lower_key], lower_key)
+
+        # 3. Dotted object/dict traversal (e.g. profile.intern_id, profile.user.email)
+        parts = raw_key.split(".")
+        current = context.get(parts[0])
+        if current is not None:
+            for part in parts[1:]:
+                if isinstance(current, dict):
+                    current = current.get(part)
+                elif hasattr(current, part):
+                    attr = getattr(current, part)
+                    current = attr() if callable(attr) else attr
+                else:
+                    current = None
+                    break
+            if current is not None:
+                return _format(current, parts[-1])
+
+        # 4. Leaf variable fallback (e.g. {{profile.intern_id}} -> lookup "intern_id" in context)
+        leaf = parts[-1]
+        if leaf in context:
+            return _format(context[leaf], leaf)
+        if leaf.lower() in context:
+            return _format(context[leaf.lower()], leaf.lower())
+
+        return ""
 
     html = PLACEHOLDER_RE.sub(substitute, html)
 

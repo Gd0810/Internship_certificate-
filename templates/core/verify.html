@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Verify Certificate & Intern Credentials | Redback Internship Platform{% endblock %}
 
+{% block extra_head %}
+{% if profile %}
+  <meta property="og:title" content="Verified Internship Certificate — {{ profile.full_name }} | Redback">
+  <meta property="og:description" content="This is the verified internship certificate for {{ profile.full_name }} in {{ profile.track.name }} with Redback IT Solutions Private Limited. Certificate No: {{ profile.certificate_id|default:profile.intern_id }}">
+  <meta property="og:image" content="{{ public_base_url }}/media/templates/certificate/default-cfe8f3a2/img/redbackOG.png">
+  <meta property="og:url" content="{{ public_base_url }}/verify/?intern_id={{ profile.intern_id|urlencode }}">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Verified Internship Certificate — {{ profile.full_name }} | Redback">
+  <meta name="twitter:description" content="Verified internship certificate for {{ profile.full_name }} in {{ profile.track.name }} with Redback IT Solutions Private Limited.">
+  <meta name="twitter:image" content="{{ public_base_url }}/media/templates/certificate/default-cfe8f3a2/img/redbackOG.png">
+{% else %}
+  <meta property="og:title" content="Verify Certificate & Intern Credentials | Redback">
+  <meta property="og:description" content="Verify authentic internship certificates and credentials from Redback IT Solutions Private Limited.">
+  <meta property="og:image" content="{{ public_base_url }}/media/templates/certificate/default-cfe8f3a2/img/redbackOG.png">
+  <meta property="og:url" content="{{ public_base_url }}/verify/">
+{% endif %}
+{% endblock %}
+
 {% block body %}
 {% include "core/_public_nav.html" %}
 
