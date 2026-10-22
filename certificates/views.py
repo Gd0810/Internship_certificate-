@@ -212,6 +212,37 @@ def offer_letter_download(request):
 
 
 @login_required
+def offer_letter_image(request):
+    profile = _profile_or_none(request)
+    if profile is None:
+        return redirect("core:home")
+
+    base_url = request.build_absolute_uri("/")
+    html = render_offer_letter(profile)
+    if html is None:
+        return HttpResponse("Offer letter template is not configured yet.", status=503)
+
+    pdf_bytes = html_to_pdf_bytes(html, base_url=base_url)
+    try:
+        try:
+            import pymupdf as fitz
+        except ImportError:
+            import fitz
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        pix = doc[0].get_pixmap(dpi=150)
+        png_bytes = pix.tobytes("png")
+        response = HttpResponse(png_bytes, content_type="image/png")
+        disp_type = "attachment" if request.GET.get("download") == "1" else "inline"
+        filename = f"offer-letter-{profile.intern_id or profile.user_id}.png"
+        response["Content-Disposition"] = f'{disp_type}; filename="{filename}"'
+        response["Content-Length"] = str(len(png_bytes))
+        return response
+    except Exception as exc:
+        logger.exception("Failed to render offer letter PNG: %s", exc)
+        return HttpResponse(f"Offer letter image generation error: {exc}", status=500, content_type="text/plain")
+
+
+@login_required
 def certificate_download(request):
     profile = _profile_or_none(request)
     if profile is None:
@@ -246,9 +277,9 @@ def certificate_image(request):
     pdf_bytes = html_to_pdf_bytes(html, base_url=base_url)
     try:
         try:
-            import fitz
-        except ImportError:
             import pymupdf as fitz
+        except ImportError:
+            import fitz
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         pix = doc[0].get_pixmap(dpi=150)
         png_bytes = pix.tobytes("png")

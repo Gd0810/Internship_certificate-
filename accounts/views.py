@@ -112,6 +112,19 @@ def dashboard(request):
             "deliverable_items": deliverable_items,
         })
 
+    from urllib.parse import quote
+
+    track_name = profile.track.name if profile.track else "Internship Program"
+    clean_track_tag = "".join(ch for ch in track_name.title() if ch.isalnum())
+    track_tag_str = f" #{clean_track_tag}" if clean_track_tag else ""
+    offer_share_text = (
+        f"Excited to share that I have received an Internship Offer for {track_name} with Redback IT Solutions Private Limited! 💼🚀\n\n"
+        f"Looking forward to learning, building real-world projects, and gaining hands-on industry experience.\n\n"
+        f"#InternshipOffer #OfferLetter #Redback #CareerGrowth #Learning #Internship{track_tag_str}"
+    )
+    linkedin_offer_share_text = offer_share_text
+    linkedin_offer_share_url = f"https://www.linkedin.com/feed/?shareActive=true&text={quote(offer_share_text)}"
+
     linkedin_share_url = ""
     linkedin_share_text = ""
     linkedin_add_cert_url = ""
@@ -119,9 +132,7 @@ def dashboard(request):
     if profile.has_paid:
         try:
             from certificates.qr import get_verification_url
-            from urllib.parse import quote
             verify_url = get_verification_url(profile, request=request)
-            track_name = profile.track.name if profile.track else "Internship Program"
             share_text = (
                 f"This is my internship certificate I completed in {track_name} with Redback IT Solutions Private Limited! 🎓🚀\n\n"
                 f"#Internship #Certificate #Redback #Learning #CareerGrowth"
@@ -137,6 +148,8 @@ def dashboard(request):
         "task_rows": task_rows,
         "linkedin_share_url": linkedin_share_url,
         "linkedin_share_text": linkedin_share_text,
+        "linkedin_offer_share_url": linkedin_offer_share_url,
+        "linkedin_offer_share_text": linkedin_offer_share_text,
         "verify_url": verify_url,
     }
     return render(request, "accounts/dashboard.html", context)
