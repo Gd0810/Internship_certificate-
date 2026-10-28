@@ -1,0 +1,250 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4 landscape; margin: 8mm; }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    background: #ffffff;
+    color: #151c27;
+    width: 100%;
+  }
+  .sheet {
+    width: 100%;
+    background: #ffffff;
+    margin: 0 auto;
+  }
+  .frame-table {
+    width: 100%;
+    border: 3px solid #151c27;
+    border-collapse: collapse;
+    background: #ffffff;
+  }
+  .frame-cell {
+    padding: 3px;
+    border: 1.5px solid #bb0004;
+    background: #ffffff;
+  }
+  .inner-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+  }
+  .left-col {
+    width: 138px;
+    vertical-align: top;
+    padding: 0;
+  }
+  .main-col {
+    vertical-align: top;
+    padding: 14px 26px 12px 14px;
+  }
+  .title-main {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: 5px;
+    color: #151c27;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 3px;
+  }
+  .title-sub {
+    color: #bb0004;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .awarded-to {
+    font-family: 'DejaVu Serif', 'Times New Roman', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: #6b7280;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .candidate-name {
+    font-family: 'DejaVu Serif', 'Times New Roman', serif;
+    font-size: 35px;
+    font-weight: bold;
+    color: #151c27;
+    text-align: center;
+    letter-spacing: 0.5px;
+    padding-bottom: 4px;
+  }
+  .desc-text {
+    font-family: 'DejaVu Serif', 'Times New Roman', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: #4b5563;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 6px;
+  }
+  .track-title {
+    font-family: 'DejaVu Serif', 'Times New Roman', serif;
+    font-size: 23px;
+    font-weight: bold;
+    color: #151c27;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .desc-sub {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .footer-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  .foot-label {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #bb0004;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .foot-val {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #151c27;
+    letter-spacing: 0.5px;
+  }
+  .sig-line {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    color: #151c27;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .sig-title {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-size: 8px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+  .verify-note {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-size: 9px;
+    color: #9ca3af;
+    text-align: center;
+    margin-top: 14px;
+    letter-spacing: 0.3px;
+  }
+  @media print {
+    html, body {
+      background: #ffffff !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .sheet {
+      max-width: 100% !important;
+      margin: 0 auto !important;
+      box-shadow: none !important;
+    }
+  }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="sheet">
+<table class="frame-table">
+  <tr>
+    <td class="frame-cell">
+      <table class="inner-table">
+        <tr>
+          <td class="left-col" width="138">
+            <img src="img/left_strip.png" width="138" height="538" alt="Redback Certificate Ribbon" style="display: block;">
+          </td>
+          <td class="main-col">
+            <!-- Header row with centered Title and top-right QR code -->
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td width="85" style="vertical-align: top;">&nbsp;</td>
+                <td style="text-align: center; vertical-align: top;">
+                  <div class="title-main">CERTIFICATE</div>
+                  <div class="title-sub">&#8212;&#8212;&#8212;&nbsp;&nbsp;OF COMPLETION&nbsp;&nbsp;&#8212;&#8212;&#8212;</div>
+                </td>
+                <td width="85" style="vertical-align: top; text-align: right;">
+                  <table align="right" style="border-collapse: collapse; margin-left: auto;">
+                    <tr>
+                      <td style="border: 1px solid #c8c2b5; padding: 2px; text-align: center; background: #ffffff;">
+                        <img src="{{qr_code_data_uri}}" onerror="if (this.src != '{{qr_code_file_url}}') this.src='{{qr_code_file_url}}';" width="65" height="65" alt="Verification QR Code" style="display: block;">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="font-size: 8px; font-weight: bold; color: #4b5563; text-align: center; padding-top: 2px; letter-spacing: 0.5px;">
+                        {{profile.intern_id}}
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
+            <div class="awarded-to">awarded to</div>
+            <div class="candidate-name">{{user_name}}</div>
+            <table width="350" align="center" style="margin: 0 auto 12px; border-collapse: collapse;">
+              <tr><td style="border-bottom: 1px solid #e5e7eb; font-size: 1px; line-height: 1px;">&nbsp;</td></tr>
+            </table>
+
+            <div class="desc-text">for successfully completing the internship in</div>
+            <div class="track-title">{{track_name}}</div>
+            <div class="desc-sub">A COMPREHENSIVE STUDY &amp; HANDS-ON INTERNSHIP CONDUCTED BY REDBACK IT SOLUTIONS</div>
+
+            <!-- 3-Column Footer -->
+            <table class="footer-table">
+              <tr>
+                <td width="160" style="vertical-align: bottom; text-align: left; padding-left: 10px;">
+                  <div class="foot-label">DATE OF ISSUE</div>
+                  <div class="foot-val">{{date}}</div>
+                </td>
+                <td width="180" style="vertical-align: bottom; text-align: center;">
+                  <div class="foot-label">INTERN ID</div>
+                  <div class="foot-val">{{profile.intern_id}}</div>
+                </td>
+                <td width="200" style="vertical-align: bottom; text-align: right; padding-right: 10px;">
+                  <div style="text-align: right; padding-bottom: 2px;">
+                    <img src="img/sivapriya mam sign-01.png" alt="Signature" height="42" style="display: inline-block;">
+                  </div>
+                  <div style="border-top: 1px solid #d1d5db; width: 170px; margin-left: auto; padding-top: 3px; text-align: center;">
+                    <div class="sig-line">AUTHORIZED SIGNATORY</div>
+                    <div class="sig-title">Program Director &middot; Redback</div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Verification note -->
+            <div class="verify-note">
+              Scan the code or visit {{verify_url}} and enter the intern ID to verify
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</div>
+</body>
+</html>

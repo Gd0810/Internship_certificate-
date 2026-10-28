@@ -204,9 +204,11 @@
               </td>
 
               <td class="py-4 px-6 text-right">
-                <a href="{% url 'company:student_detail' p.pk %}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#bb0004] hover:text-white text-slate-700 font-bold text-xs transition-colors no-underline">
-                  <span>Details</span>
-                  <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                <a href="{% url 'company:student_detail' p.pk %}" 
+                   class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs shadow-xs transition-all no-underline group/btn border-0 cursor-pointer"
+                   style="background-color: #bb0004 !important; color: #ffffff !important;">
+                  <span style="color: #ffffff !important;">Details</span>
+                  <span class="material-symbols-outlined text-xs group-hover/btn:translate-x-0.5 transition-transform" style="color: #ffffff !important;">arrow_forward</span>
                 </a>
               </td>
             </tr>

@@ -107,11 +107,11 @@ a.text-white,
 .bg-\[\#e1251b\],
 .bg-\[\#151c27\],
 .bg-\[\#1159c2\],
-[class*="bg-[#bb0004]"],
-[class*="bg-[#e1251b]"],
-[class*="bg-[#151c27]"],
-[class*="bg-[#1159c2]"],
-[class*="from-[#bb0004]"] {
+[class~="bg-[#bb0004]"],
+[class~="bg-[#e1251b]"],
+[class~="bg-[#151c27]"],
+[class~="bg-[#1159c2]"],
+[class~="from-[#bb0004]"] {
   color: #ffffff !important;
 }
 
@@ -124,11 +124,21 @@ a.text-white *,
 .bg-\[\#e1251b\] *,
 .bg-\[\#151c27\] *,
 .bg-\[\#1159c2\] *,
-[class*="bg-[#bb0004]"] *,
-[class*="bg-[#e1251b]"] *,
-[class*="bg-[#151c27]"] *,
-[class*="bg-[#1159c2]"] *,
-[class*="from-[#bb0004]"] * {
+[class~="bg-[#bb0004]"] *,
+[class~="bg-[#e1251b]"] *,
+[class~="bg-[#151c27]"] *,
+[class~="bg-[#1159c2]"] *,
+[class~="from-[#bb0004]"] * {
+  color: #ffffff !important;
+}
+
+/* Ensure hover states on colored buttons turn text and icons white on hover */
+[class*="hover:bg-[#bb0004]"]:hover,
+[class*="hover:bg-[#bb0004]"]:hover *,
+[class*="hover:bg-[#e1251b]"]:hover,
+[class*="hover:bg-[#e1251b]"]:hover *,
+[class*="hover:bg-[#151c27]"]:hover,
+[class*="hover:bg-[#151c27]"]:hover * {
   color: #ffffff !important;
 }
 
