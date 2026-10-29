@@ -2,15 +2,21 @@
 <html>
 <head>
 <meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
 <style>
-  @page { size: A4 landscape; margin: 8mm; }
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   body {
-    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
     background: #ffffff;
     color: #151c27;
     width: 100%;
@@ -40,114 +46,121 @@
     width: 138px;
     vertical-align: top;
     padding: 0;
+    line-height: 0;
+    font-size: 0;
   }
-  .main-col {
-    vertical-align: top;
-    padding: 14px 26px 12px 14px;
+  .main-content {
+    vertical-align: middle;
+    padding: 18px 28px 16px 20px;
   }
   .title-main {
-    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
     font-size: 38px;
     font-weight: 800;
-    letter-spacing: 5px;
+    letter-spacing: 6px;
     color: #151c27;
     text-transform: uppercase;
     text-align: center;
-    margin-bottom: 3px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+    line-height: 1.15;
   }
   .title-sub {
+    font-family: 'Poppins', Arial, sans-serif;
     color: #bb0004;
     font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 2px;
+    font-weight: 700;
+    letter-spacing: 4px;
     text-align: center;
     margin-bottom: 12px;
   }
   .awarded-to {
-    font-family: 'DejaVu Serif', 'Times New Roman', serif;
+    font-family: 'Poppins', Arial, sans-serif;
     font-size: 14px;
     font-style: italic;
     color: #6b7280;
-    margin-bottom: 8px;
+    margin-top: 14px;
+    margin-bottom: 6px;
     text-align: center;
   }
   .candidate-name {
-    font-family: 'DejaVu Serif', 'Times New Roman', serif;
-    font-size: 35px;
-    font-weight: bold;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 42px;
+    font-weight: 700;
     color: #151c27;
     text-align: center;
     letter-spacing: 0.5px;
-    padding-bottom: 4px;
+    line-height: 1.15;
   }
   .desc-text {
-    font-family: 'DejaVu Serif', 'Times New Roman', serif;
+    font-family: 'Poppins', Arial, sans-serif;
     font-size: 14px;
     font-style: italic;
     color: #4b5563;
     text-align: center;
-    margin-top: 10px;
     margin-bottom: 6px;
   }
   .track-title {
-    font-family: 'DejaVu Serif', 'Times New Roman', serif;
-    font-size: 23px;
-    font-weight: bold;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 28px;
+    font-weight: 700;
     color: #151c27;
     text-align: center;
     letter-spacing: 0.5px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    line-height: 1.2;
   }
   .desc-sub {
-    font-family: 'DejaVu Sans', Arial, sans-serif;
-    font-size: 10px;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 10.5px;
+    font-weight: 500;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     color: #6b7280;
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 22px;
   }
   .footer-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin-bottom: 10px;
   }
   .foot-label {
-    font-family: 'DejaVu Sans', Arial, sans-serif;
-    font-size: 9.5px;
-    font-weight: 800;
-    letter-spacing: 1px;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
     color: #bb0004;
     text-transform: uppercase;
     margin-bottom: 4px;
   }
   .foot-val {
-    font-family: 'DejaVu Sans', Arial, sans-serif;
-    font-size: 13px;
-    font-weight: 700;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
     color: #151c27;
     letter-spacing: 0.5px;
   }
   .sig-line {
-    font-family: 'DejaVu Sans', Arial, sans-serif;
-    font-size: 9px;
-    font-weight: 800;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
     color: #151c27;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
   }
   .sig-title {
-    font-family: 'DejaVu Sans', Arial, sans-serif;
-    font-size: 8px;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 9px;
+    font-weight: 400;
     color: #6b7280;
     margin-top: 2px;
   }
   .verify-note {
-    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
     font-size: 9px;
     color: #9ca3af;
     text-align: center;
-    margin-top: 14px;
     letter-spacing: 0.3px;
   }
   @media print {
@@ -174,9 +187,9 @@
       <table class="inner-table">
         <tr>
           <td class="left-col" width="138">
-            <img src="img/left_strip.png" width="138" height="538" alt="Redback Certificate Ribbon" style="display: block;">
+            <img src="img/left_strip.png" width="138" height="536" alt="Redback Certificate Ribbon" style="display: block;">
           </td>
-          <td class="main-col">
+          <td class="main-content">
             <!-- Header row with centered Title and top-right QR code -->
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
@@ -188,12 +201,12 @@
                 <td width="85" style="vertical-align: top; text-align: right;">
                   <table align="right" style="border-collapse: collapse; margin-left: auto;">
                     <tr>
-                      <td style="border: 1px solid #c8c2b5; padding: 2px; text-align: center; background: #ffffff;">
-                        <img src="{{qr_code_data_uri}}" onerror="if (this.src != '{{qr_code_file_url}}') this.src='{{qr_code_file_url}}';" width="65" height="65" alt="Verification QR Code" style="display: block;">
+                      <td style="padding: 0; text-align: center; background: transparent;">
+                        <img src="{{qr_code_data_uri}}" onerror="if (this.src != '{{qr_code_file_url}}') this.src='{{qr_code_file_url}}';" width="64" height="64" alt="Verification QR Code" style="display: block; margin: 0 auto;">
                       </td>
                     </tr>
                     <tr>
-                      <td style="font-size: 8px; font-weight: bold; color: #4b5563; text-align: center; padding-top: 2px; letter-spacing: 0.5px;">
+                      <td style="font-size: 8px; font-weight: 600; color: #4b5563; text-align: center; padding-top: 4px; letter-spacing: 0.5px;">
                         {{profile.intern_id}}
                       </td>
                     </tr>
@@ -204,8 +217,8 @@
 
             <div class="awarded-to">awarded to</div>
             <div class="candidate-name">{{user_name}}</div>
-            <table width="350" align="center" style="margin: 0 auto 12px; border-collapse: collapse;">
-              <tr><td style="border-bottom: 1px solid #e5e7eb; font-size: 1px; line-height: 1px;">&nbsp;</td></tr>
+            <table width="320" align="center" style="margin: 8px auto 14px; border-collapse: collapse;">
+              <tr><td style="border-bottom: 1.5px solid #e5e7eb; font-size: 1px; line-height: 1px; height: 1px;">&nbsp;</td></tr>
             </table>
 
             <div class="desc-text">for successfully completing the internship in</div>
@@ -215,19 +228,19 @@
             <!-- 3-Column Footer -->
             <table class="footer-table">
               <tr>
-                <td width="160" style="vertical-align: bottom; text-align: left; padding-left: 10px;">
+                <td width="165" style="vertical-align: bottom; text-align: left; padding-left: 8px;">
                   <div class="foot-label">DATE OF ISSUE</div>
                   <div class="foot-val">{{date}}</div>
                 </td>
-                <td width="180" style="vertical-align: bottom; text-align: center;">
+                <td width="185" style="vertical-align: bottom; text-align: center;">
                   <div class="foot-label">INTERN ID</div>
                   <div class="foot-val">{{profile.intern_id}}</div>
                 </td>
-                <td width="200" style="vertical-align: bottom; text-align: right; padding-right: 10px;">
+                <td width="205" style="vertical-align: bottom; text-align: right; padding-right: 8px;">
                   <div style="text-align: right; padding-bottom: 2px;">
-                    <img src="img/sivapriya mam sign-01.png" alt="Signature" height="42" style="display: inline-block;">
+                    <img src="img/sivapriya mam sign-01.png" alt="Signature" height="46" style="display: inline-block;">
                   </div>
-                  <div style="border-top: 1px solid #d1d5db; width: 170px; margin-left: auto; padding-top: 3px; text-align: center;">
+                  <div style="border-top: 1px solid #d1d5db; width: 175px; margin-left: auto; padding-top: 3px; text-align: center;">
                     <div class="sig-line">AUTHORIZED SIGNATORY</div>
                     <div class="sig-title">Program Director &middot; Redback</div>
                   </div>
