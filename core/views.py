@@ -159,6 +159,8 @@ def verify(request, query_id=None):
 
     from django.conf import settings
     public_base_url = getattr(settings, "CERTIFICATE_VERIFY_BASE_URL", "").strip().rstrip("/")
+    if not settings.DEBUG and "devtunnels.ms" in public_base_url:
+        public_base_url = ""
     if not public_base_url:
         public_base_url = request.build_absolute_uri("/").rstrip("/")
 

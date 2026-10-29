@@ -42,11 +42,18 @@ CSRF_TRUSTED_ORIGINS = list(config(
     cast=Csv()
 ))
 
-# Base URL encoded in certificate QR codes for instant mobile scanning
+# Base URL encoded in certificate QR codes for instant mobile scanning.
+# In development (DEBUG=True), defaults to devtunnels URL for remote testing.
+# In production (DEBUG=False), defaults to empty string so it automatically
+# resolves to the live production domain from incoming requests.
 CERTIFICATE_VERIFY_BASE_URL = config(
     "CERTIFICATE_VERIFY_BASE_URL",
-    default="https://wwr45z0g-8000.inc1.devtunnels.ms"
+    default="https://wwr45z0g-8000.inc1.devtunnels.ms" if DEBUG else ""
 )
+
+# Reverse proxy support (Devtunnels, Nginx, Cloudflare, AWS ALB, etc.)
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # The company portal is intentionally reached through an unlisted, random-looking
 # URL prefix rather than a guessable "/company/" path. Override in production via env.

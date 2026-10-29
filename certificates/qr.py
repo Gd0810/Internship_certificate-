@@ -28,7 +28,12 @@ def get_local_lan_ip() -> str:
 
 
 def get_verification_url(profile, request=None, base_url=None) -> str:
-    """Build the public verification URL for the student's profile."""
+    """Build the public verification URL for the student's profile.
+    
+    - In Development (DEBUG=True): Uses devtunnel or configured testing URL for remote mobile scans.
+    - In Production (DEBUG=False): Automatically resolves to the live actual domain from the request,
+      ensuring devtunnel URLs are never leaked in production certificates.
+    """
     intern_id = getattr(profile, "intern_id", "") or ""
     encoded_id = quote(intern_id, safe="")
     verify_path = f"/verify/?intern_id={encoded_id}"
@@ -37,32 +42,72 @@ def get_verification_url(profile, request=None, base_url=None) -> str:
     except Exception:
         pass
 
+    is_debug = getattr(settings, "DEBUG", True)
     custom_public_base = getattr(settings, "CERTIFICATE_VERIFY_BASE_URL", "").strip()
-    if custom_public_base:
+
+    # --- DEVELOPMENT ENVIRONMENT (DEBUG = True) ---
+    if is_debug:
+        # If explicitly configured (e.g. devtunnels in .env), use it for mobile testing
+        if custom_public_base:
+            return f"{custom_public_base.rstrip('/')}{verify_path}"
+
+        url = ""
+        if request is not None:
+            try:
+                url = request.build_absolute_uri(verify_path)
+            except Exception as exc:
+                logger.debug("Failed build_absolute_uri from request: %s", exc)
+        elif base_url:
+            url = f"{base_url.rstrip('/')}{verify_path}"
+        else:
+            url = f"http://127.0.0.1:8000{verify_path}"
+
+        # If loopback in development, replace with LAN IP so phones on same Wi-Fi can scan
+        try:
+            parsed = urllib.parse.urlparse(url)
+            if parsed.hostname in ("127.0.0.1", "localhost", "0.0.0.0"):
+                lan_ip = get_local_lan_ip()
+                port = f":{parsed.port}" if parsed.port else ":8000"
+                netloc = f"{lan_ip}{port}"
+                url = urllib.parse.urlunparse(parsed._replace(netloc=netloc))
+        except Exception as exc:
+            logger.debug("Failed LAN IP resolution: %s", exc)
+
+        return url
+
+    # --- PRODUCTION ENVIRONMENT (DEBUG = False) ---
+    # In production, devtunnel URLs are NEVER used.
+    # If a real custom domain is set (not containing devtunnels.ms), honor it:
+    if custom_public_base and "devtunnels.ms" not in custom_public_base:
         return f"{custom_public_base.rstrip('/')}{verify_path}"
 
     url = ""
     if request is not None:
         try:
             url = request.build_absolute_uri(verify_path)
+            # Ensure HTTPS in production if SSL redirect is enabled
+            if url.startswith("http://") and getattr(settings, "SECURE_SSL_REDIRECT", True):
+                url = "https://" + url[7:]
         except Exception as exc:
-            logger.debug("Failed build_absolute_uri from request: %s", exc)
-    elif base_url:
-        url = f"{base_url.rstrip('/')}{verify_path}"
-    else:
-        url = f"http://127.0.0.1:8000{verify_path}"
+            logger.debug("Failed build_absolute_uri from request in production: %s", exc)
 
-    # If the URL hostname is loopback/localhost, replace it with the machine's
-    # actual Wi-Fi/LAN IP so phones scanning the QR code can open the link!
-    try:
-        parsed = urllib.parse.urlparse(url)
-        if parsed.hostname in ("127.0.0.1", "localhost", "0.0.0.0"):
-            lan_ip = get_local_lan_ip()
-            port = f":{parsed.port}" if parsed.port else ":8000"
-            netloc = f"{lan_ip}{port}"
-            url = urllib.parse.urlunparse(parsed._replace(netloc=netloc))
-    except Exception as exc:
-        logger.debug("Failed LAN IP resolution: %s", exc)
+    if not url:
+        if base_url and "devtunnels.ms" not in base_url and "127.0.0.1" not in base_url:
+            url = f"{base_url.rstrip('/')}{verify_path}"
+        else:
+            # Fall back to the live domain configured in ALLOWED_HOSTS
+            prod_host = None
+            for h in getattr(settings, "ALLOWED_HOSTS", []):
+                h = h.strip()
+                if h and not h.startswith("*") and not h.startswith(".") and "devtunnels" not in h and h not in ("127.0.0.1", "localhost", "testserver"):
+                    prod_host = h
+                    break
+            if prod_host:
+                url = f"https://{prod_host}{verify_path}"
+            elif base_url:
+                url = f"{base_url.rstrip('/')}{verify_path}"
+            else:
+                url = f"http://127.0.0.1:8000{verify_path}"
 
     return url
 
