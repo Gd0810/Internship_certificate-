@@ -1,4 +1,5 @@
 {% extends "company/_sidebar_layout.html" %}
+{% load static %}
 
 {% block company_title %}{{ kind }} Template Management{% endblock %}
 
@@ -12,7 +13,7 @@
       <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">{{ kind }} Design Templates</h3>
     </div>
     <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1159c2] flex items-center justify-center font-bold">
-      <span class="material-symbols-outlined text-xl">upload_file</span>
+      <span class="material-symbols-outlined text-xl">workspace_premium</span>
     </div>
   </div>
 
@@ -20,11 +21,17 @@
   <div class="bg-gradient-to-r from-blue-900 to-[#101725] p-6 rounded-2xl text-white shadow-sm space-y-3">
     <div class="flex items-center gap-2 text-[#d9e2ff] text-xs font-bold uppercase tracking-wider">
       <span class="material-symbols-outlined text-sm">info</span>
-      <span>ZIP Package Requirements</span>
+      <span>{% if kind == "Certificate" %}Certificate Template Options{% else %}ZIP Package Requirements{% endif %}</span>
     </div>
-    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
-      Upload a <strong class="text-white">.zip package</strong> containing <code class="bg-slate-800 px-1.5 py-0.5 rounded text-amber-300">index.html</code> at its root level (with all CSS/JS in that single HTML file) plus an <code class="bg-slate-800 px-1.5 py-0.5 rounded text-amber-300">img/</code> folder for logo, signature, seal, and background assets.
-    </p>
+    {% if kind == "Certificate" %}
+      <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+        Choose between two ready-made official certificate templates (<strong class="text-white">Default One</strong> or <strong class="text-white">Default Two</strong>), or choose <strong class="text-white">Custom Template</strong> to upload your own custom .zip package.
+      </p>
+    {% else %}
+      <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+        Upload a <strong class="text-white">.zip package</strong> containing <code class="bg-slate-800 px-1.5 py-0.5 rounded text-amber-300">index.html</code> at its root level (with all CSS/JS in that single HTML file) plus an <code class="bg-slate-800 px-1.5 py-0.5 rounded text-amber-300">img/</code> folder for logo, signature, seal, and background assets.
+      </p>
+    {% endif %}
     <div class="pt-2 border-t border-slate-800 flex flex-wrap gap-2 text-[11px] text-slate-300">
       <span class="font-bold text-white">Supported Placeholders:</span>
       <code class="bg-slate-800/80 px-2 py-0.5 rounded text-sky-300">{% templatetag openvariable %}user_name{% templatetag closevariable %}</code>
@@ -36,44 +43,192 @@
     </div>
   </div>
 
-  <!-- Upload Form Card -->
+  <!-- Template Configuration & Upload Form Card -->
   <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs">
-    <h4 class="text-base font-bold text-[#151c27] mb-4">Upload New {{ kind }} Design</h4>
-    <form method="post" enctype="multipart/form-data" class="space-y-6">
+    <h4 class="text-base font-bold text-[#151c27] mb-5">
+      {% if kind == "Certificate" %}Configure {{ kind }} Template{% else %}Upload New {{ kind }} Design{% endif %}
+    </h4>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-6" id="template-form">
       {% csrf_token %}
 
       <!-- Scope Selector -->
       <div>
-        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Target Track Scope</label>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Target Track Scope *</label>
         {{ form.track }}
-        <p class="text-xs text-slate-500 mt-1">Select <strong>Global (All Tracks)</strong> to apply this design across all tracks without custom overrides.</p>
+        <p class="text-xs text-slate-500 mt-1">Select <strong>Global (All Tracks)</strong> to apply this template across all tracks without custom overrides, or select a specific track.</p>
       </div>
 
-      <!-- File ZIP Input -->
-      <div>
-        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Template Package (.zip) *</label>
+      {% if kind == "Certificate" %}
+        <!-- Template Selection Options (Radio Buttons) -->
+        <div>
+          <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-3">
+            Select Certificate Design Template *
+          </label>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <!-- Radio Option 1: Default One -->
+            <label for="id_choice_default_1"
+                   id="card_default_1"
+                   class="template-card relative flex flex-col p-4 rounded-2xl border-2 cursor-pointer transition-all hover:shadow-md border-slate-200 bg-white">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <input type="radio" name="template_choice" value="default_1" id="id_choice_default_1"
+                         class="w-4 h-4 text-[#bb0004] focus:ring-[#bb0004] border-slate-300 template-radio"
+                         {% if form.template_choice.value == 'default_1' or not form.template_choice.value %}checked{% endif %}>
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-800">Default One</span>
+                </div>
+                <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-blue-50 text-[#1159c2] border border-blue-200">
+                  Classic
+                </span>
+              </div>
+
+              <!-- Preview Thumbnail -->
+              <div class="w-full h-32 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 mb-3 relative group">
+                <img src="{% static 'img/templates/default_1_preview.png' %}" alt="Default One Preview" class="w-full h-full object-cover">
+                <a href="{% url 'company:certificate_preset_preview' 'default_1' %}" target="_blank"
+                   class="absolute inset-0 bg-slate-900/65 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1 no-underline">
+                  <span class="material-symbols-outlined text-sm">visibility</span> Preview Full
+                </a>
+              </div>
+
+              <h5 class="text-sm font-extrabold text-[#151c27] mb-1">Classic Framed</h5>
+              <p class="text-xs text-slate-500 leading-relaxed mb-3">
+                Formal layout featuring Redback header branding, elegant certificate border, and QR verification.
+              </p>
+
+              <div class="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-semibold">
+                <span class="text-emerald-700 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs">check_circle</span> Built-in Ready
+                </span>
+                <a href="{% url 'company:certificate_preset_preview' 'default_1' %}" target="_blank" class="text-[#1159c2] hover:underline flex items-center gap-0.5 font-bold">
+                  Preview <span class="material-symbols-outlined text-xs">open_in_new</span>
+                </a>
+              </div>
+            </label>
+
+            <!-- Radio Option 2: Default Two -->
+            <label for="id_choice_default_2"
+                   id="card_default_2"
+                   class="template-card relative flex flex-col p-4 rounded-2xl border-2 cursor-pointer transition-all hover:shadow-md border-slate-200 bg-white">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <input type="radio" name="template_choice" value="default_2" id="id_choice_default_2"
+                         class="w-4 h-4 text-[#bb0004] focus:ring-[#bb0004] border-slate-300 template-radio"
+                         {% if form.template_choice.value == 'default_2' %}checked{% endif %}>
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-800">Default Two</span>
+                </div>
+                <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-red-50 text-[#bb0004] border border-red-200">
+                  Modern Badge
+                </span>
+              </div>
+
+              <!-- Preview Thumbnail -->
+              <div class="w-full h-32 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 mb-3 relative group">
+                <img src="{% static 'img/templates/default_2_preview.png' %}" alt="Default Two Preview" class="w-full h-full object-cover">
+                <a href="{% url 'company:certificate_preset_preview' 'default_2' %}" target="_blank"
+                   class="absolute inset-0 bg-slate-900/65 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1 no-underline">
+                  <span class="material-symbols-outlined text-sm">visibility</span> Preview Full
+                </a>
+              </div>
+
+              <h5 class="text-sm font-extrabold text-[#151c27] mb-1">Ribbon &amp; Badge</h5>
+              <p class="text-xs text-slate-500 leading-relaxed mb-3">
+                Modern layout with vertical red &amp; black ribbon stripes, Redback seal badge, and Poppins font.
+              </p>
+
+              <div class="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-semibold">
+                <span class="text-emerald-700 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs">check_circle</span> Built-in Ready
+                </span>
+                <a href="{% url 'company:certificate_preset_preview' 'default_2' %}" target="_blank" class="text-[#1159c2] hover:underline flex items-center gap-0.5 font-bold">
+                  Preview <span class="material-symbols-outlined text-xs">open_in_new</span>
+                </a>
+              </div>
+            </label>
+
+            <!-- Radio Option 3: Custom Upload -->
+            <label for="id_choice_custom"
+                   id="card_custom"
+                   class="template-card relative flex flex-col p-4 rounded-2xl border-2 cursor-pointer transition-all hover:shadow-md border-slate-200 bg-white">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <input type="radio" name="template_choice" value="custom" id="id_choice_custom"
+                         class="w-4 h-4 text-[#bb0004] focus:ring-[#bb0004] border-slate-300 template-radio"
+                         {% if form.template_choice.value == 'custom' %}checked{% endif %}>
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-800">Custom Upload</span>
+                </div>
+                <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                  ZIP Package
+                </span>
+              </div>
+
+              <!-- Custom Upload Illustration -->
+              <div class="w-full h-32 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 mb-3 flex flex-col items-center justify-center text-slate-400">
+                <span class="material-symbols-outlined text-3xl mb-1 text-slate-400">upload_file</span>
+                <span class="text-[11px] font-semibold text-slate-500">Upload Your Own ZIP</span>
+              </div>
+
+              <h5 class="text-sm font-extrabold text-[#151c27] mb-1">Upload New Design</h5>
+              <p class="text-xs text-slate-500 leading-relaxed mb-3">
+                Don't want default templates? Upload your own custom HTML/CSS ZIP package with img/ assets.
+              </p>
+
+              <div class="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-semibold">
+                <span class="text-slate-500 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs">folder_zip</span> Custom ZIP
+                </span>
+                <span class="text-xs text-slate-400">Max 15MB</span>
+              </div>
+            </label>
+
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- File ZIP Input (conditionally visible for custom or for offer letters) -->
+      <div id="zip-upload-section" {% if kind == "Certificate" and form.template_choice.value != 'custom' %}style="display: none;"{% endif %}>
+        <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">
+          Custom Template Package (.zip) *
+        </label>
         <div class="p-4 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 hover:bg-blue-50/50 hover:border-blue-300 transition-all">
           {{ form.package }}
         </div>
+        <p class="text-xs text-slate-500 mt-1">
+          Must contain <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700">index.html</code> at its root and an <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700">img/</code> folder.
+        </p>
         {% for e in form.package.errors %}
           <div class="text-red-500 text-xs mt-1 font-semibold">{{ e }}</div>
         {% endfor %}
       </div>
 
-      <!-- Submit Action -->
+      <!-- Submit Action Button -->
       <div>
-        <button type="submit" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-md transition-all cursor-pointer border-0 flex items-center gap-2">
-          <span class="material-symbols-outlined text-lg">cloud_upload</span>
-          <span>Upload &amp; Activate Design</span>
+        <button type="submit" id="submit-btn" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-md transition-all cursor-pointer border-0 flex items-center gap-2">
+          <span class="material-symbols-outlined text-lg" id="submit-icon">check_circle</span>
+          <span id="submit-text">
+            {% if kind == "Certificate" %}
+              {% if form.template_choice.value == 'default_2' %}
+                Apply Default Two Design
+              {% elif form.template_choice.value == 'custom' %}
+                Upload &amp; Activate Custom Design
+              {% else %}
+                Apply Default One Design
+              {% endif %}
+            {% else %}
+              Upload &amp; Activate Design
+            {% endif %}
+          </span>
         </button>
       </div>
     </form>
   </div>
 
-  <!-- Recent Uploads Table -->
+  <!-- Recent Templates Table -->
   <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
     <div class="p-6 border-b border-slate-100 flex items-center justify-between">
-      <h4 class="text-base font-bold text-[#151c27]">Recently Uploaded Templates</h4>
+      <h4 class="text-base font-bold text-[#151c27]">{{ kind }} Templates History</h4>
       <span class="text-xs text-slate-400 font-semibold">Active &amp; History</span>
     </div>
 
@@ -82,9 +237,12 @@
         <thead>
           <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
             <th class="py-3.5 px-6">Scope / Track</th>
-            <th class="py-3.5 px-6">Folder Slug</th>
+            <th class="py-3.5 px-6">Template Design</th>
             <th class="py-3.5 px-6">Active Status</th>
             <th class="py-3.5 px-6">Upload Timestamp</th>
+            {% if kind == "Certificate" %}
+              <th class="py-3.5 px-6 text-right">Actions</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 text-xs text-[#151c27]">
@@ -100,8 +258,23 @@
                 {% endif %}
               </td>
 
-              <td class="py-4 px-6 font-mono text-slate-600 text-[11px]">
-                {{ t.folder_path }}
+              <td class="py-4 px-6 text-[11px]">
+                <div class="flex items-center gap-2">
+                  {% if t.folder_path == "default-cfe8f3a2" %}
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-bold text-[10px] border border-blue-200">
+                      Default One (Classic)
+                    </span>
+                  {% elif t.folder_path == "demo-certificate-badge" %}
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-50 text-[#bb0004] font-bold text-[10px] border border-red-200">
+                      Default Two (Modern Badge)
+                    </span>
+                  {% else %}
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 font-bold text-[10px] border border-amber-200">
+                      Custom Upload
+                    </span>
+                  {% endif %}
+                  <span class="font-mono text-slate-500">({{ t.folder_path }})</span>
+                </div>
               </td>
 
               <td class="py-4 px-6">
@@ -111,7 +284,7 @@
                   </span>
                 {% else %}
                   <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500 text-[11px] font-bold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Replaced
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Inactive
                   </span>
                 {% endif %}
               </td>
@@ -119,10 +292,29 @@
               <td class="py-4 px-6 text-slate-400">
                 {{ t.uploaded_at|date:"d M Y, H:i" }}
               </td>
+
+              {% if kind == "Certificate" %}
+                <td class="py-4 px-6 text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    <a href="{% url 'company:certificate_preset_preview' t.folder_path %}" target="_blank"
+                       class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold no-underline transition-all">
+                      <span class="material-symbols-outlined text-xs">visibility</span> Preview
+                    </a>
+                    {% if not t.is_active %}
+                      <form method="post" action="{% url 'company:certificate_template_activate' t.pk %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 text-[11px] font-bold transition-all cursor-pointer">
+                          <span class="material-symbols-outlined text-xs">check_circle</span> Activate
+                        </button>
+                      </form>
+                    {% endif %}
+                  </div>
+                </td>
+              {% endif %}
             </tr>
           {% empty %}
             <tr>
-              <td colspan="4" class="py-12 text-center text-slate-400">
+              <td colspan="{% if kind == 'Certificate' %}5{% else %}4{% endif %}" class="py-12 text-center text-slate-400">
                 <span class="material-symbols-outlined text-3xl text-slate-300 block mb-1">folder_off</span>
                 No {{ kind|lower }} design templates uploaded yet.
               </td>
@@ -134,4 +326,62 @@
   </div>
 
 </div>
+
+<!-- JavaScript to handle interactive template radio card selection -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const radios = document.querySelectorAll('input[name="template_choice"]');
+    const uploadSection = document.getElementById('zip-upload-section');
+    const submitText = document.getElementById('submit-text');
+    const submitIcon = document.getElementById('submit-icon');
+
+    const cardMap = {
+      'default_1': document.getElementById('card_default_1'),
+      'default_2': document.getElementById('card_default_2'),
+      'custom': document.getElementById('card_custom')
+    };
+
+    function updateTemplateUI(selectedVal) {
+      // Reset card styles
+      Object.keys(cardMap).forEach(key => {
+        const card = cardMap[key];
+        if (card) {
+          if (key === selectedVal) {
+            card.classList.remove('border-slate-200', 'bg-white');
+            card.classList.add('border-[#bb0004]', 'bg-red-50/20', 'ring-2', 'ring-[#bb0004]/20');
+          } else {
+            card.classList.remove('border-[#bb0004]', 'bg-red-50/20', 'ring-2', 'ring-[#bb0004]/20');
+            card.classList.add('border-slate-200', 'bg-white');
+          }
+        }
+      });
+
+      // Show or hide ZIP upload input
+      if (selectedVal === 'custom') {
+        if (uploadSection) uploadSection.style.display = 'block';
+        if (submitText) submitText.innerHTML = 'Upload &amp; Activate Custom Design';
+        if (submitIcon) submitIcon.textContent = 'cloud_upload';
+      } else if (selectedVal === 'default_2') {
+        if (uploadSection) uploadSection.style.display = 'none';
+        if (submitText) submitText.innerHTML = 'Apply Default Two Design';
+        if (submitIcon) submitIcon.textContent = 'check_circle';
+      } else {
+        if (uploadSection) uploadSection.style.display = 'none';
+        if (submitText) submitText.innerHTML = 'Apply Default One Design';
+        if (submitIcon) submitIcon.textContent = 'check_circle';
+      }
+    }
+
+    radios.forEach(r => {
+      r.addEventListener('change', function() {
+        if (this.checked) {
+          updateTemplateUI(this.value);
+        }
+      });
+      if (r.checked) {
+        updateTemplateUI(r.value);
+      }
+    });
+  });
+</script>
 {% endblock %}

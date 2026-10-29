@@ -26,5 +26,7 @@ urlpatterns = [
     path("tracks/<int:track_pk>/tasks/<int:pk>/edit/", views.task_edit, name="task_edit"),
     path("tracks/<int:track_pk>/tasks/<int:pk>/delete/", views.task_delete, name="task_delete"),
     path("templates/certificate/", views.certificate_template_upload, name="certificate_template_upload"),
+    path("templates/certificate/preview/<str:preset_key>/", views.certificate_preset_preview, name="certificate_preset_preview"),
+    path("templates/certificate/<int:pk>/activate/", views.certificate_template_activate, name="certificate_template_activate"),
     path("templates/offer-letter/", views.offer_letter_template_upload, name="offer_letter_template_upload"),
 ]

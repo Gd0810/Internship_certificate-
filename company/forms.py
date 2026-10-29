@@ -143,3 +143,41 @@ class TemplateUploadForm(forms.Form):
         if not f.name.lower().endswith(".zip"):
             raise forms.ValidationError("Please upload a .zip file.")
         return f
+
+
+class CertificateTemplateForm(forms.Form):
+    CHOICES = [
+        ("default_1", "Default One (Classic Framed)"),
+        ("default_2", "Default Two (Modern Ribbon & Badge)"),
+        ("custom", "Custom Template (Upload .ZIP)"),
+    ]
+
+    track = forms.ModelChoiceField(
+        queryset=InternshipTrack.objects.all(),
+        required=False,
+        empty_label="Global (All Tracks)",
+        widget=forms.Select(attrs={"class": INPUT}),
+        help_text="Select 'Global (All Tracks)' to automatically apply this template across all tracks.",
+    )
+    template_choice = forms.ChoiceField(
+        choices=CHOICES,
+        widget=forms.RadioSelect,
+        initial="default_1",
+    )
+    package = forms.FileField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={"class": INPUT, "accept": ".zip"}),
+        help_text="A .zip package containing index.html at root and an img/ folder.",
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        choice = cleaned_data.get("template_choice")
+        package = cleaned_data.get("package")
+
+        if choice == "custom":
+            if not package:
+                self.add_error("package", "Please choose a .zip file to upload your custom design.")
+            elif not package.name.lower().endswith(".zip"):
+                self.add_error("package", "Please upload a valid .zip file.")
+        return cleaned_data

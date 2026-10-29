@@ -18,11 +18,11 @@ from accounts.forms import StyledAuthenticationForm
 from accounts.models import InternProfile
 from payments.models import Payment
 from certificates.models import CertificateTemplate, OfferLetterTemplate
-from certificates.template_engine import extract_template_package, TemplatePackageError
-from certificates.rendering import render_offer_letter, render_certificate
+from certificates.template_engine import extract_template_package, TemplatePackageError, render_template_html
+from certificates.rendering import render_offer_letter, render_certificate, _kind_root, _build_context
 from certificates.views import _inject_preview_styles
 from .decorators import company_staff_required
-from .forms import TrackForm, TaskModuleForm, TemplateUploadForm, CategoryForm
+from .forms import TrackForm, TaskModuleForm, TemplateUploadForm, CategoryForm, CertificateTemplateForm
 from .models import InternshipTrack, TaskModule, TrackCategory, UserTaskProgress
 
 logger = logging.getLogger("company")
@@ -212,22 +212,106 @@ def _handle_template_upload(request, model, kind):
     return form, unique_folder
 
 
+CERT_DEFAULT_MAP = {
+    "default_1": ("default-cfe8f3a2", "Default One (Classic Framed)"),
+    "default_2": ("demo-certificate-badge", "Default Two (Modern Ribbon & Badge)"),
+}
+
+
 @company_staff_required
 def certificate_template_upload(request):
-    unique_folder = None
     if request.method == "POST":
-        form, unique_folder = _handle_template_upload(request, CertificateTemplate, "certificate")
-        if unique_folder:
-            messages.success(request, "Certificate design uploaded and activated.")
-            return redirect("company:certificate_template_upload")
-    else:
-        form = TemplateUploadForm()
+        form = CertificateTemplateForm(request.POST, request.FILES)
+        if form.is_valid():
+            track = form.cleaned_data["track"]
+            choice = form.cleaned_data["template_choice"]
+            track_label = track.name if track else "Global (All Tracks)"
 
-    templates = CertificateTemplate.objects.select_related("track").order_by("-uploaded_at")[:20]
+            if choice in CERT_DEFAULT_MAP:
+                folder_path, name_label = CERT_DEFAULT_MAP[choice]
+                # Deactivate previous active templates for this track scope
+                CertificateTemplate.objects.filter(track=track).update(is_active=False)
+
+                # Find or create template record
+                tpl = CertificateTemplate.objects.filter(track=track, folder_path=folder_path).first()
+                if tpl:
+                    tpl.is_active = True
+                    tpl.save(update_fields=["is_active"])
+                else:
+                    CertificateTemplate.objects.create(track=track, folder_path=folder_path, is_active=True)
+
+                messages.success(request, f"Certificate template '{name_label}' has been applied to {track_label}.")
+                return redirect("company:certificate_template_upload")
+
+            elif choice == "custom":
+                package = form.cleaned_data["package"]
+                if package.size > settings.MAX_TEMPLATE_ZIP_SIZE_MB * 1024 * 1024:
+                    form.add_error("package", f"File exceeds {settings.MAX_TEMPLATE_ZIP_SIZE_MB} MB limit.")
+                else:
+                    folder_slug = track.slug if track else "default"
+                    unique_folder = f"{folder_slug}-{uuid.uuid4().hex[:8]}"
+                    destination = Path(settings.CERT_TEMPLATE_ROOT) / "certificate" / unique_folder
+
+                    try:
+                        if destination.exists():
+                            shutil.rmtree(destination)
+                        extract_template_package(package, destination, max_size_mb=settings.MAX_TEMPLATE_ZIP_SIZE_MB)
+                        CertificateTemplate.objects.filter(track=track).update(is_active=False)
+                        CertificateTemplate.objects.create(track=track, folder_path=unique_folder, is_active=True)
+                        messages.success(request, f"Custom certificate design uploaded and activated for {track_label}.")
+                        return redirect("company:certificate_template_upload")
+                    except TemplatePackageError as exc:
+                        shutil.rmtree(destination, ignore_errors=True)
+                        form.add_error("package", str(exc))
+    else:
+        active_global = CertificateTemplate.objects.filter(track__isnull=True, is_active=True).first()
+        initial_choice = "default_1"
+        if active_global:
+            if "demo-certificate-badge" in active_global.folder_path:
+                initial_choice = "default_2"
+            elif "default-cfe8f3a2" in active_global.folder_path:
+                initial_choice = "default_1"
+            else:
+                initial_choice = "custom"
+        form = CertificateTemplateForm(initial={"template_choice": initial_choice})
+
+    templates = CertificateTemplate.objects.select_related("track").order_by("-is_active", "-uploaded_at")[:20]
     return render(request, "company/template_upload.html", {
-        "form": form, "kind": "Certificate", "templates": templates,
+        "form": form,
+        "kind": "Certificate",
+        "templates": templates,
         "action_name": "company:certificate_template_upload",
     })
+
+
+@company_staff_required
+def certificate_preset_preview(request, preset_key):
+    folder_map = {
+        "default_1": "default-cfe8f3a2",
+        "default_2": "demo-certificate-badge",
+    }
+    folder_path = folder_map.get(preset_key, preset_key)
+    folder = _kind_root("certificate") / folder_path
+    if not (folder / "index.html").exists():
+        return HttpResponse("<p style='font-family:sans-serif;padding:40px;color:#8a8a86;'>Certificate template not found.</p>")
+
+    profile = InternProfile.objects.select_related("user", "track").first()
+    media_prefix = f"{settings.MEDIA_URL}templates/certificate/{folder_path}/"
+    context = _build_context(profile, is_certificate=True, request=request)
+    html = render_template_html(folder, context, media_prefix)
+    return HttpResponse(_inject_preview_styles(html))
+
+
+@company_staff_required
+@require_POST
+def certificate_template_activate(request, pk):
+    tpl = get_object_or_404(CertificateTemplate, pk=pk)
+    CertificateTemplate.objects.filter(track=tpl.track).update(is_active=False)
+    tpl.is_active = True
+    tpl.save(update_fields=["is_active"])
+    track_name = tpl.track.name if tpl.track else "Global (All Tracks)"
+    messages.success(request, f"Template '{tpl.folder_path}' is now active for {track_name}.")
+    return redirect("company:certificate_template_upload")
 
 
 @company_staff_required
