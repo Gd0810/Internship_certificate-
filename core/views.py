@@ -1,9 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.http import HttpResponse, JsonResponse
 from company.models import InternshipTrack, TrackCategory
 from accounts.models import InternProfile
+from .forms import ContactForm
 
 
 def _lookup_intern_profile(raw_query):
@@ -34,6 +37,20 @@ def home(request):
     raw_query = request.GET.get("intern_id", "").strip()
     profile, searched, error_message = _lookup_intern_profile(raw_query)
 
+    if request.method == "POST" and "contact_submit" in request.POST:
+        contact_form = ContactForm(request.POST)
+        if contact_form.is_valid():
+            contact_form.save()
+            messages.success(
+                request,
+                "Thank you for contacting Redback! We have received your message and will reach out to you shortly."
+            )
+            return redirect(reverse("core:home") + "#contact")
+        else:
+            messages.error(request, "Please fix the errors in the contact form.")
+    else:
+        contact_form = ContactForm()
+
     return render(
         request,
         "core/home.html",
@@ -43,6 +60,7 @@ def home(request):
             "profile": profile,
             "searched": searched,
             "error_message": error_message,
+            "contact_form": contact_form,
         },
     )
 
@@ -126,6 +144,24 @@ def track_detail(request, slug):
 
 def about(request):
     return render(request, "core/about.html")
+
+
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                "Thank you for contacting Redback! We have received your message and will reach out to you shortly."
+            )
+            return redirect("core:contact")
+        else:
+            messages.error(request, "Please correct the errors in the form below.")
+    else:
+        form = ContactForm()
+
+    return render(request, "core/contact.html", {"form": form})
 
 
 def verify(request, query_id=None):

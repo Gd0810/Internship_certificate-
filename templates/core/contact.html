@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us — Redback IT Solutions | Internship Support & Offices{% endblock %}
+{% block meta_title %}Contact Us — Redback IT Solutions | Internship Support & Offices{% endblock %}
+{% block meta_description %}Get in touch with Redback IT Solutions Private Limited. Connect with our team for internship questions, technical tracks, corporate onboarding, and office visits in Vellore, Tamil Nadu.{% endblock %}
+{% block meta_keywords %}contact Redback, Redback IT Solutions Vellore, internship inquiry, technical training support, Redback address, Redback contact number{% endblock %}
+
+{% block structured_data %}
+{{ block.super }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact Redback IT Solutions",
+  "description": "Contact information and inquiries for Redback IT Solutions internship platform.",
+  "mainEntity": {
+    "@type": "EducationalOrganization",
+    "name": "{{ SITE_FULL_NAME }}",
+    "telephone": ["+918189985559", "+918189985554"],
+    "email": "info@redback.in",
+    "address": [
+      {
+        "@type": "PostalAddress",
+        "streetAddress": "5/x1 Hari om 2nd street, TNHB, Phase III, Sathuvachari",
+        "addressLocality": "Vellore",
+        "addressRegion": "Tamil Nadu",
+        "postalCode": "632009",
+        "addressCountry": "IN"
+      },
+      {
+        "@type": "PostalAddress",
+        "streetAddress": "No 35, 1st Floor, Pilliyar Koil Street, Arni Rd, Virupatchipuram",
+        "addressLocality": "Vellore",
+        "addressRegion": "Tamil Nadu",
+        "postalCode": "632002",
+        "addressCountry": "IN"
+      }
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block body %}
+{% include "core/_public_nav.html" %}
+
+<main class="flex-1 w-full bg-[#f9f9ff]">
+  {% include "core/_contact_section.html" %}
+</main>
+
+{% include "core/_footer.html" %}
+{% endblock %}
+

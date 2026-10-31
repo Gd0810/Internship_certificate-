@@ -1,0 +1,224 @@
+<!-- Reusable Contact Section Component -->
+<section id="contact" class="max-w-[1280px] mx-auto px-4 lg:px-6 py-16 w-full">
+  <!-- Eyebrow & Header -->
+  <div class="text-center max-w-3xl mx-auto mb-12">
+    <span class="text-xs font-bold text-[#bb0004] tracking-widest uppercase bg-[#ffdad5]/50 px-4 py-1.5 rounded-full inline-block mb-3">
+      GET IN TOUCH
+    </span>
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-[#151c27] tracking-tight leading-tight m-0">
+      Contact Redback IT Solutions
+    </h2>
+    <p class="text-base text-[#5d3f3b] mt-3.5 leading-relaxed m-0">
+      Have questions about our internship programs, technical tracks, or certificate verification? Our team is here to assist you.
+    </p>
+  </div>
+
+  <!-- Messages Alert Display -->
+  {% if messages %}
+    <div class="max-w-4xl mx-auto mb-8">
+      {% for message in messages %}
+        <div class="p-4 rounded-xl flex items-center gap-3 text-sm font-semibold shadow-xs {% if message.tags == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200{% else %}bg-red-50 text-red-800 border border-red-200{% endif %}">
+          <span class="material-symbols-outlined text-xl">
+            {% if message.tags == 'success' %}check_circle{% else %}error{% endif %}
+          </span>
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Contact Grid: Info & Form -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- Left Column: Contact Information Cards (5 cols) -->
+    <div class="lg:col-span-5 bg-gradient-to-br from-[#101725] via-[#151c27] to-[#1e293b] text-white rounded-3xl p-8 sm:p-10 shadow-lg relative overflow-hidden flex flex-col justify-between space-y-8">
+      <!-- Glow effect -->
+      <div class="absolute -top-16 -right-16 w-64 h-64 bg-[#bb0004]/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-16 -left-16 w-64 h-64 bg-[#1159c2]/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-6">
+        <div>
+          <span class="text-xs font-bold text-[#ffdad5] uppercase tracking-wider block mb-1">Direct Assistance</span>
+          <h3 class="text-2xl font-extrabold text-white tracking-tight m-0">Contact Information</h3>
+          <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed m-0">
+            Reach out via call, email, or visit our training and corporate offices in Vellore.
+          </p>
+        </div>
+
+        <!-- Contact Items List -->
+        <div class="space-y-4 pt-2">
+          
+          <!-- Phone Numbers -->
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-[#bb0004] to-[#e1251b] flex items-center justify-center text-white shrink-0 shadow-sm">
+              <span class="material-symbols-outlined text-[22px]">call</span>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">Phone Support</div>
+              <div class="mt-1 space-y-0.5">
+                <a href="tel:+918189985559" class="block text-sm font-bold text-white hover:text-[#ffdad5] transition-colors no-underline">
+                  +91 81899 85559
+                </a>
+                <a href="tel:+918189985554" class="block text-sm font-bold text-white hover:text-[#ffdad5] transition-colors no-underline">
+                  +91 81899 85554
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+            <div class="w-11 h-11 rounded-xl bg-blue-500/20 text-[#8ec5fc] flex items-center justify-center shrink-0 border border-blue-400/30">
+              <span class="material-symbols-outlined text-[22px]">mail</span>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">Email Inquiry</div>
+              <a href="mailto:info@redback.in" class="mt-1 block text-sm font-bold text-white hover:text-sky-300 transition-colors no-underline">
+                info@redback.in
+              </a>
+            </div>
+          </div>
+
+          <!-- Address 1 -->
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+            <div class="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center shrink-0 border border-amber-400/30">
+              <span class="material-symbols-outlined text-[22px]">location_on</span>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-amber-300 uppercase tracking-wider">Office Address 1</div>
+              <p class="mt-1 text-xs sm:text-sm text-slate-200 leading-relaxed m-0">
+                5/x1 Hari om 2nd street, TNHB, Phase III, Sathuvachari, Vellore, Tamil Nadu 632009
+              </p>
+            </div>
+          </div>
+
+          <!-- Address 2 -->
+          <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+            <div class="w-11 h-11 rounded-xl bg-rose-500/20 text-rose-300 flex items-center justify-center shrink-0 border border-rose-400/30">
+              <span class="material-symbols-outlined text-[22px]">apartment</span>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-rose-300 uppercase tracking-wider">Office Address 2</div>
+              <p class="mt-1 text-xs sm:text-sm text-slate-200 leading-relaxed m-0">
+                No 35, 1st Floor, Pilliyar Koil Street, Arni Rd, Virupatchipuram, Vellore, Tamil Nadu 632002
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Working Hours Note -->
+     
+    </div>
+
+    <!-- Right Column: Interactive Contact Form (7 cols) -->
+    <div class="lg:col-span-7 bg-white rounded-3xl p-8 sm:p-10 border border-[#e7bdb7]/40 shadow-sm relative">
+      <div>
+        <span class="text-xs font-bold text-[#bb0004] uppercase tracking-wider block mb-1">Send a Message</span>
+        <h3 class="text-2xl font-extrabold text-[#151c27] tracking-tight m-0">How Can We Help You?</h3>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1 mb-6 leading-relaxed">
+          Fill in your details below. Our academic and technical advisors will respond within 24 hours.
+        </p>
+      </div>
+
+      <form method="post" action="{% if form_action %}{{ form_action }}{% else %}{% url 'core:contact' %}{% endif %}" class="space-y-5">
+        {% csrf_token %}
+        <input type="hidden" name="contact_submit" value="1">
+
+        <!-- Name Field -->
+        <div>
+          <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">
+            Your Full Name *
+          </label>
+          {% if contact_form %}
+            {{ contact_form.name }}
+            {% for err in contact_form.name.errors %}
+              <div class="text-xs text-red-500 mt-1 font-semibold">{{ err }}</div>
+            {% endfor %}
+          {% elif form %}
+            {{ form.name }}
+            {% for err in form.name.errors %}
+              <div class="text-xs text-red-500 mt-1 font-semibold">{{ err }}</div>
+            {% endfor %}
+          {% else %}
+            <input type="text" name="name" required placeholder="Enter your full name" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-[#151c27] placeholder:text-slate-400 focus:bg-white focus:border-[#bb0004] focus:outline-none focus:ring-3 focus:ring-[#bb0004]/10 transition-all duration-200">
+          {% endif %}
+        </div>
+
+        <!-- 2 Column: Email & Phone Number -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Email Field -->
+          <div>
+            <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">
+              Email Address *
+            </label>
+            {% if contact_form %}
+              {{ contact_form.email }}
+              {% for err in contact_form.email.errors %}
+                <div class="text-xs text-red-500 mt-1 font-semibold">{{ err }}</div>
+              {% endfor %}
+            {% elif form %}
+              {{ form.email }}
+              {% for err in form.email.errors %}
+                <div class="text-xs text-red-500 mt-1 font-semibold">{{ err }}</div>
+              {% endfor %}
+            {% else %}
+              <input type="email" name="email" required placeholder="name@example.com" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-[#151c27] placeholder:text-slate-400 focus:bg-white focus:border-[#bb0004] focus:outline-none focus:ring-3 focus:ring-[#bb0004]/10 transition-all duration-200">
+            {% endif %}
+          </div>
+
+          <!-- Phone Number Field -->
+          <div>
+            <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">
+              Phone Number *
+            </label>
+            {% if contact_form %}
+              {{ contact_form.phone_number }}
+              {% for err in contact_form.phone_number.errors %}
+                <div class="text-xs text-red-500 mt-1 font-semibold">{{ err }}</div>
+              {% endfor %}
+            {% elif form %}
+              {{ form.phone_number }}
+              {% for err in form.phone_number.errors %}
+                <div class="text-xs text-red-500 mt-1 font-semibold">{{ err }}</div>
+              {% endfor %}
+            {% else %}
+              <input type="tel" name="phone_number" required placeholder="+91 98765 43210" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-[#151c27] placeholder:text-slate-400 focus:bg-white focus:border-[#bb0004] focus:outline-none focus:ring-3 focus:ring-[#bb0004]/10 transition-all duration-200">
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Message Field -->
+        <div>
+          <label class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">
+            Message / Inquiry *
+          </label>
+          {% if contact_form %}
+            {{ contact_form.message }}
+            {% for err in contact_form.message.errors %}
+              <div class="text-xs text-red-500 mt-1 font-semibold">{{ err }}</div>
+            {% endfor %}
+          {% elif form %}
+            {{ form.message }}
+            {% for err in form.message.errors %}
+              <div class="text-xs text-red-500 mt-1 font-semibold">{{ err }}</div>
+            {% endfor %}
+          {% else %}
+            <textarea name="message" rows="4" required placeholder="Write your query, preferred track, or internship questions..." class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-[#151c27] placeholder:text-slate-400 focus:bg-white focus:border-[#bb0004] focus:outline-none focus:ring-3 focus:ring-[#bb0004]/10 transition-all duration-200"></textarea>
+          {% endif %}
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-[#bb0004] to-[#e1251b] hover:opacity-95 text-white font-bold text-sm px-8 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer border-0">
+            <span>Send Message</span>
+            <span class="material-symbols-outlined text-[18px]">send</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+

@@ -33,6 +33,11 @@
         <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
         <span>Verify Certificate</span>
       </a>
+
+      <a href="{% url 'core:contact' %}" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 no-underline {% if request.resolver_match.url_name == 'contact' %}bg-[#ffdad5]/60 text-[#bb0004] font-bold shadow-2xs{% else %}text-[#5d3f3b] hover:text-[#151c27] hover:bg-[#f0f3ff]{% endif %}">
+        <span class="material-symbols-outlined text-[18px]">support_agent</span>
+        <span>Contact</span>
+      </a>
     </nav>
 
     <!-- Desktop Right CTA Buttons -->
@@ -83,6 +88,10 @@
       <a href="{% url 'core:verify' %}" class="px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-3 no-underline {% if request.resolver_match.url_name == 'verify' %}bg-[#ffdad5]/60 text-[#bb0004] font-bold{% else %}text-[#151c27] hover:bg-[#f0f3ff]{% endif %}">
         <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">verified</span>
         <span>Verify Certificate</span>
+      </a>
+      <a href="{% url 'core:contact' %}" class="px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-3 no-underline {% if request.resolver_match.url_name == 'contact' %}bg-[#ffdad5]/60 text-[#bb0004] font-bold{% else %}text-[#151c27] hover:bg-[#f0f3ff]{% endif %}">
+        <span class="material-symbols-outlined text-[20px]">support_agent</span>
+        <span>Contact</span>
       </a>
 
       <div class="pt-3 mt-1 border-t border-[#e7bdb7]/20 flex flex-col gap-2">
