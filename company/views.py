@@ -21,6 +21,7 @@ from certificates.models import CertificateTemplate, OfferLetterTemplate
 from certificates.template_engine import extract_template_package, TemplatePackageError, render_template_html
 from certificates.rendering import render_offer_letter, render_certificate, _kind_root, _build_context
 from certificates.views import _inject_preview_styles
+from core.models import ContactInquiry
 from .decorators import company_staff_required
 from .forms import TrackForm, TaskModuleForm, TemplateUploadForm, CategoryForm, CertificateTemplateForm
 from .models import InternshipTrack, TaskModule, TrackCategory, UserTaskProgress
@@ -58,9 +59,20 @@ def overview(request):
         "interns": InternProfile.objects.count(),
         "paid": InternProfile.objects.filter(has_paid=True).count(),
         "revenue": sum(p.amount for p in Payment.objects.filter(status="paid")),
+        "inquiries": ContactInquiry.objects.count(),
+        "pending_inquiries": ContactInquiry.objects.filter(is_resolved=False).count(),
     }
     recent_interns = InternProfile.objects.select_related("user", "track").order_by("-created_at")[:10]
-    return render(request, "company/overview.html", {"stats": stats, "recent_interns": recent_interns})
+    recent_inquiries = ContactInquiry.objects.order_by("-created_at")[:5]
+    return render(
+        request,
+        "company/overview.html",
+        {
+            "stats": stats,
+            "recent_interns": recent_interns,
+            "recent_inquiries": recent_inquiries,
+        },
+    )
 
 
 # ---------------------------------------------------------------- Tracks ----
@@ -473,4 +485,72 @@ def student_certificate_preview(request, pk):
     if html is None:
         return HttpResponse("<p style='font-family:sans-serif;padding:40px;color:#8a8a86;'>Certificate template not configured for this track.</p>")
     return HttpResponse(_inject_preview_styles(html))
+
+
+# ----------------------------------------------------------- Contact Inquiries ----
+@company_staff_required
+def inquiry_list(request):
+    search_query = request.GET.get("q", "").strip()
+    status_filter = request.GET.get("status", "").strip()
+
+    inquiries_qs = ContactInquiry.objects.all().order_by("-created_at")
+
+    if search_query:
+        inquiries_qs = inquiries_qs.filter(
+            Q(name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(phone_number__icontains=search_query) |
+            Q(message__icontains=search_query)
+        )
+
+    if status_filter == "pending":
+        inquiries_qs = inquiries_qs.filter(is_resolved=False)
+    elif status_filter == "resolved":
+        inquiries_qs = inquiries_qs.filter(is_resolved=True)
+
+    total_count = inquiries_qs.count()
+    paginator = Paginator(inquiries_qs, 15)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
+    stats = {
+        "total": ContactInquiry.objects.count(),
+        "pending": ContactInquiry.objects.filter(is_resolved=False).count(),
+        "resolved": ContactInquiry.objects.filter(is_resolved=True).count(),
+    }
+
+    return render(
+        request,
+        "company/inquiry_list.html",
+        {
+            "page_obj": page_obj,
+            "search_query": search_query,
+            "status_filter": status_filter,
+            "total_count": total_count,
+            "stats": stats,
+        },
+    )
+
+
+@company_staff_required
+@require_POST
+def inquiry_toggle_resolved(request, pk):
+    inquiry = get_object_or_404(ContactInquiry, pk=pk)
+    inquiry.is_resolved = not inquiry.is_resolved
+    inquiry.save(update_fields=["is_resolved"])
+    status_label = "Resolved" if inquiry.is_resolved else "Pending"
+    messages.success(request, f"Inquiry from {inquiry.name} marked as {status_label}.")
+    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or "company:inquiry_list"
+    return redirect(next_url)
+
+
+@company_staff_required
+@require_POST
+def inquiry_delete(request, pk):
+    inquiry = get_object_or_404(ContactInquiry, pk=pk)
+    name = inquiry.name
+    inquiry.delete()
+    messages.success(request, f"Inquiry from {name} has been deleted.")
+    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or "company:inquiry_list"
+    return redirect(next_url)
+
 

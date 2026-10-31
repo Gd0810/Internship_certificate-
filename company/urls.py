@@ -29,4 +29,7 @@ urlpatterns = [
     path("templates/certificate/preview/<str:preset_key>/", views.certificate_preset_preview, name="certificate_preset_preview"),
     path("templates/certificate/<int:pk>/activate/", views.certificate_template_activate, name="certificate_template_activate"),
     path("templates/offer-letter/", views.offer_letter_template_upload, name="offer_letter_template_upload"),
+    path("inquiries/", views.inquiry_list, name="inquiry_list"),
+    path("inquiries/<int:pk>/toggle/", views.inquiry_toggle_resolved, name="inquiry_toggle_resolved"),
+    path("inquiries/<int:pk>/delete/", views.inquiry_delete, name="inquiry_delete"),
 ]

@@ -24,4 +24,13 @@ def site_meta(request):
         "DEFAULT_OG_IMAGE": f"{base_url}/static/img/redback-og-banner.png",
     }
 
+    if request.user.is_authenticated and request.user.is_staff:
+        try:
+            from core.models import ContactInquiry
+            res["pending_inquiries_count"] = ContactInquiry.objects.filter(is_resolved=False).count()
+        except Exception:
+            res["pending_inquiries_count"] = 0
+
+    return res
+
 

@@ -31,68 +31,86 @@
   </div>
 
   <!-- Key Metrics Stat Cards Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
     
     <!-- Stat 1: Tracks -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Internship Tracks</span>
-        <div class="w-10 h-10 rounded-xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center">
-          <span class="material-symbols-outlined text-xl">grid_view</span>
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tracks</span>
+        <div class="w-9 h-9 rounded-xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg">grid_view</span>
         </div>
       </div>
-      <div class="mt-4 flex items-baseline justify-between">
-        <span class="text-3xl font-extrabold text-[#151c27]">{{ stats.tracks }}</span>
-        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Active Tracks</span>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-[#151c27]">{{ stats.tracks }}</span>
+        <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Active</span>
       </div>
     </div>
 
     <!-- Stat 2: Interns -->
-    <a href="{% url 'company:student_list' %}" class="bg-white p-6 rounded-2xl border border-slate-200/80 hover:border-[#1159c2]/50 shadow-xs hover:shadow-md transition-all no-underline block group">
+    <a href="{% url 'company:student_list' %}" class="bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-[#1159c2]/50 shadow-xs hover:shadow-md transition-all no-underline block group">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-slate-400 group-hover:text-[#1159c2] transition-colors uppercase tracking-wider">Registered Interns</span>
-        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-          <span class="material-symbols-outlined text-xl">group</span>
+        <span class="text-xs font-bold text-slate-400 group-hover:text-[#1159c2] transition-colors uppercase tracking-wider">Interns</span>
+        <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-lg">group</span>
         </div>
       </div>
-      <div class="mt-4 flex items-baseline justify-between">
-        <span class="text-3xl font-extrabold text-[#151c27]">{{ stats.interns }}</span>
-        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">View All Students →</span>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-[#151c27]">{{ stats.interns }}</span>
+        <span class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">Enrolled</span>
       </div>
     </a>
 
     <!-- Stat 3: Paid Certificates -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Certificates Unlocked</span>
-        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
-          <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Certificates</span>
+        <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
         </div>
       </div>
-      <div class="mt-4 flex items-baseline justify-between">
-        <span class="text-3xl font-extrabold text-[#151c27]">{{ stats.paid }}</span>
-        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Verified &amp; Paid</span>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-[#151c27]">{{ stats.paid }}</span>
+        <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Paid</span>
       </div>
     </div>
 
     <!-- Stat 4: Revenue -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Revenue</span>
-        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
-          <span class="material-symbols-outlined text-xl">payments</span>
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Revenue</span>
+        <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg">payments</span>
         </div>
       </div>
-      <div class="mt-4 flex items-baseline justify-between">
-        <span class="text-3xl font-extrabold text-[#151c27]">₹{{ stats.revenue }}</span>
-        <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">INR Total</span>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-[#151c27]">₹{{ stats.revenue }}</span>
+        <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">Total</span>
       </div>
     </div>
+
+    <!-- Stat 5: Inquiries -->
+    <a href="{% url 'company:inquiry_list' %}" class="bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-[#bb0004]/50 shadow-xs hover:shadow-md transition-all no-underline block group">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 group-hover:text-[#bb0004] transition-colors uppercase tracking-wider">Inquiries</span>
+        <div class="w-9 h-9 rounded-xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-lg">contact_support</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-[#151c27]">{{ stats.inquiries }}</span>
+        {% if stats.pending_inquiries > 0 %}
+          <span class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">{{ stats.pending_inquiries }} Pending</span>
+        {% else %}
+          <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">All Handled</span>
+        {% endif %}
+      </div>
+    </a>
 
   </div>
 
   <!-- Quick Management Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     
     <a href="{% url 'company:track_list' %}" class="bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-[#bb0004]/50 shadow-xs hover:shadow-md transition-all group no-underline">
       <div class="flex items-center gap-3">
@@ -100,8 +118,8 @@
           <span class="material-symbols-outlined">library_books</span>
         </div>
         <div>
-          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-[#bb0004] transition-colors">Manage Tracks &amp; Tasks</h4>
-          <p class="text-xs text-slate-500 mt-0.5">Create tracks, add task modules &amp; set deliverables</p>
+          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-[#bb0004] transition-colors">Tracks &amp; Tasks</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Manage tracks and deliverables</p>
         </div>
       </div>
     </a>
@@ -112,8 +130,8 @@
           <span class="material-symbols-outlined">description</span>
         </div>
         <div>
-          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-[#1159c2] transition-colors">Offer Letter Templates</h4>
-          <p class="text-xs text-slate-500 mt-0.5">Upload custom HTML offer letter ZIP templates</p>
+          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-[#1159c2] transition-colors">Offer Letters</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Configure offer letter designs</p>
         </div>
       </div>
     </a>
@@ -124,8 +142,20 @@
           <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
         </div>
         <div>
-          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-emerald-600 transition-colors">Certificate Designs</h4>
-          <p class="text-xs text-slate-500 mt-0.5">Upload certificate layouts &amp; signature assets</p>
+          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-emerald-600 transition-colors">Certificates</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Layouts &amp; verified signatures</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="{% url 'company:inquiry_list' %}" class="bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-[#bb0004]/50 shadow-xs hover:shadow-md transition-all group no-underline">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center group-hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined">mark_email_unread</span>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-[#bb0004] transition-colors">Inquiries &amp; Leads</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Inbound website inquiries</p>
         </div>
       </div>
     </a>
@@ -214,9 +244,122 @@
             </tr>
           {% empty %}
             <tr>
-              <td colspan="5" class="py-12 text-center text-slate-400">
+              <td colspan="6" class="py-12 text-center text-slate-400">
                 <span class="material-symbols-outlined text-3xl text-slate-300 block mb-1">group_off</span>
                 No registered interns found in the database.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Inbound Inquiries Table -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+    <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+      <div>
+        <h3 class="text-base font-bold text-[#151c27]">Recent Inbound Inquiries</h3>
+        <p class="text-xs text-slate-500 mt-0.5">Latest contact messages and student inquiries from website forms</p>
+      </div>
+      <a href="{% url 'company:inquiry_list' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#bb0004] hover:text-[#e1251b] transition-colors no-underline">
+        <span>View All Inquiries</span>
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+      </a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+            <th class="py-3.5 px-6">Sender Details</th>
+            <th class="py-3.5 px-6">Message Preview</th>
+            <th class="py-3.5 px-6">Date Received</th>
+            <th class="py-3.5 px-6">Status</th>
+            <th class="py-3.5 px-6 text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-xs text-[#151c27]">
+          {% for inq in recent_inquiries %}
+            <tr class="hover:bg-slate-50/50 transition-colors group">
+              <td class="py-4 px-6 min-w-[200px]">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#bb0004] to-[#e1251b] text-white font-bold flex items-center justify-center text-xs shrink-0">
+                    {{ inq.name|first|upper }}
+                  </div>
+                  <div>
+                    <div class="font-bold text-[#151c27]">{{ inq.name }}</div>
+                    <div class="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+                      <a href="mailto:{{ inq.email }}" class="hover:text-[#bb0004] transition-colors no-underline">{{ inq.email }}</a>
+                      <span>•</span>
+                      <a href="tel:{{ inq.phone_number }}" class="hover:text-emerald-600 transition-colors no-underline font-mono">{{ inq.phone_number }}</a>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <td class="py-4 px-6 max-w-sm">
+                <div class="text-slate-600 truncate text-xs" title="{{ inq.message }}">
+                  {{ inq.message|truncatechars:100 }}
+                </div>
+              </td>
+
+              <td class="py-4 px-6 text-slate-400 whitespace-nowrap">
+                {{ inq.created_at|date:"d M Y, h:i A" }}
+              </td>
+
+              <td class="py-4 px-6 whitespace-nowrap">
+                {% if inq.is_resolved %}
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Resolved
+                  </span>
+                {% else %}
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Pending
+                  </span>
+                {% endif %}
+              </td>
+
+              <td class="py-4 px-6 text-right whitespace-nowrap">
+                <div class="flex items-center justify-end gap-1.5">
+                  <form method="post" action="{% url 'company:inquiry_toggle_resolved' inq.pk %}" class="inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    {% if inq.is_resolved %}
+                      <button
+                        type="submit"
+                        class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 transition-colors text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
+                        title="Mark as Pending"
+                      >
+                        <span class="material-symbols-outlined text-xs">undo</span>
+                        <span>Reopen</span>
+                      </button>
+                    {% else %}
+                      <button
+                        type="submit"
+                        class="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
+                        title="Mark as Resolved"
+                      >
+                        <span class="material-symbols-outlined text-xs">check</span>
+                        <span>Resolve</span>
+                      </button>
+                    {% endif %}
+                  </form>
+
+                  <a href="{% url 'company:inquiry_list' %}?q={{ inq.email }}"
+                     class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors text-xs font-bold inline-flex items-center gap-1 no-underline"
+                     title="View in full list">
+                    <span>View</span>
+                    <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="py-12 text-center text-slate-400">
+                <span class="material-symbols-outlined text-3xl text-slate-300 block mb-1">mark_email_read</span>
+                No inquiries submitted yet.
               </td>
             </tr>
           {% endfor %}

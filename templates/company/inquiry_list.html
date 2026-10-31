@@ -1,0 +1,304 @@
+{% extends "company/_sidebar_layout.html" %}
+
+{% block company_title %}Contact Inquiries — Company Portal{% endblock %}
+
+{% block company_content %}
+<div class="space-y-6">
+
+  <!-- Header Card -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+    <div>
+      <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">Contact Inquiries &amp; Leads</h3>
+      <p class="text-xs text-slate-500 mt-0.5">Review, follow up, and manage student and visitor inquiries received from website forms</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ffdad5]/40 text-[#bb0004] text-xs font-bold border border-[#bb0004]/20">
+        <span class="material-symbols-outlined text-sm">mail</span>
+        <span>{{ total_count }} Message{{ total_count|pluralize }}</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Stats Metric Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Inquiries</span>
+        <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg">inbox</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-[#151c27]">{{ stats.total }}</span>
+        <span class="text-[11px] font-semibold text-slate-500">All submissions</span>
+      </div>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending Follow-up</span>
+        <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg">mark_email_unread</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-amber-700">{{ stats.pending }}</span>
+        <span class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">Action Needed</span>
+      </div>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Resolved</span>
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-lg">task_alt</span>
+        </div>
+      </div>
+      <div class="mt-3 flex items-baseline justify-between">
+        <span class="text-2xl font-extrabold text-emerald-700">{{ stats.resolved }}</span>
+        <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Completed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+    <form method="get" class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+      
+      <!-- Search Input -->
+      <div class="relative flex-1">
+        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">search</span>
+        <input
+          type="text"
+          name="q"
+          value="{{ search_query }}"
+          placeholder="Search by name, email, phone number, message text..."
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-[#151c27] placeholder-slate-400 focus:outline-none focus:border-[#bb0004] focus:bg-white transition-all"
+        />
+      </div>
+
+      <!-- Status Filter -->
+      <div class="min-w-[170px]">
+        <select
+          name="status"
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-[#151c27] focus:outline-none focus:border-[#bb0004] focus:bg-white cursor-pointer"
+        >
+          <option value="">All Statuses</option>
+          <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending Only</option>
+          <option value="resolved" {% if status_filter == 'resolved' %}selected{% endif %}>Resolved Only</option>
+        </select>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2">
+        <button
+          type="submit"
+          class="bg-[#101725] hover:bg-slate-800 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0"
+        >
+          <span class="material-symbols-outlined text-base">filter_list</span>
+          <span>Filter</span>
+        </button>
+
+        {% if search_query or status_filter %}
+          <a
+            href="{% url 'company:inquiry_list' %}"
+            class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs sm:text-sm px-3.5 py-2.5 rounded-xl transition-all flex items-center justify-center gap-1 no-underline shrink-0"
+            title="Reset filters"
+          >
+            <span class="material-symbols-outlined text-base">close</span>
+            <span class="hidden sm:inline">Reset</span>
+          </a>
+        {% endif %}
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Inquiries Table -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+            <th class="py-3.5 px-6">Sender Details</th>
+            <th class="py-3.5 px-6">Message &amp; Query</th>
+            <th class="py-3.5 px-6">Date Received</th>
+            <th class="py-3.5 px-6">Status</th>
+            <th class="py-3.5 px-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-xs text-[#151c27]">
+          {% for inq in page_obj %}
+            <tr class="hover:bg-slate-50/60 transition-colors group align-top">
+              
+              <!-- Sender Details -->
+              <td class="py-4 px-6 min-w-[220px]">
+                <div class="flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#bb0004] to-[#e1251b] text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
+                    {{ inq.name|first|upper }}
+                  </div>
+                  <div>
+                    <div class="font-extrabold text-[#151c27] text-sm group-hover:text-[#bb0004] transition-colors">
+                      {{ inq.name }}
+                    </div>
+                    <div class="mt-1 flex flex-col gap-0.5 text-slate-500 text-xs">
+                      <a href="mailto:{{ inq.email }}" class="inline-flex items-center gap-1.5 hover:text-[#bb0004] transition-colors no-underline">
+                        <span class="material-symbols-outlined text-xs text-slate-400">mail</span>
+                        <span>{{ inq.email }}</span>
+                      </a>
+                      <a href="tel:{{ inq.phone_number }}" class="inline-flex items-center gap-1.5 hover:text-emerald-600 transition-colors no-underline font-mono">
+                        <span class="material-symbols-outlined text-xs text-slate-400">phone</span>
+                        <span>{{ inq.phone_number }}</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Message -->
+              <td class="py-4 px-6 min-w-[280px] max-w-md">
+                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-slate-700 leading-relaxed text-xs">
+                  <p class="whitespace-pre-line m-0">{{ inq.message }}</p>
+                </div>
+              </td>
+
+              <!-- Date Received -->
+              <td class="py-4 px-6 whitespace-nowrap">
+                <div class="font-semibold text-slate-700">
+                  {{ inq.created_at|date:"d M Y" }}
+                </div>
+                <div class="text-[11px] text-slate-400 font-mono mt-0.5">
+                  {{ inq.created_at|date:"h:i A" }}
+                </div>
+              </td>
+
+              <!-- Status Badge -->
+              <td class="py-4 px-6 whitespace-nowrap">
+                {% if inq.is_resolved %}
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    <span>Resolved</span>
+                  </span>
+                {% else %}
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    <span>Pending Action</span>
+                  </span>
+                {% endif %}
+              </td>
+
+              <!-- Actions -->
+              <td class="py-4 px-6 text-right whitespace-nowrap">
+                <div class="flex items-center justify-end gap-1.5">
+                  
+                  <!-- Quick Call -->
+                  <a href="tel:{{ inq.phone_number }}"
+                     class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-600 hover:text-emerald-600 border border-slate-200 transition-colors flex items-center justify-center no-underline"
+                     title="Call {{ inq.phone_number }}">
+                    <span class="material-symbols-outlined text-base">call</span>
+                  </a>
+
+                  <!-- Quick Email -->
+                  <a href="mailto:{{ inq.email }}"
+                     class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-[#1159c2] border border-slate-200 transition-colors flex items-center justify-center no-underline"
+                     title="Email {{ inq.email }}">
+                    <span class="material-symbols-outlined text-base">email</span>
+                  </a>
+
+                  <!-- Toggle Resolved Form -->
+                  <form method="post" action="{% url 'company:inquiry_toggle_resolved' inq.pk %}" class="inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    {% if inq.is_resolved %}
+                      <button
+                        type="submit"
+                        class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 transition-colors text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
+                        title="Mark as Pending"
+                      >
+                        <span class="material-symbols-outlined text-sm">undo</span>
+                        <span>Reopen</span>
+                      </button>
+                    {% else %}
+                      <button
+                        type="submit"
+                        class="px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors text-xs font-bold inline-flex items-center gap-1 cursor-pointer"
+                        title="Mark as Resolved"
+                      >
+                        <span class="material-symbols-outlined text-sm">check</span>
+                        <span>Resolve</span>
+                      </button>
+                    {% endif %}
+                  </form>
+
+                  <!-- Delete Form -->
+                  <form method="post" action="{% url 'company:inquiry_delete' inq.pk %}" class="inline" onsubmit="return confirm('Are you sure you want to delete the inquiry from {{ inq.name|escapejs }}?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <button
+                      type="submit"
+                      class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-[#bb0004] border border-slate-200 transition-colors flex items-center justify-center cursor-pointer"
+                      title="Delete inquiry"
+                    >
+                      <span class="material-symbols-outlined text-base">delete</span>
+                    </button>
+                  </form>
+
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="py-16 text-center text-slate-400">
+                <span class="material-symbols-outlined text-4xl text-slate-300 block mb-2">mark_email_read</span>
+                <p class="font-bold text-slate-600 text-sm">No contact inquiries found</p>
+                <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                  {% if search_query or status_filter %}
+                    No messages match your current search criteria. Try resetting the filters.
+                  {% else %}
+                    All visitor and student inquiries submitted via website forms will appear here.
+                  {% endif %}
+                </p>
+                {% if search_query or status_filter %}
+                  <a href="{% url 'company:inquiry_list' %}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all no-underline">
+                    <span class="material-symbols-outlined text-sm">refresh</span>
+                    <span>Clear Search &amp; Filters</span>
+                  </a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+      <div class="p-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+        <div>
+          Showing page <span class="font-bold text-[#151c27]">{{ page_obj.number }}</span> of <span class="font-bold text-[#151c27]">{{ page_obj.paginator.num_pages }}</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-[#151c27] font-semibold transition-colors no-underline">
+              Previous
+            </a>
+          {% endif %}
+          
+          <span class="px-3 py-1.5 rounded-lg bg-slate-100 font-bold text-[#151c27]">
+            {{ page_obj.number }}
+          </span>
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-[#151c27] font-semibold transition-colors no-underline">
+              Next
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}
+
