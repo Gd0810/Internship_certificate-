@@ -1,4 +1,45 @@
 {% extends "base.html" %}
+
+{% block title %}{{ track.name }} Internship Program | Redback{% endblock %}
+{% block meta_title %}{{ track.name }} Internship Program | Redback{% endblock %}
+{% block meta_description %}{{ track.description|striptags|truncatewords:28 }}{% endblock %}
+{% block meta_keywords %}{{ track.name }}, {{ track.name }} internship, technical internship, practical training, Redback{% if track.points %}, {{ track.points }}{% endif %}{% endblock %}
+
+{% block og_title %}{{ track.name }} Internship Program | Redback{% endblock %}
+{% block og_description %}{{ track.description|striptags|truncatewords:28 }}{% endblock %}
+{% block og_image %}{% if track.track_image %}{{ request.scheme }}://{{ request.get_host }}{{ track.track_image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block twitter_image %}{% if track.track_image %}{{ request.scheme }}://{{ request.get_host }}{{ track.track_image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+
+{% block structured_data %}
+{{ block.super }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "{{ track.name }} Internship Program",
+  "description": "{{ track.description|striptags|escapejs }}",
+  "provider": {
+    "@type": "EducationalOrganization",
+    "name": "{{ SITE_FULL_NAME }}",
+    "sameAs": "https://redback.in"
+  },
+  "educationalCredentialAwarded": "Certificate of Completion",
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "Online / Hybrid",
+    "courseWorkload": "{{ module_count }} Task Modules"
+  },
+  "offers": {
+    "@type": "Offer",
+    "category": "Paid Certificate",
+    "price": "{{ track.price }}",
+    "priceCurrency": "INR",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+{% endblock %}
+
 {% block body %}
 {% include "core/_public_nav.html" %}
 

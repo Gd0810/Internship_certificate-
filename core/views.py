@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from company.models import InternshipTrack, TrackCategory
 from accounts.models import InternProfile
 
@@ -175,4 +175,25 @@ def verify(request, query_id=None):
             "public_base_url": public_base_url,
         },
     )
+
+
+def robots_txt(request):
+    sitemap_url = request.build_absolute_uri("/sitemap.xml")
+    from django.conf import settings
+    company_slug = getattr(settings, "COMPANY_PORTAL_SLUG", "company/connect")
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Allow: /tracks/",
+        "Allow: /about/",
+        "Allow: /verify/",
+        f"Disallow: /{company_slug}/",
+        "Disallow: /dashboard/",
+        "Disallow: /accounts/",
+        "Disallow: /payments/",
+        "Disallow: /certificates/offer-letter/",
+        "Disallow: /certificates/certificate/",
+        f"\nSitemap: {sitemap_url}",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain; charset=utf-8")
 

@@ -1,11 +1,21 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
 from accounts import views as accounts_views
+from core.sitemaps import StaticViewSitemap, TrackSitemap
+from core.views import robots_txt
+
+sitemaps = {
+    "static": StaticViewSitemap,
+    "tracks": TrackSitemap,
+}
 
 urlpatterns = [
+    path("robots.txt", robots_txt, name="robots_txt"),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
     path("connect/", admin.site.urls),
     path("", include("core.urls")),
     path("accounts/", include("accounts.urls")),

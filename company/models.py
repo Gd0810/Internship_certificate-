@@ -71,6 +71,10 @@ class InternshipTrack(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse("core:track_detail", kwargs={"slug": self.slug})
+
     @property
     def points_list(self):
         if not self.points:

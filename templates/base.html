@@ -3,11 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
   <title>{% block title %}{{ SITE_NAME }} — {{ SITE_TAGLINE }}{% endblock %}</title>
+  <meta name="title" content="{% block meta_title %}{{ SITE_NAME }} — {{ SITE_TAGLINE }}{% endblock %}">
+  <meta name="description" content="{% block meta_description %}{{ DEFAULT_META_DESCRIPTION }}{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}{{ DEFAULT_META_KEYWORDS }}{% endblock %}">
+  <meta name="author" content="{% block meta_author %}{{ SITE_FULL_NAME }}{% endblock %}">
+  <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+  <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">
+
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+  <meta property="og:site_name" content="{{ SITE_FULL_NAME }}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ SITE_NAME }} — {{ SITE_TAGLINE }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ DEFAULT_META_DESCRIPTION }}{% endblock %}">
+  <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}{{ DEFAULT_OG_IMAGE }}{% endblock %}">
+  <meta property="og:image:alt" content="{% block og_image_alt %}{{ SITE_FULL_NAME }}{% endblock %}">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}">
+  <meta name="twitter:site" content="{{ SITE_TWITTER_HANDLE }}">
+  <meta name="twitter:title" content="{% block twitter_title %}{{ SITE_NAME }} — {{ SITE_TAGLINE }}{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}{{ DEFAULT_META_DESCRIPTION }}{% endblock %}">
+  <meta name="twitter:image" content="{% block twitter_image %}{{ DEFAULT_OG_IMAGE }}{% endblock %}">
+
+  <!-- Search Engine Verification (Optional Google Search Console Hook) -->
+  {% block search_console_verification %}{% endblock %}
+
+  <!-- Google Schema.org JSON-LD Structured Data -->
+  {% block structured_data %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "EducationalOrganization",
+        "@id": "{{ SITE_URL }}/#organization",
+        "name": "{{ SITE_FULL_NAME }}",
+        "url": "https://redback.in",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ SITE_URL }}/static/img/favicon.png"
+        },
+        "sameAs": [
+          "https://redback.in",
+          "https://www.linkedin.com/company/redback-it-solutions"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "{{ SITE_URL }}/#website",
+        "url": "{{ SITE_URL }}",
+        "name": "{{ SITE_FULL_NAME }}",
+        "description": "{{ DEFAULT_META_DESCRIPTION }}",
+        "publisher": {
+          "@id": "{{ SITE_URL }}/#organization"
+        }
+      }
+    ]
+  }
+  </script>
+  {% endblock %}
+
+  <!-- Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Poppins:wght@400;500;600;700&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,0..200" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
   <link rel="stylesheet" href="{% static 'css/output.css' %}?v={% now 'U' %}">
   {% block extra_head %}{% endblock %}
 </head>
