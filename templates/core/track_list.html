@@ -43,7 +43,7 @@
             class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-10 py-2.5 text-xs sm:text-sm text-[#151c27] placeholder-slate-400 focus:outline-none focus:border-[#bb0004] focus:bg-white transition-all shadow-2xs"
           />
           {% if search_query %}
-            <a href="?{% for cat in selected_categories %}category={{ cat }}&{% endfor %}{% for m in selected_modules %}modules={{ m }}&{% endfor %}sort={{ sort_option }}" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors" title="Clear search">
+            <a href="?{% for p in selected_pricing %}pricing={{ p }}&{% endfor %}{% for cat in selected_categories %}category={{ cat }}&{% endfor %}{% for m in selected_modules %}modules={{ m }}&{% endfor %}sort={{ sort_option }}" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors" title="Clear search">
               <span class="material-symbols-outlined text-base">close</span>
             </a>
           {% endif %}
@@ -86,9 +86,9 @@
               </span>
               <div>
                 <h3 class="font-extrabold text-[#151c27] text-sm tracking-tight m-0">Filter Tracks</h3>
-                {% if selected_categories or selected_modules %}
+                {% if selected_pricing or selected_categories or selected_modules %}
                   <span class="text-[10px] text-slate-400 font-medium">
-                    {{ selected_categories|length|add:selected_modules|length }} active filter{{ selected_categories|length|add:selected_modules|length|pluralize }}
+                    {{ selected_pricing|length|add:selected_categories|length|add:selected_modules|length }} active filter{{ selected_pricing|length|add:selected_categories|length|add:selected_modules|length|pluralize }}
                   </span>
                 {% else %}
                   <span class="text-[10px] text-slate-400 font-medium">Refine your results</span>
@@ -96,7 +96,7 @@
               </div>
             </div>
 
-            {% if selected_categories or selected_modules or search_query %}
+            {% if selected_pricing or selected_categories or selected_modules or search_query %}
               <a href="{% url 'core:track_list' %}" class="inline-flex items-center gap-1 text-[11px] font-bold text-[#bb0004] hover:text-[#e1251b] transition-colors no-underline group" title="Reset all filters">
                 <span class="material-symbols-outlined text-xs group-hover:rotate-180 transition-transform duration-300">restart_alt</span>
                 <span>Reset</span>
@@ -104,8 +104,107 @@
             {% endif %}
           </div>
 
-          <!-- Section 1: Track Category -->
+          <!-- Section 1: Pricing (Free, Offer, Paid) -->
           <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#151c27] m-0 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm text-[#bb0004]">sell</span>
+                <span>Pricing</span>
+              </h4>
+              <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                3
+              </span>
+            </div>
+
+            <div class="space-y-1.5">
+              <!-- Free -->
+              <label class="icp-filter-label group {% if 'free' in selected_pricing %}is-active{% endif %}">
+                <div class="icp-checkbox-wrapper">
+                  <input
+                    type="checkbox"
+                    name="pricing"
+                    value="free"
+                    class="icp-filter-input hidden"
+                    {% if 'free' in selected_pricing %}checked{% endif %}
+                    onchange="document.getElementById('track-filter-form').submit();"
+                  />
+                  <span class="icp-custom-checkbox">
+                    <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors {% if 'free' in selected_pricing %}font-bold text-emerald-700{% endif %}">
+                      Free
+                    </span>
+                    <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                      ₹0
+                    </span>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full transition-colors {% if 'free' in selected_pricing %}bg-emerald-600 text-white{% else %}bg-emerald-50 text-emerald-700 group-hover:bg-emerald-100{% endif %}">
+                  {{ pricing_counts.free }}
+                </span>
+              </label>
+
+              <!-- Offer -->
+              <label class="icp-filter-label group {% if 'offer' in selected_pricing %}is-active{% endif %}">
+                <div class="icp-checkbox-wrapper">
+                  <input
+                    type="checkbox"
+                    name="pricing"
+                    value="offer"
+                    class="icp-filter-input hidden"
+                    {% if 'offer' in selected_pricing %}checked{% endif %}
+                    onchange="document.getElementById('track-filter-form').submit();"
+                  />
+                  <span class="icp-custom-checkbox">
+                    <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors {% if 'offer' in selected_pricing %}font-bold text-[#bb0004]{% endif %}">
+                      Offer
+                    </span>
+                    <span class="text-[9px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                      Deal
+                    </span>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full transition-colors {% if 'offer' in selected_pricing %}bg-[#bb0004] text-white{% else %}bg-amber-50 text-amber-800 border border-amber-200 group-hover:bg-amber-100{% endif %}">
+                  {{ pricing_counts.offer }}
+                </span>
+              </label>
+
+              <!-- Paid -->
+              <label class="icp-filter-label group {% if 'paid' in selected_pricing %}is-active{% endif %}">
+                <div class="icp-checkbox-wrapper">
+                  <input
+                    type="checkbox"
+                    name="pricing"
+                    value="paid"
+                    class="icp-filter-input hidden"
+                    {% if 'paid' in selected_pricing %}checked{% endif %}
+                    onchange="document.getElementById('track-filter-form').submit();"
+                  />
+                  <span class="icp-custom-checkbox">
+                    <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors {% if 'paid' in selected_pricing %}font-bold text-[#bb0004]{% endif %}">
+                      Paid
+                    </span>
+                    <span class="text-[9px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                      Standard
+                    </span>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full transition-colors {% if 'paid' in selected_pricing %}bg-slate-800 text-white{% else %}bg-slate-100 text-slate-600 group-hover:bg-slate-200{% endif %}">
+                  {{ pricing_counts.paid }}
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Section 2: Track Category -->
+          <div class="space-y-3 pt-5 border-t border-slate-100">
             <div class="flex items-center justify-between">
               <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#151c27] m-0 flex items-center gap-1.5">
                 <span>Category</span>
@@ -146,7 +245,7 @@
             </div>
           </div>
 
-          <!-- Section 2: Modules Count -->
+          <!-- Section 3: Modules Count -->
           <div class="space-y-3 pt-5 border-t border-slate-100">
             <div class="flex items-center justify-between">
               <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#151c27] m-0 flex items-center gap-1.5">
@@ -261,7 +360,7 @@
             </div>
 
             <!-- Active Pills -->
-            {% if selected_categories or selected_modules or search_query %}
+            {% if selected_pricing or selected_categories or selected_modules or search_query %}
               <div class="flex flex-wrap items-center gap-2">
                 {% if search_query %}
                   <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-[#151c27] text-xs font-semibold border border-slate-200">
@@ -269,6 +368,13 @@
                     <span>"{{ search_query }}"</span>
                   </span>
                 {% endif %}
+
+                {% for p in selected_pricing %}
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold {% if p == 'free' %}bg-emerald-50 text-emerald-700 border border-emerald-200{% elif p == 'offer' %}bg-amber-50 text-amber-800 border border-amber-200{% else %}bg-slate-100 text-slate-700 border border-slate-200{% endif %}">
+                    <span class="material-symbols-outlined text-xs">{% if p == 'free' %}verified{% elif p == 'offer' %}local_offer{% else %}sell{% endif %}</span>
+                    <span>{{ p|capfirst }}</span>
+                  </span>
+                {% endfor %}
 
                 {% for cat in categories %}
                   {% if cat.slug in selected_categories %}
@@ -303,7 +409,7 @@
             {% if page_obj.has_other_pages %}
               <div class="flex items-center justify-center gap-3 pt-8 pb-4">
                 {% if page_obj.has_previous %}
-                  <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% for cat in selected_categories %}&category={{ cat }}{% endfor %}{% for m in selected_modules %}&modules={{ m }}{% endfor %}&sort={{ sort_option }}" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:border-[#bb0004] hover:text-[#bb0004] transition-colors no-underline shadow-2xs">
+                  <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% for p in selected_pricing %}&pricing={{ p }}{% endfor %}{% for cat in selected_categories %}&category={{ cat }}{% endfor %}{% for m in selected_modules %}&modules={{ m }}{% endfor %}&sort={{ sort_option }}" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:border-[#bb0004] hover:text-[#bb0004] transition-colors no-underline shadow-2xs">
                     Previous
                   </a>
                 {% endif %}
@@ -313,7 +419,7 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                  <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% for cat in selected_categories %}&category={{ cat }}{% endfor %}{% for m in selected_modules %}&modules={{ m }}{% endfor %}&sort={{ sort_option }}" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:border-[#bb0004] hover:text-[#bb0004] transition-colors no-underline shadow-2xs">
+                  <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% for p in selected_pricing %}&pricing={{ p }}{% endfor %}{% for cat in selected_categories %}&category={{ cat }}{% endfor %}{% for m in selected_modules %}&modules={{ m }}{% endfor %}&sort={{ sort_option }}" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:border-[#bb0004] hover:text-[#bb0004] transition-colors no-underline shadow-2xs">
                     Next
                   </a>
                 {% endif %}

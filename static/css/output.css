@@ -2595,6 +2595,12 @@
     .group-hover\:rotate-180:is(:where(.group):hover *) {
       rotate: 180deg;
     }
+    .group-hover\:bg-amber-100:is(:where(.group):hover *) {
+      background-color: var(--color-amber-100);
+    }
+    .group-hover\:bg-emerald-100:is(:where(.group):hover *) {
+      background-color: var(--color-emerald-100);
+    }
     .group-hover\:bg-slate-200:is(:where(.group):hover *) {
       background-color: var(--color-slate-200);
     }

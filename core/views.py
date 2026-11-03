@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.db.models import Q, Count
+from django.db.models import Q, Count, F
 from django.http import HttpResponse, JsonResponse
 from company.models import InternshipTrack, TrackCategory
 from accounts.models import InternProfile
@@ -67,6 +67,7 @@ def home(request):
 
 def track_list(request):
     search_query = request.GET.get("q", "").strip()
+    selected_pricing = [p for p in request.GET.getlist("pricing") if p in ["free", "offer", "paid"]]
     selected_categories = [c for c in request.GET.getlist("category") if c]
     selected_modules = [m for m in request.GET.getlist("modules") if m]
     sort_option = request.GET.get("sort", "newest")
@@ -82,6 +83,16 @@ def track_list(request):
             Q(points__icontains=search_query) |
             Q(category__name__icontains=search_query)
         )
+
+    if selected_pricing:
+        pricing_q = Q()
+        if "free" in selected_pricing:
+            pricing_q |= Q(is_free=True) | Q(price=0)
+        if "offer" in selected_pricing:
+            pricing_q |= Q(is_free=False) & Q(discount_price__isnull=False) & Q(discount_price__lt=F("price"))
+        if "paid" in selected_pricing:
+            pricing_q |= Q(is_free=False) & Q(price__gt=0) & (Q(discount_price__isnull=True) | Q(discount_price__gte=F("price")))
+        tracks_qs = tracks_qs.filter(pricing_q)
 
     if selected_categories:
         tracks_qs = tracks_qs.filter(category__slug__in=selected_categories)
@@ -116,6 +127,13 @@ def track_list(request):
         track_count=Count("tracks", filter=Q(tracks__is_active=True))
     ).order_by("name")
 
+    base_tracks = InternshipTrack.objects.filter(is_active=True)
+    pricing_counts = {
+        "free": base_tracks.filter(Q(is_free=True) | Q(price=0)).count(),
+        "offer": base_tracks.filter(Q(is_free=False) & Q(discount_price__isnull=False) & Q(discount_price__lt=F("price"))).count(),
+        "paid": base_tracks.filter(Q(is_free=False) & Q(price__gt=0) & (Q(discount_price__isnull=True) | Q(discount_price__gte=F("price")))).count(),
+    }
+
     paginator = Paginator(tracks_qs, 9)
     page_obj = paginator.get_page(request.GET.get("page"))
 
@@ -126,6 +144,8 @@ def track_list(request):
             "page_obj": page_obj,
             "categories": categories,
             "search_query": search_query,
+            "selected_pricing": selected_pricing,
+            "pricing_counts": pricing_counts,
             "selected_categories": selected_categories,
             "selected_modules": selected_modules,
             "sort_option": sort_option,
