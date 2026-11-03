@@ -181,7 +181,7 @@
                 Welcome back, <span class="text-[#ffdad5]" style="color: #ffdad5 !important;">{{ profile.full_name }}</span>
               </h1>
               <p class="text-slate-300 text-xs sm:text-sm mt-1 max-w-xl leading-relaxed">
-                {{ profile.track.name }} · {{ profile.college_name }}
+                {{ profile.track.name }}{% if profile.college_name %} · {{ profile.college_name }}{% endif %}
               </p>
             </div>
 
@@ -307,12 +307,12 @@
 
             <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
               <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">College / University</span>
-              <span class="font-medium text-[#151c27] text-sm block truncate" title="{{ profile.college_name }}">{{ profile.college_name }}</span>
+              <span class="font-medium text-[#151c27] text-sm block truncate" title="{{ profile.college_name }}">{{ profile.college_name|default:"Not specified" }}</span>
             </div>
 
             <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
               <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Degree</span>
-              <span class="font-medium text-[#151c27] text-sm block">{{ profile.degree }}</span>
+              <span class="font-medium text-[#151c27] text-sm block">{{ profile.degree|default:"Not specified" }}</span>
             </div>
 
             <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">

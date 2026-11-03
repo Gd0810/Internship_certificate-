@@ -17,8 +17,16 @@ INPUT_CLASSES = (
 
 class RegistrationForm(forms.Form):
     full_name = forms.CharField(max_length=150, widget=forms.TextInput(attrs={"class": INPUT_CLASSES, "placeholder": "Full name"}))
-    college_name = forms.CharField(max_length=200, widget=forms.TextInput(attrs={"class": INPUT_CLASSES, "placeholder": "College / university name"}))
-    degree = forms.CharField(max_length=150, widget=forms.TextInput(attrs={"class": INPUT_CLASSES, "placeholder": "Degree, e.g. B.Tech CSE"}))
+    college_name = forms.CharField(
+        max_length=200,
+        required=False,
+        widget=forms.TextInput(attrs={"class": INPUT_CLASSES, "placeholder": "College / university name (optional)"})
+    )
+    degree = forms.CharField(
+        max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={"class": INPUT_CLASSES, "placeholder": "Degree, e.g. B.Tech CSE (optional)"})
+    )
     track = forms.ModelChoiceField(
         queryset=InternshipTrack.objects.filter(is_active=True),
         widget=forms.Select(attrs={"class": INPUT_CLASSES}),
@@ -26,11 +34,16 @@ class RegistrationForm(forms.Form):
     )
     email = forms.EmailField(widget=forms.EmailInput(attrs={"class": INPUT_CLASSES, "placeholder": "you@example.com"}))
     mobile_number = forms.CharField(
-        max_length=16, validators=[mobile_validator],
+        max_length=20,
         widget=forms.TextInput(attrs={"class": INPUT_CLASSES, "placeholder": "+91 98765 43210"}),
     )
     password = forms.CharField(widget=forms.PasswordInput(attrs={"class": INPUT_CLASSES, "placeholder": "Password"}))
     re_enter_password = forms.CharField(widget=forms.PasswordInput(attrs={"class": INPUT_CLASSES, "placeholder": "Re-enter password"}))
+
+    def clean_mobile_number(self):
+        val = self.cleaned_data.get("mobile_number", "").replace(" ", "").replace("-", "").strip()
+        mobile_validator(val)
+        return val
 
     def clean_email(self):
         email = self.cleaned_data["email"].lower().strip()

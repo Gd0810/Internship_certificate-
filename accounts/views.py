@@ -46,8 +46,8 @@ def register(request):
                 InternProfile.objects.create(
                     user=user,
                     full_name=data["full_name"],
-                    college_name=data["college_name"],
-                    degree=data["degree"],
+                    college_name=data.get("college_name", "") or "",
+                    degree=data.get("degree", "") or "",
                     track=data["track"],
                     mobile_number=data["mobile_number"],
                 )

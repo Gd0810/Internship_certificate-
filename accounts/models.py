@@ -23,8 +23,8 @@ class InternProfile(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="intern_profile")
     full_name = models.CharField(max_length=150)
-    college_name = models.CharField(max_length=200)
-    degree = models.CharField(max_length=150)
+    college_name = models.CharField(max_length=200, blank=True, default="")
+    degree = models.CharField(max_length=150, blank=True, default="")
     track = models.ForeignKey(
         "company.InternshipTrack", on_delete=models.PROTECT, related_name="enrolled_profiles"
     )

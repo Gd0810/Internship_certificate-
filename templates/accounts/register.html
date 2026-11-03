@@ -107,10 +107,11 @@
               {% endfor %}
             </div>
 
-            <!-- College Name -->
+            <!-- College Name (Optional) -->
             <div>
-              <label for="{{ form.college_name.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1.5">
-                College / University *
+              <label for="{{ form.college_name.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                <span>College / University</span>
+                <span class="text-[11px] text-slate-400 font-normal lowercase">optional</span>
               </label>
               {{ form.college_name }}
               {% for e in form.college_name.errors %}
@@ -118,10 +119,11 @@
               {% endfor %}
             </div>
 
-            <!-- Degree -->
+            <!-- Degree (Optional) -->
             <div>
-              <label for="{{ form.degree.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1.5">
-                Degree / Qualification *
+              <label for="{{ form.degree.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                <span>Degree / Qualification</span>
+                <span class="text-[11px] text-slate-400 font-normal lowercase">optional</span>
               </label>
               {{ form.degree }}
               {% for e in form.degree.errors %}
@@ -129,12 +131,84 @@
               {% endfor %}
             </div>
 
-            <!-- Internship Track -->
-            <div>
+            <!-- Internship Track with Searchable Dropdown -->
+            <div class="relative" id="track-searchable-combobox">
               <label for="{{ form.track.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1.5">
                 Internship Track *
               </label>
-              {{ form.track }}
+
+              <!-- Hidden native select for standard form POST submission and validation -->
+              <div class="hidden">
+                {{ form.track }}
+              </div>
+
+              <!-- Custom Searchable Dropdown Trigger -->
+              <div class="relative">
+                <button
+                  type="button"
+                  id="track-select-trigger"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  class="icp-input w-full rounded-lg border border-[--c-border] bg-white px-4 py-2.5 text-left text-sm text-[--c-ink] flex items-center justify-between gap-2 shadow-2xs hover:border-[#bb0004] focus:outline-none focus:ring-2 focus:ring-[#bb0004]/20 transition cursor-pointer"
+                >
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span class="material-symbols-outlined text-lg text-[#bb0004] shrink-0">school</span>
+                    <span id="track-select-label" class="truncate font-medium text-slate-400">
+                      Select an internship track
+                    </span>
+                  </div>
+                  <span id="track-chevron" class="material-symbols-outlined text-slate-400 text-lg shrink-0 transition-transform duration-200">
+                    expand_more
+                  </span>
+                </button>
+
+                <!-- Searchable Dropdown Menu -->
+                <div
+                  id="track-dropdown-panel"
+                  class="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-2xl border border-slate-200 shadow-xl z-50 overflow-hidden hidden transform transition-all duration-150 origin-top"
+                  style="box-shadow: 0 12px 30px -4px rgba(16, 23, 37, 0.16), 0 4px 12px -2px rgba(16, 23, 37, 0.08);"
+                >
+                  <!-- Search Bar inside dropdown -->
+                  <div class="p-2.5 border-b border-slate-100 bg-slate-50/90 sticky top-0 z-10">
+                    <div class="relative">
+                      <span class="material-symbols-outlined text-slate-400 text-lg absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        search
+                      </span>
+                      <input
+                        type="text"
+                        id="track-search-input"
+                        placeholder="Search track (e.g. Python, AI, React, Cloud...)"
+                        class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-[#151c27] placeholder:text-slate-400 focus:outline-none focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 transition"
+                        autocomplete="off"
+                      />
+                      <button
+                        type="button"
+                        id="track-search-clear"
+                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 hidden p-0.5 rounded cursor-pointer border-0 bg-transparent flex items-center justify-center"
+                        title="Clear search"
+                      >
+                        <span class="material-symbols-outlined text-sm">close</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Options List -->
+                  <ul
+                    id="track-options-list"
+                    role="listbox"
+                    class="max-h-60 overflow-y-auto divide-y divide-slate-100/60 p-1.5 m-0 list-none"
+                  >
+                    <!-- Populated dynamically from native select -->
+                  </ul>
+
+                  <!-- Empty State when no search results -->
+                  <div id="track-no-results" class="py-6 px-4 text-center text-xs text-slate-400 hidden">
+                    <span class="material-symbols-outlined text-2xl block mb-1 text-slate-300">search_off</span>
+                    <span>No internship tracks match your search</span>
+                  </div>
+                </div>
+              </div>
+
               {% for e in form.track.errors %}
                 <div class="text-red-500 text-xs mt-1 font-semibold">{{ e }}</div>
               {% endfor %}
@@ -209,6 +283,197 @@
 
   </div>
 </main>
+
+<!-- Searchable Track Dropdown Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const nativeSelect = document.getElementById('{{ form.track.id_for_label }}');
+    const combobox = document.getElementById('track-searchable-combobox');
+    const trigger = document.getElementById('track-select-trigger');
+    const label = document.getElementById('track-select-label');
+    const panel = document.getElementById('track-dropdown-panel');
+    const searchInput = document.getElementById('track-search-input');
+    const clearBtn = document.getElementById('track-search-clear');
+    const optionsList = document.getElementById('track-options-list');
+    const noResults = document.getElementById('track-no-results');
+    const chevron = document.getElementById('track-chevron');
+
+    if (!nativeSelect || !trigger || !panel || !optionsList) return;
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    // Build the list items from native select options
+    function renderOptions() {
+      optionsList.innerHTML = '';
+      const options = Array.from(nativeSelect.options);
+
+      options.forEach(function (opt) {
+        if (!opt.value) return; // Skip placeholder option
+
+        const li = document.createElement('li');
+        li.className = 'track-option-item flex items-center justify-between px-3.5 py-2.5 rounded-xl cursor-pointer transition text-xs sm:text-sm text-slate-700 hover:bg-[#ffdad5]/40 hover:text-[#bb0004]';
+        li.setAttribute('role', 'option');
+        li.setAttribute('data-value', opt.value);
+        li.setAttribute('data-text', opt.text.trim());
+
+        const isSelected = opt.selected || nativeSelect.value === opt.value;
+        if (isSelected) {
+          li.classList.add('bg-[#ffdad5]/40', 'font-bold', 'text-[#bb0004]');
+          li.setAttribute('aria-selected', 'true');
+        }
+
+        li.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="material-symbols-outlined text-base ${isSelected ? 'text-[#bb0004]' : 'text-slate-400'} shrink-0 option-icon">
+              ${isSelected ? 'check_circle' : 'radio_button_unchecked'}
+            </span>
+            <span class="truncate option-name">${escapeHtml(opt.text.trim())}</span>
+          </div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-2 shrink-0">Track</span>
+        `;
+
+        li.addEventListener('click', function () {
+          selectTrack(opt.value, opt.text.trim());
+        });
+
+        optionsList.appendChild(li);
+      });
+
+      syncSelectedFromNative();
+    }
+
+    function syncSelectedFromNative() {
+      const selectedIndex = nativeSelect.selectedIndex;
+      if (selectedIndex >= 0 && nativeSelect.options[selectedIndex] && nativeSelect.options[selectedIndex].value) {
+        const text = nativeSelect.options[selectedIndex].text.trim();
+        label.textContent = text;
+        label.classList.remove('text-slate-400');
+        label.classList.add('text-[#151c27]', 'font-bold');
+      } else {
+        label.textContent = 'Select an internship track';
+        label.classList.remove('text-[#151c27]', 'font-bold');
+        label.classList.add('text-slate-400');
+      }
+
+      optionsList.querySelectorAll('.track-option-item').forEach(function (li) {
+        const val = li.getAttribute('data-value');
+        const isMatch = val === nativeSelect.value;
+        const icon = li.querySelector('.option-icon');
+        if (isMatch) {
+          li.classList.add('bg-[#ffdad5]/40', 'font-bold', 'text-[#bb0004]');
+          li.setAttribute('aria-selected', 'true');
+          if (icon) {
+            icon.textContent = 'check_circle';
+            icon.classList.remove('text-slate-400');
+            icon.classList.add('text-[#bb0004]');
+          }
+        } else {
+          li.classList.remove('bg-[#ffdad5]/40', 'font-bold', 'text-[#bb0004]');
+          li.removeAttribute('aria-selected');
+          if (icon) {
+            icon.textContent = 'radio_button_unchecked';
+            icon.classList.remove('text-[#bb0004]');
+            icon.classList.add('text-slate-400');
+          }
+        }
+      });
+    }
+
+    function selectTrack(value, text) {
+      nativeSelect.value = value;
+      nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      syncSelectedFromNative();
+      closeDropdown();
+      trigger.focus();
+    }
+
+    function openDropdown() {
+      panel.classList.remove('hidden');
+      trigger.setAttribute('aria-expanded', 'true');
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+      trigger.classList.add('ring-2', 'ring-[#bb0004]/20', 'border-[#bb0004]');
+      searchInput.value = '';
+      filterTracks('');
+      setTimeout(function () {
+        searchInput.focus();
+      }, 50);
+    }
+
+    function closeDropdown() {
+      panel.classList.add('hidden');
+      trigger.setAttribute('aria-expanded', 'false');
+      if (chevron) chevron.style.transform = 'rotate(0deg)';
+      trigger.classList.remove('ring-2', 'ring-[#bb0004]/20', 'border-[#bb0004]');
+    }
+
+    function filterTracks(query) {
+      const q = (query || '').toLowerCase().trim();
+      let visibleCount = 0;
+
+      optionsList.querySelectorAll('.track-option-item').forEach(function (li) {
+        const trackText = (li.getAttribute('data-text') || '').toLowerCase();
+        if (!q || trackText.includes(q)) {
+          li.style.display = 'flex';
+          visibleCount++;
+        } else {
+          li.style.display = 'none';
+        }
+      });
+
+      if (noResults) {
+        noResults.classList.toggle('hidden', visibleCount > 0);
+      }
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', q.length === 0);
+      }
+    }
+
+    // Toggle dropdown
+    trigger.addEventListener('click', function (e) {
+      e.preventDefault();
+      const isOpen = !panel.classList.contains('hidden');
+      if (isOpen) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    });
+
+    // Real-time filter typing
+    searchInput.addEventListener('input', function () {
+      filterTracks(searchInput.value);
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        filterTracks('');
+        searchInput.focus();
+      });
+    }
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (!combobox.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    // Keyboard support
+    combobox.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeDropdown();
+        trigger.focus();
+      }
+    });
+
+    renderOptions();
+  });
+</script>
 
 {% include "core/_footer.html" %}
 {% endblock %}
