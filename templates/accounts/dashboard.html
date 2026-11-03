@@ -485,15 +485,32 @@
               {% endif %}
 
               <!-- Submission Deliverables -->
-              {% if row.task.deliverables %}
-                <div class="pt-2">
-                  <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2.5">Required Deliverables:</h5>
-                  <div class="flex flex-wrap gap-2">
+              {% if row.has_deliverables %}
+                <div class="pt-2" id="deliverables-container-{{ row.task.id }}">
+                  <div class="flex items-center justify-between gap-2 mb-2">
+                    <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">Required Deliverables:</h5>
+                    <span id="deliv-status-pill-{{ row.task.id }}" class="text-[10px] font-bold px-2.5 py-0.5 rounded-md {% if row.all_deliverables_submitted %}bg-emerald-50 text-emerald-700 border border-emerald-200{% else %}bg-amber-50 text-amber-700 border border-amber-200{% endif %}">
+                      {% if row.all_deliverables_submitted %}
+                        ✓ Links Submitted
+                      {% else %}
+                        ⚠️ Links Required to Complete
+                      {% endif %}
+                    </span>
+                  </div>
+                  <div class="flex flex-wrap gap-2" id="deliverables-badges-{{ row.task.id }}">
                     {% for deliv in row.deliverable_items %}
-                      <span class="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-sm text-slate-400">link</span>
-                        <span>{{ deliv.name }}</span>
-                      </span>
+                      {% if deliv.is_submitted %}
+                        <a href="{{ deliv.value }}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800 flex items-center gap-1.5 hover:bg-emerald-100 transition-colors no-underline group/link" title="Click to view submitted link: {{ deliv.value }}">
+                          <span class="material-symbols-outlined text-sm text-emerald-600">check_circle</span>
+                          <span>{{ deliv.name }}</span>
+                          <span class="material-symbols-outlined text-xs text-emerald-500 group-hover/link:translate-x-0.5 transition-transform">open_in_new</span>
+                        </a>
+                      {% else %}
+                        <span class="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-600 flex items-center gap-1.5">
+                          <span class="material-symbols-outlined text-sm text-slate-400">link</span>
+                          <span>{{ deliv.name }} <span class="text-[10px] text-amber-600 font-bold">(Not Submitted)</span></span>
+                        </span>
+                      {% endif %}
                     {% endfor %}
                   </div>
                 </div>
@@ -501,25 +518,44 @@
 
               <!-- Action Buttons -->
               <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
-                {% if row.task.deliverables %}
+                {% if row.has_deliverables %}
                   <button type="button" data-open-modal="{{ row.task.id }}" class="flex-1 bg-[#151c27] hover:bg-slate-800 text-white font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border-0">
                     <span class="material-symbols-outlined text-base">upload_file</span>
-                    <span>Edit Submission Links</span>
+                    <span id="btn-modal-label-{{ row.task.id }}">{% if row.all_deliverables_submitted %}Edit Submission Links{% else %}Submit Deliverable Links{% endif %}</span>
                   </button>
                 {% endif %}
 
-                <button type="button" id="btn-complete-{{ row.task.id }}" data-task-complete="{{ row.task.id }}" data-completed="{% if row.completed %}true{% else %}false{% endif %}" class="flex-1 font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border {% if row.completed %}bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100{% else %}bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200{% endif %}">
+                <button type="button" 
+                  id="btn-complete-{{ row.task.id }}" 
+                  data-task-complete="{{ row.task.id }}" 
+                  data-has-deliverables="{% if row.has_deliverables %}true{% else %}false{% endif %}"
+                  data-all-submitted="{% if row.all_deliverables_submitted %}true{% else %}false{% endif %}"
+                  data-completed="{% if row.completed %}true{% else %}false{% endif %}" 
+                  class="flex-1 font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border {% if row.completed %}bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100{% else %}bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200{% endif %}">
                   <span>{% if row.completed %}✓ Module Completed{% else %}Mark as Completed{% endif %}</span>
                 </button>
               </div>
 
               <!-- Modal Popup for Deliverables Submission -->
-              {% if row.task.deliverables %}
+              {% if row.has_deliverables %}
                 <div id="modal-{{ row.task.id }}" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-                  <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 text-left border border-slate-200">
+                  <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-5 text-left border border-slate-200">
                     <div>
-                      <h3 class="text-xl font-extrabold text-[#151c27]">Submit Module Deliverables</h3>
+                      <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-extrabold text-[#bb0004] bg-[#ffdad5]/40 border border-[#bb0004]/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                          Module {{ row.task.module_number }} Deliverables
+                        </span>
+                        <button type="button" data-close-modal="{{ row.task.id }}" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer border-0 bg-transparent">
+                          <span class="material-symbols-outlined text-xl">close</span>
+                        </button>
+                      </div>
+                      <h3 class="text-xl font-extrabold text-[#151c27] mt-2">Submit Module Deliverables</h3>
                       <p class="text-xs text-slate-500 mt-1">Provide links for: <strong class="text-[#bb0004]">{{ row.task.title }}</strong></p>
+                    </div>
+
+                    <div id="modal-alert-{{ row.task.id }}" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 font-semibold flex items-start gap-2">
+                      <span class="material-symbols-outlined text-base text-amber-600 mt-0.5 shrink-0">lock</span>
+                      <span class="modal-alert-text leading-relaxed">You must provide links for all required deliverables before marking this module as complete.</span>
                     </div>
 
                     {% if row.task.source_link %}
@@ -535,11 +571,14 @@
                       </div>
                     {% endif %}
 
-                    <form class="space-y-4">
+                    <form class="space-y-4" onsubmit="return false;">
                       {% for deliv in row.deliverable_items %}
                         <div>
-                          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">{{ deliv.name }} *</label>
-                          <input type="text" data-deliv-name="{{ deliv.name }}" value="{{ deliv.value }}" placeholder="https://..." class="icp-modal-sub-input w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm text-[#151c27] focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 outline-none transition-all">
+                          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                            <span>{{ deliv.name }} <span class="text-red-500">*</span></span>
+                            <span class="text-[10px] text-slate-400 font-normal lowercase">URL link required</span>
+                          </label>
+                          <input type="url" data-deliv-name="{{ deliv.name }}" value="{{ deliv.value }}" placeholder="https://..." class="icp-modal-sub-input w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm text-[#151c27] focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 outline-none transition-all" required>
                         </div>
                       {% endfor %}
 
@@ -851,12 +890,26 @@
       });
     }
 
+    // Helper to escape HTML for dynamic badges
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
     // Modal dialog handling
     document.querySelectorAll('[data-open-modal]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const taskId = btn.getAttribute('data-open-modal');
         const modal = document.getElementById('modal-' + taskId);
-        if (modal) modal.classList.remove('hidden');
+        if (modal) {
+          const alertBox = modal.querySelector('#modal-alert-' + taskId);
+          if (alertBox) alertBox.classList.add('hidden');
+          modal.querySelectorAll('.icp-modal-sub-input').forEach(function(inp) {
+            inp.classList.remove('border-red-400', 'bg-red-50/30');
+          });
+          modal.classList.remove('hidden');
+        }
       });
     });
 
@@ -868,18 +921,83 @@
       });
     });
 
-    // Save Deliverables
+    // Helper to validate modal inputs
+    function getModalDeliverables(taskId) {
+      const modal = document.getElementById('modal-' + taskId);
+      if (!modal) return { deliverables: {}, missing: [] };
+      const deliverables = {};
+      const missing = [];
+      modal.querySelectorAll('.icp-modal-sub-input').forEach(function (input) {
+        const delivName = input.getAttribute('data-deliv-name');
+        const val = input.value.trim();
+        if (delivName) {
+          deliverables[delivName] = val;
+          if (!val) {
+            missing.push(delivName);
+            input.classList.add('border-red-400', 'bg-red-50/30');
+          } else {
+            input.classList.remove('border-red-400', 'bg-red-50/30');
+          }
+        }
+      });
+      return { deliverables: deliverables, missing: missing };
+    }
+
+    // Update UI when deliverables are submitted
+    function updateDeliverablesUI(taskId, deliverableItems, allSubmitted) {
+      const badgesContainer = document.getElementById('deliverables-badges-' + taskId);
+      if (badgesContainer && Array.isArray(deliverableItems)) {
+        badgesContainer.innerHTML = deliverableItems.map(function(item) {
+          if (item.is_submitted) {
+            return '<a href="' + escapeHtml(item.value) + '" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800 flex items-center gap-1.5 hover:bg-emerald-100 transition-colors no-underline group/link" title="Click to view submitted link: ' + escapeHtml(item.value) + '"><span class="material-symbols-outlined text-sm text-emerald-600">check_circle</span><span>' + escapeHtml(item.name) + '</span><span class="material-symbols-outlined text-xs text-emerald-500 group-hover/link:translate-x-0.5 transition-transform">open_in_new</span></a>';
+          } else {
+            return '<span class="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-600 flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-slate-400">link</span><span>' + escapeHtml(item.name) + ' <span class="text-[10px] text-amber-600 font-bold">(Not Submitted)</span></span></span>';
+          }
+        }).join('');
+      }
+
+      const statusPill = document.getElementById('deliv-status-pill-' + taskId);
+      if (statusPill) {
+        if (allSubmitted) {
+          statusPill.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200';
+          statusPill.textContent = '✓ Links Submitted';
+        } else {
+          statusPill.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200';
+          statusPill.textContent = '⚠️ Links Required to Complete';
+        }
+      }
+
+      const modalLabel = document.getElementById('btn-modal-label-' + taskId);
+      if (modalLabel) {
+        modalLabel.textContent = allSubmitted ? 'Edit Submission Links' : 'Submit Deliverable Links';
+      }
+
+      const completeBtn = document.getElementById('btn-complete-' + taskId);
+      if (completeBtn) {
+        completeBtn.setAttribute('data-all-submitted', allSubmitted ? 'true' : 'false');
+      }
+    }
+
+    // Save Deliverables inside modal
     document.querySelectorAll('[data-task-save]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const taskId = btn.getAttribute('data-task-save');
         const modal = document.getElementById('modal-' + taskId);
-        const deliverables = {};
-        if (modal) {
-          modal.querySelectorAll('.icp-modal-sub-input').forEach(function (input) {
-            const delivName = input.getAttribute('data-deliv-name');
-            if (delivName) deliverables[delivName] = input.value.trim();
-          });
+        const alertBox = modal ? modal.querySelector('#modal-alert-' + taskId) : null;
+        const alertText = alertBox ? alertBox.querySelector('.modal-alert-text') : null;
+
+        const check = getModalDeliverables(taskId);
+        if (check.missing.length > 0) {
+          if (alertBox && alertText) {
+            alertText.textContent = 'Please enter valid links for all required deliverables: ' + check.missing.join(', ');
+            alertBox.classList.remove('hidden');
+          }
+          const firstMissing = modal.querySelector('.border-red-400');
+          if (firstMissing) firstMissing.focus();
+          return;
         }
+
+        if (alertBox) alertBox.classList.add('hidden');
 
         btn.disabled = true;
         const origText = btn.textContent;
@@ -891,7 +1009,7 @@
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
           },
-          body: JSON.stringify({ deliverables: deliverables }),
+          body: JSON.stringify({ deliverables: check.deliverables }),
         })
           .then((r) => r.json())
           .then((data) => {
@@ -899,11 +1017,22 @@
             btn.textContent = origText;
             if (data.ok) {
               btn.textContent = '✓ Submitted!';
+              updateDeliverablesUI(taskId, data.deliverable_items, data.all_deliverables_submitted);
               setTimeout(function () {
                 btn.textContent = origText;
                 if (modal) modal.classList.add('hidden');
               }, 800);
+            } else {
+              if (alertBox && alertText) {
+                alertText.textContent = data.error || 'Failed to save deliverables.';
+                alertBox.classList.remove('hidden');
+              }
             }
+          })
+          .catch((err) => {
+            btn.disabled = false;
+            btn.textContent = origText;
+            console.error('Error submitting deliverables:', err);
           });
       });
     });
@@ -912,8 +1041,30 @@
     document.querySelectorAll('[data-task-complete]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const taskId = btn.getAttribute('data-task-complete');
+        const hasDeliverables = btn.getAttribute('data-has-deliverables') === 'true';
         const isCurrentlyDone = btn.getAttribute('data-completed') === 'true';
         const targetState = !isCurrentlyDone;
+
+        // If attempting to mark as completed AND module has required deliverables:
+        if (targetState && hasDeliverables) {
+          const check = getModalDeliverables(taskId);
+          if (check.missing.length > 0) {
+            // STOP & PREVENT COMPLETION: Open deliverables modal and alert the student
+            const modal = document.getElementById('modal-' + taskId);
+            if (modal) {
+              const alertBox = modal.querySelector('#modal-alert-' + taskId);
+              const alertText = alertBox ? alertBox.querySelector('.modal-alert-text') : null;
+              if (alertBox && alertText) {
+                alertText.textContent = '⚠️ Deliverables Required: You must submit your project links before this module can be marked as complete.';
+                alertBox.classList.remove('hidden');
+              }
+              modal.classList.remove('hidden');
+              const firstMissing = modal.querySelector('.border-red-400');
+              if (firstMissing) firstMissing.focus();
+            }
+            return;
+          }
+        }
 
         const modal = document.getElementById('modal-' + taskId);
         const deliverables = {};
@@ -940,7 +1091,23 @@
           .then((r) => r.json())
           .then((data) => {
             btn.disabled = false;
-            if (!data.ok) return;
+            if (!data.ok) {
+              if (hasDeliverables) {
+                const modal = document.getElementById('modal-' + taskId);
+                if (modal) {
+                  const alertBox = modal.querySelector('#modal-alert-' + taskId);
+                  const alertText = alertBox ? alertBox.querySelector('.modal-alert-text') : null;
+                  if (alertBox && alertText) {
+                    alertText.textContent = data.error || 'Please submit all required deliverables first.';
+                    alertBox.classList.remove('hidden');
+                  }
+                  modal.classList.remove('hidden');
+                }
+              } else {
+                alert(data.error || 'Could not update task status.');
+              }
+              return;
+            }
 
             btn.setAttribute('data-completed', data.is_completed ? 'true' : 'false');
             btn.innerHTML = data.is_completed
@@ -951,6 +1118,10 @@
               btn.className = "flex-1 font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100";
             } else {
               btn.className = "flex-1 font-bold text-xs py-3 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer border bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200";
+            }
+
+            if (data.deliverable_items) {
+              updateDeliverablesUI(taskId, data.deliverable_items, data.all_deliverables_submitted);
             }
 
             const pill = document.getElementById('status-pill-' + taskId);

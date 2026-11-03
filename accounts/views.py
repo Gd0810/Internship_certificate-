@@ -99,17 +99,32 @@ def dashboard(request):
     for t in tasks:
         p = progress_map.get(t.id)
         sub_data = p.submission_data if (p and p.submission_data) else {}
+        raw_delivs = t.deliverables if isinstance(t.deliverables, list) else []
+        clean_delivs = [str(d).strip() for d in raw_delivs if str(d).strip()]
+
         deliverable_items = []
-        for deliv in t.deliverables:
+        missing_count = 0
+        for deliv in clean_delivs:
+            val = str(sub_data.get(deliv, "")).strip()
+            if not val:
+                missing_count += 1
             deliverable_items.append({
                 "name": deliv,
-                "value": sub_data.get(deliv, "")
+                "value": val,
+                "is_submitted": bool(val),
             })
+
+        has_deliverables = len(clean_delivs) > 0
+        all_deliverables_submitted = has_deliverables and (missing_count == 0)
+
         task_rows.append({
             "task": t,
             "completed": p.is_completed if p else False,
             "submission_data": sub_data,
             "deliverable_items": deliverable_items,
+            "has_deliverables": has_deliverables,
+            "all_deliverables_submitted": all_deliverables_submitted,
+            "missing_count": missing_count,
         })
 
     from urllib.parse import quote
@@ -168,8 +183,26 @@ def toggle_task(request, task_id):
         return HttpResponseBadRequest("Invalid task.")
 
     progress, _ = UserTaskProgress.objects.get_or_create(profile=profile, task=task)
-    progress.is_completed = not progress.is_completed
-    progress.completed_at = timezone.now() if progress.is_completed else None
+
+    # If currently not completed, intern is attempting to mark as completed
+    if not progress.is_completed:
+        raw_delivs = task.deliverables if isinstance(task.deliverables, list) else []
+        required_delivs = [str(d).strip() for d in raw_delivs if str(d).strip()]
+        if required_delivs:
+            curr_data = progress.submission_data or {}
+            missing = [d for d in required_delivs if not str(curr_data.get(d, "")).strip()]
+            if missing:
+                return JsonResponse({
+                    "ok": False,
+                    "error": f"Please submit links for all required deliverables ({', '.join(missing)}) before marking this module as complete.",
+                    "missing": missing,
+                }, status=400)
+        progress.is_completed = True
+        progress.completed_at = timezone.now()
+    else:
+        progress.is_completed = False
+        progress.completed_at = None
+
     progress.save()
 
     return JsonResponse({
@@ -203,22 +236,58 @@ def save_submission(request, task_id):
     mark_complete = body.get("mark_complete", None)
 
     progress, _ = UserTaskProgress.objects.get_or_create(profile=profile, task=task)
-    if deliverables_submitted:
+    if deliverables_submitted and isinstance(deliverables_submitted, dict):
         current_sub = progress.submission_data or {}
-        current_sub.update(deliverables_submitted)
+        for k, v in deliverables_submitted.items():
+            if str(k).strip():
+                current_sub[str(k).strip()] = str(v).strip()
         progress.submission_data = current_sub
 
+    raw_delivs = task.deliverables if isinstance(task.deliverables, list) else []
+    required_delivs = [str(d).strip() for d in raw_delivs if str(d).strip()]
+
     if mark_complete is not None:
-        progress.is_completed = bool(mark_complete)
-        progress.completed_at = timezone.now() if progress.is_completed else None
+        target_complete = bool(mark_complete)
+        if target_complete:
+            if required_delivs:
+                curr_data = progress.submission_data or {}
+                missing = [d for d in required_delivs if not str(curr_data.get(d, "")).strip()]
+                if missing:
+                    return JsonResponse({
+                        "ok": False,
+                        "error": f"Please submit links for all required deliverables ({', '.join(missing)}) before marking this module as complete.",
+                        "missing": missing,
+                        "submission_data": progress.submission_data,
+                    }, status=400)
+            progress.is_completed = True
+            progress.completed_at = timezone.now()
+        else:
+            progress.is_completed = False
+            progress.completed_at = None
 
     progress.save()
+
+    curr_data = progress.submission_data or {}
+    deliverable_items = []
+    missing_count = 0
+    for d in required_delivs:
+        val = str(curr_data.get(d, "")).strip()
+        if not val:
+            missing_count += 1
+        deliverable_items.append({
+            "name": d,
+            "value": val,
+            "is_submitted": bool(val),
+        })
 
     return JsonResponse({
         "ok": True,
         "task_id": task.id,
         "is_completed": progress.is_completed,
         "submission_data": progress.submission_data,
+        "deliverable_items": deliverable_items,
+        "has_deliverables": len(required_delivs) > 0,
+        "all_deliverables_submitted": (len(required_delivs) > 0 and missing_count == 0),
         "completed_count": profile.completed_tasks,
         "total_count": profile.total_tasks,
         "all_completed": profile.all_tasks_completed,
