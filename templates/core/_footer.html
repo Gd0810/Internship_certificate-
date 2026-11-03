@@ -1,3 +1,4 @@
+{% load static %}
 <!-- Trust Banner + Rich Footer Component -->
 <footer class="w-full bg-[#f0f3ff] border-t border-[#e7bdb7]/20 mt-auto">
   <!-- Trust Banner Section (Attached cleanly to Footer) -->
@@ -28,12 +29,11 @@
       </div>
 
       <div class="flex flex-col items-center text-center">
-        <span class="text-[10px] text-[#5d3f3b] uppercase tracking-wider mb-1">An Initiative by</span>
-        <div class="flex items-center gap-1.5">
-          <span class="w-6 h-6 bg-[#bb0004] rounded flex items-center justify-center text-white text-[12px] font-bold">R</span>
-          <span class="text-xl font-bold text-[#bb0004] tracking-tight">Redback</span>
-        </div>
-        <span class="text-[10px] text-[#5d3f3b] mt-1">Empowering Minds. Building Futures.</span>
+        <span class="text-[11px] font-bold text-[#5d3f3b] uppercase tracking-wider mb-2">An Initiative by</span>
+        <a href="https://redback.in" target="_blank" rel="noopener" class="inline-flex items-center no-underline hover:opacity-90 transition-opacity" title="Redback IT Solutions">
+          <img src="{% static 'img/redback-og-banner.png' %}" alt="Redback" class="h-12 sm:h-14 md:h-16 w-auto object-contain">
+        </a>
+        <span class="text-[11px] font-medium text-[#5d3f3b] mt-2">Empowering Minds. Building Futures.</span>
       </div>
     </div>
   </div>
@@ -43,10 +43,9 @@
     <div class="max-w-[1280px] mx-auto px-4 lg:px-6">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
         <div class="col-span-1 md:col-span-1">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="w-6 h-6 bg-[#bb0004] rounded flex items-center justify-center text-white text-[11px] font-bold">R</span>
-            <span class="text-lg font-bold text-[#bb0004]">Redback</span>
-          </div>
+          <a href="{% url 'core:home' %}" class="inline-block mb-3.5 no-underline hover:opacity-90 transition-opacity" title="Redback">
+            <img src="{% static 'img/redback-og-banner.png' %}" alt="Redback" class="h-12 sm:h-14 md:h-16 w-auto object-contain">
+          </a>
           <p class="text-xs text-[#5d3f3b] leading-relaxed max-w-xs m-0">
             The premier platform for verified internship skills, task module evaluations, and employer-verifiable certificates.
           </p>

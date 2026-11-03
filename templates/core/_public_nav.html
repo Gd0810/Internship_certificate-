@@ -1,20 +1,11 @@
+{% load static %}
 <!-- Modern Professional Header Topbar -->
-<header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-[#e7bdb7]/30 transition-all shadow-2xs">
-  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
+<header class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#e7bdb7]/30 transition-all shadow-2xs">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[76px] sm:min-h-[84px] py-2 flex items-center justify-between gap-4">
 
     <!-- Brand Logo & Identity -->
-    <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 group no-underline">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#bb0004] via-[#e1251b] to-[#ff4d4d] flex items-center justify-center text-white font-extrabold text-lg shadow-md group-hover:scale-105 group-hover:shadow-lg transition-all duration-300">
-        R
-      </div>
-      <div class="flex flex-col">
-        <span class="text-xl font-extrabold tracking-tight text-[#151c27] group-hover:text-[#bb0004] transition-colors leading-none">
-          Redback
-        </span>
-        <span class="text-[10px] font-bold text-[#bb0004] tracking-widest uppercase mt-0.5 leading-none">
-          Internships
-        </span>
-      </div>
+    <a href="{% url 'core:home' %}" class="flex items-center group no-underline py-1" title="Redback IT Solutions">
+      <img src="{% static 'img/redback-og-banner.png' %}" alt="Redback" class="h-12 sm:h-14 md:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-102">
     </a>
 
     <!-- Desktop Navigation Links -->
