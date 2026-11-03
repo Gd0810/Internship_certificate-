@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Redback — Technology Internship Programs & Verified Certification{% endblock %}
 {% block meta_title %}Redback — Technology Internship Programs & Verified Certification{% endblock %}
@@ -66,12 +67,12 @@
       <!-- CTA Buttons -->
       <div class="flex flex-wrap items-center gap-4 mt-6">
         <a href="{% url 'accounts:register' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-semibold text-sm px-8 py-3.5 rounded-xl flex items-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline" style="color: #ffffff !important;">
-          <span style="color: #ffffff !important;">Start a Quiz Now</span>
+          <span style="color: #ffffff !important;">Apply for Internship Now</span>
           <span class="material-symbols-outlined text-[20px]" style="color: #ffffff !important;">arrow_forward</span>
         </a>
         <a href="{% url 'core:track_list' %}" class="bg-white border-2 border-[#e7bdb7] hover:bg-[#f0f3ff] text-[#151c27] font-semibold text-sm px-8 py-3.5 rounded-xl flex items-center gap-2 transition-all no-underline">
           <span class="material-symbols-outlined text-[20px]">grid_view</span>
-          Explore Categories
+          Explore Tracks
         </a>
       </div>
     </div>
@@ -142,33 +143,101 @@
           </div>
         </div>
 
-        <!-- Certificate Mockup Card -->
-        <div class="absolute top-6 right-0 w-[58%] h-[82%] bg-white rounded-xl shadow-2xl border-[3.5px] border-[#C9A227] z-20 transform rotate-3 hover:rotate-0 transition-transform duration-500 flex flex-col items-center justify-center p-4 sm:p-5 text-center" style="background-image: radial-gradient(circle at center, #ffffff 0%, #f9f9ff 100%);">
-          <div class="w-full h-full border-2 border-dashed border-[#C9A227]/50 p-3 sm:p-4 flex flex-col items-center">
-            <h4 class="font-bold text-xs uppercase tracking-widest text-[#1a2332] mb-0.5">CERTIFICATE</h4>
-            <p class="text-[8px] uppercase tracking-wider text-[#5d3f3b] mb-3">OF ACHIEVEMENT</p>
-            <p class="text-[8px] text-[#5d3f3b] mb-1">This is to certify that</p>
-            <h2 class="text-xl sm:text-2xl text-[#bb0004] font-[serif] italic font-bold mb-2">Your Name</h2>
-            <p class="text-[7.5px] text-[#5d3f3b] leading-tight px-2 mb-auto">has successfully completed the Quiz and has been awarded this certificate by <span class="font-bold text-[#bb0004]">Redback.</span></p>
-
-            <div class="flex justify-between w-full items-end mt-2">
-              <div class="text-left">
-                <p class="text-[6px] text-[#5d3f3b] m-0">Date: 25 May 2025</p>
-                <p class="text-[6px] text-[#5d3f3b] m-0">ID: RBQZ12345</p>
-              </div>
-              <div class="w-8 h-8 border-2 border-[#bb0004] rounded-full flex items-center justify-center text-[#bb0004] font-bold text-xs relative overflow-hidden bg-white">
-                <div class="absolute inset-0 border-[2px] border-dashed border-white rounded-full"></div>
-                R
-              </div>
-              <div class="text-center">
-                <div class="w-12 border-b border-[#5d3f3b] mb-0.5 text-[8px] italic text-[#5d3f3b]">Signature</div>
-                <p class="text-[6px] text-[#5d3f3b] leading-tight">Director<br/>Redback</p>
-              </div>
+        <!-- Certificate Mockup Card (Official Redback Default 2 Certificate - Full Card Setup) -->
+        <div class="absolute top-4 sm:top-5 right-0 w-[60%] sm:w-[58%] h-[86%] sm:h-[84%] bg-white rounded-2xl shadow-[0_20px_50px_rgba(187,0,4,0.18),0_10px_30px_rgba(15,23,42,0.18)] border-[3px] border-[#151c27] z-20 transform rotate-3 hover:rotate-0 transition-transform duration-500 overflow-hidden group p-1 bg-white flex flex-col">
+          <!-- Inner Red Border -->
+          <div class="w-full h-full border-[1.5px] border-[#bb0004] bg-white rounded-xl overflow-hidden flex flex-row relative">
+            
+            <!-- Left Ribbon Strip (Authentic Default 2) -->
+            <div class="w-7 sm:w-8 shrink-0 h-full bg-[#bb0004] relative border-r-[1.5px] border-[#151c27]">
+              <!-- Subtle vertical accent lines -->
+              <div class="absolute inset-y-0 left-1 w-[1px] bg-white/25"></div>
             </div>
+
+            <!-- Complete, Fully Visible Redback Circular Seal Badge (Centered on Ribbon Edge) -->
+            <div class="absolute top-1/2 -translate-y-1/2 left-1 sm:left-1.5 z-20 pointer-events-none drop-shadow-md">
+              <img
+                src="{% static 'img/templates/badge.png' %}"
+                alt="Redback Verified Seal"
+                class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-full"
+              />
+            </div>
+
+            <!-- Right Certificate Content Area -->
+            <div class="flex-1 py-2.5 sm:py-3 pl-8 sm:pl-9 pr-2.5 sm:pr-3.5 flex flex-col justify-between text-center relative z-10 bg-white">
+              
+              <!-- Header Row: Title & QR Code -->
+              <div class="relative pt-0.5">
+                <!-- QR Code (Top Right) -->
+                <div class="absolute top-0 right-0 flex flex-col items-center">
+                  <img
+                    src="{% static 'img/templates/demo_qr.png' %}"
+                    alt="Verification QR"
+                    class="w-7 h-7 sm:w-8 sm:h-8 object-contain"
+                  />
+                  <span class="text-[5px] sm:text-[6px] font-bold text-slate-500 tracking-tight mt-0.5">RBS/INT/01</span>
+                </div>
+
+                <!-- Main Certificate Headings -->
+                <div class="pr-7 sm:pr-9">
+                  <h4 class="font-extrabold text-[12px] sm:text-[14px] uppercase tracking-[2px] sm:tracking-[2.5px] text-[#151c27] m-0 leading-tight" style="font-family: 'Poppins', sans-serif;">
+                    CERTIFICATE
+                  </h4>
+                  <p class="text-[6.5px] sm:text-[7.5px] font-bold uppercase tracking-[1.5px] text-[#bb0004] mt-0.5 m-0">
+                    &mdash;&mdash;&nbsp;OF COMPLETION&nbsp;&mdash;&mdash;
+                  </p>
+                </div>
+              </div>
+
+              <!-- Awarded To & Candidate Name -->
+              <div class="my-auto py-1">
+                <p class="text-[7px] sm:text-[8px] italic text-slate-400 m-0 mb-0.5">awarded to</p>
+                <h2 class="text-base sm:text-lg md:text-xl font-bold text-[#151c27] tracking-tight m-0 leading-tight" style="font-family: 'Poppins', sans-serif;">
+                  Your Name
+                </h2>
+                <div class="w-16 sm:w-20 mx-auto border-b border-slate-200 mt-1 mb-1"></div>
+
+                <p class="text-[6.5px] sm:text-[7.5px] italic text-slate-500 m-0 mb-0.5">for successfully completing the internship in</p>
+                <h3 class="text-[11px] sm:text-xs font-bold text-[#bb0004] m-0 tracking-wide" style="font-family: 'Poppins', sans-serif;">
+                  Generative AI
+                </h3>
+                <p class="text-[5px] sm:text-[5.5px] font-semibold uppercase tracking-wider text-slate-400 mt-0.5 m-0 leading-tight">
+                  A Comprehensive Study &amp; Hands-On Internship Conducted by Redback
+                </p>
+              </div>
+
+              <!-- Footer Section: Date, ID & Official Signature -->
+              <div class="pt-1 border-t border-slate-100 flex items-end justify-between text-left">
+                <!-- Date of Issue -->
+                <div>
+                  <span class="text-[5px] sm:text-[5.5px] font-extrabold uppercase tracking-wider text-[#bb0004] block">DATE OF ISSUE</span>
+                  <span class="text-[6.5px] sm:text-[7px] font-bold text-[#151c27] block">26 Oct 2026</span>
+                </div>
+
+                <!-- Intern ID -->
+                <div class="text-center">
+                  <span class="text-[5px] sm:text-[5.5px] font-extrabold uppercase tracking-wider text-[#bb0004] block">INTERN ID</span>
+                  <span class="text-[6.5px] sm:text-[7px] font-bold text-[#151c27] block">RBS/INT/01</span>
+                </div>
+
+                <!-- Signature -->
+                <div class="text-right">
+                  <img
+                    src="{% static 'img/templates/sivapriya mam sign-01.png' %}"
+                    alt="Authorized Signatory"
+                    class="h-3.5 sm:h-4.5 ml-auto object-contain mb-0.5"
+                  />
+                  <span class="text-[5px] sm:text-[5.5px] font-extrabold uppercase tracking-wider text-[#151c27] block">AUTHORIZED SIGNATORY</span>
+                  <span class="text-[4.5px] text-slate-400 block">Program Director &middot; Redback</span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
 
           <!-- 3D Trophy Image Overlay -->
-          <div class="absolute -bottom-8 -right-6 w-20 h-20 sm:w-24 sm:h-24 pointer-events-none">
+          <div class="absolute -bottom-6 -right-5 w-18 h-18 sm:w-22 sm:h-22 pointer-events-none z-30 drop-shadow-2xl">
             <img class="w-full h-full object-contain filter drop-shadow-xl" alt="Trophy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfkq9hX1kj10sNNrrkomi24rkBFsZhB4rTY2-vNZmGhjpxpfiuWw2rnq8_zcPG7XB2H6wmy47cON4JenIWrVuh3K0F8WS-piQEQ5xAWR1sgWfaiPQqi4VTchnXZtMJPGTaQuwMCHxgUKdrrAOrh-AXC8LKz2nVMknjpbLD7I2t6eKeVzwEXorapc9RbwLw12oSmHGLZTvblcjXFU9GYXRnJC0SoAxTn3JGZrQRZJlDFm04-IVeSLao"/>
           </div>
         </div>
