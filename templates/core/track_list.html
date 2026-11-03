@@ -207,6 +207,7 @@
           <div class="space-y-3 pt-5 border-t border-slate-100">
             <div class="flex items-center justify-between">
               <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#151c27] m-0 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm text-[#bb0004]">category</span>
                 <span>Category</span>
               </h4>
               <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
@@ -249,6 +250,7 @@
           <div class="space-y-3 pt-5 border-t border-slate-100">
             <div class="flex items-center justify-between">
               <h4 class="text-xs font-extrabold uppercase tracking-wider text-[#151c27] m-0 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm text-[#bb0004]">view_module</span>
                 <span>Modules Count</span>
               </h4>
             </div>
@@ -379,6 +381,7 @@
                 {% for cat in categories %}
                   {% if cat.slug in selected_categories %}
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffdad5]/70 text-[#bb0004] text-xs font-semibold border border-[#bb0004]/20">
+                      <span class="material-symbols-outlined text-xs">category</span>
                       <span>{{ cat.name }}</span>
                     </span>
                   {% endif %}
@@ -386,6 +389,7 @@
 
                 {% for m in selected_modules %}
                   <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-[#1159c2] text-xs font-semibold border border-blue-200">
+                    <span class="material-symbols-outlined text-xs">view_module</span>
                     <span>{{ m }} Modules</span>
                   </span>
                 {% endfor %}
