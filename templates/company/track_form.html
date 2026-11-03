@@ -65,11 +65,46 @@
         {% if form.points.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.points.errors.0 }}</div>{% endif %}
       </div>
 
-      <!-- Price -->
-      <div>
-        <label for="{{ form.price.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-2">Certificate Price (₹) *</label>
-        {{ form.price }}
-        {% if form.price.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.price.errors.0 }}</div>{% endif %}
+      <!-- Free Course Checkbox Toggle (Above Certificate Price) -->
+      <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200/90 flex items-center justify-between gap-4 transition-all">
+        <div class="flex items-center gap-3">
+          {{ form.is_free }}
+          <div>
+            <label for="{{ form.is_free.id_for_label }}" class="text-xs font-bold text-emerald-950 cursor-pointer block">
+              Free Course / Free Track (₹0 Certificate)
+            </label>
+            <span class="text-[11px] text-emerald-700 block mt-0.5">
+              Check this box to make this track and certificate completely free for interns.
+            </span>
+          </div>
+        </div>
+        <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 shrink-0">
+          Free Option
+        </span>
+      </div>
+
+      <!-- Pricing Grid: Standard Certificate Price & Discount Price -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Standard Certificate Price -->
+        <div>
+          <label for="{{ form.price.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1.5">
+            Certificate Price (₹) *
+          </label>
+          {{ form.price }}
+          <p class="text-[11px] text-slate-500 mt-1">Standard certificate issuance fee.</p>
+          {% if form.price.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.price.errors.0 }}</div>{% endif %}
+        </div>
+
+        <!-- Discounted Price Field -->
+        <div>
+          <label for="{{ form.discount_price.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1.5 flex items-center justify-between">
+            <span>Discounted Price (₹)</span>
+            <span class="text-[10px] text-slate-400 font-normal lowercase">optional</span>
+          </label>
+          {{ form.discount_price }}
+          <p class="text-[11px] text-slate-500 mt-1">If set, strikes through Certificate Price (₹) and shows this discount price.</p>
+          {% if form.discount_price.errors %}<div class="text-red-500 text-xs mt-1 font-semibold">{{ form.discount_price.errors.0 }}</div>{% endif %}
+        </div>
       </div>
 
       <!-- Track Source / Resource Link (Optional) -->

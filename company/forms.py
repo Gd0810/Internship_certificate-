@@ -21,7 +21,7 @@ class CategoryForm(forms.ModelForm):
 class TrackForm(forms.ModelForm):
     class Meta:
         model = InternshipTrack
-        fields = ["name", "category", "description", "track_image", "points", "price", "source_link", "is_active"]
+        fields = ["name", "category", "description", "track_image", "points", "is_free", "price", "discount_price", "source_link", "is_active"]
         widgets = {
             "name": forms.TextInput(attrs={"class": INPUT, "placeholder": "e.g. Generative AI"}),
             "category": forms.Select(attrs={"class": INPUT}),
@@ -31,7 +31,9 @@ class TrackForm(forms.ModelForm):
                 "class": INPUT, "rows": 3,
                 "placeholder": "e.g. Prompt Engineering & APIs, RAG & Vector Databases, AI Agents & Automation"
             }),
-            "price": forms.NumberInput(attrs={"class": INPUT, "step": "0.01"}),
+            "is_free": forms.CheckboxInput(attrs={"class": "icp-checkbox"}),
+            "price": forms.NumberInput(attrs={"class": INPUT, "step": "0.01", "placeholder": "e.g. 999.00"}),
+            "discount_price": forms.NumberInput(attrs={"class": INPUT, "step": "0.01", "placeholder": "e.g. 499.00 (Optional)"}),
             "source_link": forms.TextInput(attrs={"class": INPUT, "placeholder": "https://drive.google.com/drive/folders/... (Optional)"}),
             "is_active": forms.CheckboxInput(attrs={"class": "icp-checkbox"}),
         }
@@ -39,13 +41,33 @@ class TrackForm(forms.ModelForm):
             "track_image": "Track Image / Icon",
             "points": "Track Points / Skills (Comma-separated)",
             "category": "Track Category",
+            "is_free": "Free Course / Track (Free Certificate)",
+            "price": "Standard Certificate Price (₹)",
+            "discount_price": "Discounted Price (₹) (Optional)",
             "source_link": "Track Resource / Google Drive Link (Optional)",
         }
         help_texts = {
             "points": "Add points/skills separated by comma (,). Each point will be displayed as an individual chip on the track card.",
             "category": "Select a category for filtering and navigation.",
+            "is_free": "Check this box to offer this track and certificate 100% free.",
+            "discount_price": "If provided, the track card will strike through the standard price and charge this discounted amount.",
             "source_link": "Optional Google Drive link or resource folder for track materials.",
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_free = cleaned_data.get("is_free")
+        price = cleaned_data.get("price")
+        discount_price = cleaned_data.get("discount_price")
+
+        if is_free and (price is None or price == ""):
+            cleaned_data["price"] = 0
+
+        if discount_price is not None and price is not None:
+            if discount_price > price:
+                self.add_error("discount_price", "Discounted price cannot be greater than the standard certificate price.")
+
+        return cleaned_data
 
     def clean_source_link(self):
         val = (self.cleaned_data.get("source_link") or "").strip()

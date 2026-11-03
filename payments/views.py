@@ -27,7 +27,7 @@ def _client():
 @login_required
 @require_POST
 def create_order(request):
-    """Creates a Razorpay Order for the intern's own track at the company-set price."""
+    """Creates a Razorpay Order for the intern's own track at the effective price (with discount/free support)."""
     profile = getattr(request.user, "intern_profile", None)
     if profile is None:
         return JsonResponse({"ok": False, "error": "No profile."}, status=400)
@@ -36,8 +36,39 @@ def create_order(request):
     if not profile.all_tasks_completed:
         return JsonResponse({"ok": False, "error": "Complete all task modules first."}, status=400)
 
+    # 1. Free track handling: Unlock instantly without calling Razorpay
+    if profile.track.is_completely_free:
+        import uuid
+        from django.utils import timezone
+
+        free_order_ref = f"FREE_{uuid.uuid4().hex[:12].upper()}"
+        Payment.objects.create(
+            profile=profile,
+            track=profile.track,
+            razorpay_order_id=free_order_ref,
+            razorpay_payment_id="FREE_CLAIM",
+            razorpay_signature="FREE_UNLOCKED",
+            amount=0,
+            status="paid",
+            verified_at=timezone.now(),
+        )
+
+        profile.has_paid = True
+        profile.save(update_fields=["has_paid"])
+        profile.generate_certificate_id()
+
+        logger.info("Free certificate unlocked for profile %s on track %s", profile.id, profile.track.slug)
+        return JsonResponse({
+            "ok": True,
+            "is_free": True,
+            "certificate_id": profile.certificate_id,
+            "message": "Certificate unlocked successfully for free!",
+        })
+
+    # 2. Paid track (either regular price or discounted price)
     client = _client()
-    amount_paise = int(profile.track.price * 100)
+    charge_amount = profile.track.effective_price
+    amount_paise = int(charge_amount * 100)
 
     if client is None:
         # Razorpay keys not yet configured — surface a clear error rather than
@@ -51,19 +82,24 @@ def create_order(request):
         "amount": amount_paise,
         "currency": "INR",
         "payment_capture": 1,
-        "notes": {"profile_id": profile.id, "track": profile.track.slug},
+        "notes": {
+            "profile_id": profile.id,
+            "track": profile.track.slug,
+            "has_discount": profile.track.has_discount,
+        },
     })
 
     Payment.objects.create(
         profile=profile,
         track=profile.track,
         razorpay_order_id=order["id"],
-        amount=profile.track.price,
+        amount=charge_amount,
         status="created",
     )
 
     return JsonResponse({
         "ok": True,
+        "is_free": False,
         "order_id": order["id"],
         "amount": amount_paise,
         "currency": "INR",

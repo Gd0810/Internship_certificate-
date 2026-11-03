@@ -16,7 +16,15 @@
       </div>
     {% endif %}
 
-    
+    {% if track.is_free %}
+      <div class="absolute top-3 right-3 bg-emerald-600/90 backdrop-blur-md border border-emerald-400/40 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-lg uppercase tracking-wider shadow-xs">
+        FREE COURSE
+      </div>
+    {% elif track.has_discount %}
+      <div class="absolute top-3 right-3 bg-[#bb0004]/90 backdrop-blur-md border border-white/20 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-lg uppercase tracking-wider shadow-xs">
+        SPECIAL DEAL
+      </div>
+    {% endif %}
   </div>
 
   <!-- Content Body -->
@@ -37,7 +45,12 @@
           <span class="material-symbols-outlined text-sm">view_module</span>
           <span>{{ track.task_modules.count }} Module{{ track.task_modules.count|pluralize }}</span>
         </div>
-        
+        {% if track.is_free %}
+          <div class="flex items-center gap-1 text-emerald-600 font-bold">
+            <span class="material-symbols-outlined text-sm">verified</span>
+            <span>Free Certificate</span>
+          </div>
+        {% endif %}
       </div>
     </div>
 
@@ -56,13 +69,25 @@
     <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
       <div>
         <span class="text-[10px] text-slate-400 block font-medium">Program Fee</span>
-        <span class="text-base font-extrabold text-[#151c27]">
-          {% if track.price > 0 %}
-            ₹{{ track.price }}
+        <div class="flex items-baseline gap-1.5 flex-wrap">
+          {% if track.is_free %}
+            {% if track.price > 0 %}
+              <span class="text-xs text-slate-400 line-through font-semibold">₹{{ track.price|floatformat:0 }}</span>
+            {% endif %}
+            <span class="text-base font-extrabold text-emerald-600">FREE</span>
+          {% elif track.has_discount %}
+            <span class="text-xs text-slate-400 line-through font-semibold">₹{{ track.price|floatformat:0 }}</span>
+            <span class="text-base font-extrabold text-[#bb0004]">₹{{ track.discount_price|floatformat:0 }}</span>
           {% else %}
-            Free
+            <span class="text-base font-extrabold text-[#151c27]">
+              {% if track.price > 0 %}
+                ₹{{ track.price|floatformat:0 }}
+              {% else %}
+                FREE
+              {% endif %}
+            </span>
           {% endif %}
-        </span>
+        </div>
       </div>
 
       <a href="{% url 'accounts:register' %}?track={{ track.slug }}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs hover:shadow-md transition-all duration-200 flex items-center gap-1.5 no-underline shrink-0" style="color: #ffffff !important;">

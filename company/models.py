@@ -53,7 +53,19 @@ class InternshipTrack(models.Model):
     )
     price = models.DecimalField(
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
-        help_text="Amount charged to unlock the certificate for this track.",
+        help_text="Standard amount charged to unlock the certificate for this track.",
+    )
+    is_free = models.BooleanField(
+        default=False,
+        help_text="Check if this course/track certificate is completely free (₹0).",
+    )
+    discount_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0)],
+        help_text="Optional discounted certificate price (₹).",
     )
     is_active = models.BooleanField(default=True)
     source_link = models.CharField(
@@ -80,6 +92,27 @@ class InternshipTrack(models.Model):
         if not self.points:
             return []
         return [p.strip() for p in self.points.split(",") if p.strip()]
+
+    @property
+    def has_discount(self):
+        """Returns True if this track is not free and has a valid discounted price lower than standard price."""
+        if self.is_free:
+            return False
+        return self.discount_price is not None and self.discount_price < self.price
+
+    @property
+    def effective_price(self):
+        """The actual amount charged for this track's certificate."""
+        if self.is_free:
+            from decimal import Decimal
+            return Decimal("0.00")
+        if self.discount_price is not None and self.discount_price < self.price:
+            return self.discount_price
+        return self.price
+
+    @property
+    def is_completely_free(self):
+        return self.is_free or self.price == 0 or self.effective_price == 0
 
     def save(self, *args, **kwargs):
         if not self.slug:

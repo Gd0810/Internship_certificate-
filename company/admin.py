@@ -9,8 +9,8 @@ class TaskModuleInline(admin.TabularInline):
 
 @admin.register(InternshipTrack)
 class InternshipTrackAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "is_active", "created_at")
-    list_filter = ("is_active",)
+    list_display = ("name", "is_free", "price", "discount_price", "is_active", "created_at")
+    list_filter = ("is_free", "is_active")
     search_fields = ("name",)
     prepopulated_fields = {"slug": ("name",)}
     inlines = [TaskModuleInline]

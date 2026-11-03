@@ -248,9 +248,25 @@
                 <span class="material-symbols-outlined text-xl">payments</span>
               </div>
             </div>
-            <div class="mt-4 flex items-baseline justify-between">
-              <span class="text-3xl font-extrabold text-[#151c27]">₹{{ profile.track.price }}</span>
-              <span class="text-xs font-bold text-slate-500">One-time</span>
+            <div class="mt-4 flex items-baseline justify-between flex-wrap gap-1">
+              <div class="flex items-baseline gap-1.5">
+                {% if profile.track.is_free %}
+                  {% if profile.track.price > 0 %}
+                    <span class="text-sm text-slate-400 line-through font-semibold">₹{{ profile.track.price|floatformat:0 }}</span>
+                  {% endif %}
+                  <span class="text-3xl font-extrabold text-emerald-600">FREE</span>
+                {% elif profile.track.has_discount %}
+                  <span class="text-sm text-slate-400 line-through font-semibold">₹{{ profile.track.price|floatformat:0 }}</span>
+                  <span class="text-3xl font-extrabold text-[#bb0004]">₹{{ profile.track.discount_price|floatformat:0 }}</span>
+                {% else %}
+                  <span class="text-3xl font-extrabold text-[#151c27]">
+                    {% if profile.track.price > 0 %}₹{{ profile.track.price|floatformat:0 }}{% else %}FREE{% endif %}
+                  </span>
+                {% endif %}
+              </div>
+              <span class="text-xs font-bold text-slate-500">
+                {% if profile.track.is_completely_free %}Free Unlock{% else %}One-time{% endif %}
+              </span>
             </div>
           </div>
 
@@ -685,12 +701,34 @@
                 <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
               </div>
               <h3 class="text-xl font-extrabold text-[#151c27]">Unlock Verified Certificate</h3>
-              <div class="text-3xl font-extrabold text-[#bb0004]">₹{{ profile.track.price }}</div>
+              <div class="flex items-baseline justify-center gap-2">
+                {% if profile.track.is_free %}
+                  {% if profile.track.price > 0 %}
+                    <span class="text-lg text-slate-400 line-through font-semibold">₹{{ profile.track.price|floatformat:0 }}</span>
+                  {% endif %}
+                  <span class="text-3xl font-extrabold text-emerald-600">FREE</span>
+                {% elif profile.track.has_discount %}
+                  <span class="text-lg text-slate-400 line-through font-semibold">₹{{ profile.track.price|floatformat:0 }}</span>
+                  <span class="text-3xl font-extrabold text-[#bb0004]">₹{{ profile.track.discount_price|floatformat:0 }}</span>
+                {% else %}
+                  <span class="text-3xl font-extrabold text-[#bb0004]">
+                    {% if profile.track.price > 0 %}₹{{ profile.track.price|floatformat:0 }}{% else %}FREE{% endif %}
+                  </span>
+                {% endif %}
+              </div>
               <p class="text-xs text-slate-500 leading-relaxed">
-                Unlock your official {{ profile.track.name }} certificate with a one-time verification fee.
+                {% if profile.track.is_completely_free %}
+                  Complete all modules to claim your official {{ profile.track.name }} certificate for free.
+                {% else %}
+                  Unlock your official {{ profile.track.name }} certificate with a one-time verification fee.
+                {% endif %}
               </p>
-              <button id="pay-btn" type="button" class="w-full bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all cursor-pointer border-0">
-                Pay &amp; Unlock Certificate
+              <button id="pay-btn" type="button" data-original-text="{% if profile.track.is_completely_free %}Claim Free Certificate{% else %}Pay &amp; Unlock Certificate{% endif %}" class="w-full bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all cursor-pointer border-0">
+                {% if profile.track.is_completely_free %}
+                  Claim Free Certificate
+                {% else %}
+                  Pay &amp; Unlock Certificate
+                {% endif %}
               </button>
               <p id="pay-error" class="text-red-500 text-xs font-semibold" style="display:none;"></p>
             </div>
@@ -1154,8 +1192,9 @@
     const payBtn = document.getElementById('pay-btn');
     if (payBtn) {
       payBtn.addEventListener('click', function () {
+        const origText = payBtn.getAttribute('data-original-text') || 'Pay & Unlock Certificate';
         payBtn.disabled = true;
-        payBtn.textContent = 'Starting payment…';
+        payBtn.textContent = 'Processing…';
         const errorEl = document.getElementById('pay-error');
         if (errorEl) errorEl.style.display = 'none';
 
@@ -1163,6 +1202,12 @@
           .then((r) => r.json())
           .then((order) => {
             if (!order.ok) throw new Error(order.error || 'Could not start payment.');
+
+            // Free track instant claim
+            if (order.is_free) {
+              window.location.href = '?tab=certificate';
+              return;
+            }
 
             const rzp = new Razorpay({
               key: order.key_id,
@@ -1188,14 +1233,14 @@
                         errorEl.style.display = 'block';
                       }
                       payBtn.disabled = false;
-                      payBtn.textContent = 'Pay & Unlock Certificate';
+                      payBtn.textContent = origText;
                     }
                   });
               },
               modal: {
                 ondismiss: function () {
                   payBtn.disabled = false;
-                  payBtn.textContent = 'Pay & Unlock Certificate';
+                  payBtn.textContent = origText;
                 },
               },
             });
@@ -1207,7 +1252,7 @@
               errorEl.style.display = 'block';
             }
             payBtn.disabled = false;
-            payBtn.textContent = 'Pay & Unlock Certificate';
+            payBtn.textContent = origText;
           });
       });
     }
