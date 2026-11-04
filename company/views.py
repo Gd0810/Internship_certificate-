@@ -359,6 +359,7 @@ def student_list(request):
             Q(user__email__icontains=search_query) |
             Q(intern_id__icontains=search_query) |
             Q(college_name__icontains=search_query) |
+            Q(district__icontains=search_query) |
             Q(mobile_number__icontains=search_query)
         )
 

@@ -149,7 +149,12 @@
 
           <div>
             <span class="text-slate-400 font-medium block text-[11px]">Degree / Major</span>
-            <span class="font-semibold text-slate-700">{{ student.degree }}</span>
+            <span class="font-semibold text-slate-700">{{ student.degree|default:"Not specified" }}</span>
+          </div>
+
+          <div>
+            <span class="text-slate-400 font-medium block text-[11px]">District</span>
+            <span class="font-semibold text-slate-700">{{ student.district|default:"Not specified" }}</span>
           </div>
 
           <div>

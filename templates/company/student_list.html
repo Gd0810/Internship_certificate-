@@ -169,10 +169,17 @@
                 {% endif %}
               </td>
 
-              <!-- College & Degree -->
+              <!-- College, Degree & District -->
               <td class="py-4 px-6">
-                <div class="font-medium text-[#151c27] max-w-xs truncate" title="{{ student.college_name }}">{{ student.college_name }}</div>
-                <div class="text-[11px] text-slate-400">{{ student.degree }}</div>
+                <div class="font-medium text-[#151c27] max-w-xs truncate" title="{{ student.college_name }}">{{ student.college_name|default:"—" }}</div>
+                <div class="text-[11px] text-slate-400 flex items-center gap-1.5 flex-wrap mt-0.5">
+                  {% if student.degree %}<span>{{ student.degree }}</span>{% endif %}
+                  {% if student.district %}
+                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium">
+                      <span class="material-symbols-outlined text-[11px]">location_on</span>{{ student.district }}
+                    </span>
+                  {% endif %}
+                </div>
               </td>
 
               <!-- Task Progress -->

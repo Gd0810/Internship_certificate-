@@ -8,6 +8,47 @@ mobile_validator = RegexValidator(
     regex=r"^\+?\d{7,15}$", message="Enter a valid mobile number (7–15 digits, optional +country code)."
 )
 
+TAMIL_NADU_DISTRICTS = [
+    "Chennai",
+    "Chengalpattu",
+    "Kancheepuram",
+    "Tiruvallur",
+    "Coimbatore",
+    "Cuddalore",
+    "Erode",
+    "Karur",
+    "Krishnagiri",
+    "Namakkal",
+    "Ranipet",
+    "Salem",
+    "Tiruchirapalli",
+    "Tirupattur",
+    "Tiruppur",
+    "The Nilgiris",
+    "Vellore",
+    "Ariyalur",
+    "Dharmapuri",
+    "Dindigul",
+    "Kanniyakumari",
+    "Madurai",
+    "Mayiladuthurai",
+    "Pudukottai",
+    "Ramanathapuram",
+    "Sivagangai",
+    "Theni",
+    "Thanjavur",
+    "Thoothukudi",
+    "Tirunelveli",
+    "Tiruvannamalai",
+    "Tenkasi",
+    "Thiruvarur",
+    "Virudhunagar",
+    "Kallakurichi",
+    "Viluppuram",
+    "Nagapattinam",
+    "Perambalur",
+]
+
 
 def generate_unique_intern_id():
     """Generates a unique Intern ID in the format RBS/INT/XXXXXX (6 digits)."""
@@ -25,6 +66,7 @@ class InternProfile(models.Model):
     full_name = models.CharField(max_length=150)
     college_name = models.CharField(max_length=200, blank=True, default="")
     degree = models.CharField(max_length=150, blank=True, default="")
+    district = models.CharField(max_length=100, blank=True, default="", help_text="District of the intern")
     track = models.ForeignKey(
         "company.InternshipTrack", on_delete=models.PROTECT, related_name="enrolled_profiles"
     )

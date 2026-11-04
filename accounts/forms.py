@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 
 from company.models import InternshipTrack
-from .models import InternProfile, mobile_validator
+from .models import InternProfile, mobile_validator, TAMIL_NADU_DISTRICTS
 
 User = get_user_model()
 
@@ -27,6 +27,16 @@ class RegistrationForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={"class": INPUT_CLASSES, "placeholder": "Degree, e.g. B.Tech CSE (optional)"})
     )
+    district = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            "class": INPUT_CLASSES + " !pl-10",
+            "style": "padding-left: 2.5rem !important;",
+            "placeholder": "Type or search district (e.g. Vellore, Chennai...)",
+            "autocomplete": "off",
+        }),
+    )
     track = forms.ModelChoiceField(
         queryset=InternshipTrack.objects.filter(is_active=True),
         widget=forms.Select(attrs={"class": INPUT_CLASSES}),
@@ -44,6 +54,15 @@ class RegistrationForm(forms.Form):
         val = self.cleaned_data.get("mobile_number", "").replace(" ", "").replace("-", "").strip()
         mobile_validator(val)
         return val
+
+    def clean_district(self):
+        val = (self.cleaned_data.get("district") or "").strip()
+        if not val:
+            raise ValidationError("Please select your district.")
+        for d in TAMIL_NADU_DISTRICTS:
+            if d.lower() == val.lower():
+                return d
+        raise ValidationError("Please select a valid district from the suggestions.")
 
     def clean_email(self):
         email = self.cleaned_data["email"].lower().strip()

@@ -48,6 +48,7 @@ def register(request):
                     full_name=data["full_name"],
                     college_name=data.get("college_name", "") or "",
                     degree=data.get("degree", "") or "",
+                    district=data.get("district", "") or "",
                     track=data["track"],
                     mobile_number=data["mobile_number"],
                 )
