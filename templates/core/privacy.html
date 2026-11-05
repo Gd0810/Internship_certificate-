@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Privacy Policy — Redback IT Solutions | Data Protection{% endblock %}
+{% block meta_title %}Privacy Policy — Redback IT Solutions | Data Protection{% endblock %}
+{% block meta_description %}Learn how Redback IT Solutions collects, uses, protects, and handles your personal information, student records, and internship credential data.{% endblock %}
+{% block meta_keywords %}privacy policy, redback privacy, data protection, student data privacy, internship information security, credential verification data{% endblock %}
+
+{% block body %}
+{% include "core/_public_nav.html" %}
+
+<main class="flex-1 w-full bg-[#f9f9ff]">
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-[#f0f3ff] via-white to-[#f9f9ff] border-b border-[#e7bdb7]/20 pt-12 pb-14 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1280px] mx-auto">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs text-[#5d3f3b] mb-4" aria-label="Breadcrumb">
+        <a href="{% url 'core:home' %}" class="hover:text-[#bb0004] transition-colors no-underline">Home</a>
+        <span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
+        <span class="text-slate-500">Legal</span>
+        <span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
+        <span class="font-semibold text-[#151c27]">Privacy Policy</span>
+      </nav>
+
+      <div class="max-w-3xl">
+        <span class="text-xs font-bold text-[#1159c2] tracking-widest uppercase bg-[#d9e2ff]/70 px-3.5 py-1.5 rounded-full inline-block mb-3.5">
+          DATA PROTECTION &amp; PRIVACY
+        </span>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#151c27] tracking-tight leading-tight m-0">
+          Privacy Policy
+        </h1>
+        <p class="text-base sm:text-lg text-[#5d3f3b] mt-3 leading-relaxed m-0">
+          Your privacy is fundamental to our mission. This policy outlines how Redback IT Solutions Private Limited collects, safeguards, and handles your personal data across our internship portal.
+        </p>
+
+        <!-- Meta info pills -->
+        <div class="flex flex-wrap items-center gap-4 mt-6 text-xs text-[#5d3f3b]">
+          <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs">
+            <span class="material-symbols-outlined text-[#1159c2] text-base">calendar_today</span>
+            <span>Effective Date: <strong>November 1, 2026</strong></span>
+          </span>
+          <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs">
+            <span class="material-symbols-outlined text-emerald-600 text-base">security</span>
+            <span>Compliant with Indian IT Act &amp; DPDP Guidelines</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section with Sticky Sidebar -->
+  <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      
+      <!-- Sticky Table of Contents (Desktop) -->
+      <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+        <div class="sticky top-28 bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+          <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
+            <span class="material-symbols-outlined text-[#1159c2] text-lg">toc</span>
+            <span class="text-xs font-bold text-[#151c27] uppercase tracking-wider">Policy Sections</span>
+          </div>
+
+          <nav class="space-y-1 text-xs">
+            <a href="#overview" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              1. Overview &amp; Scope
+            </a>
+            <a href="#information-collected" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              2. Information We Collect
+            </a>
+            <a href="#how-we-use" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              3. How We Use Data
+            </a>
+            <a href="#public-verification" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              4. Certificate Verification
+            </a>
+            <a href="#payment-data" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              5. Payment &amp; Gateway Security
+            </a>
+            <a href="#data-sharing" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              6. Data Sharing &amp; Disclosure
+            </a>
+            <a href="#cookies-sessions" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              7. Cookies &amp; Tracking
+            </a>
+            <a href="#data-security" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              8. Security Safeguards
+            </a>
+            <a href="#retention-deletion" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              9. Retention &amp; Deletion
+            </a>
+            <a href="#user-rights" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              10. Your Privacy Rights
+            </a>
+            <a href="#policy-updates" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              11. Policy Updates
+            </a>
+            <a href="#privacy-contact" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#1159c2] font-medium transition-all no-underline">
+              12. Contact Privacy Officer
+            </a>
+          </nav>
+
+          <div class="pt-3 border-t border-slate-100">
+            <a href="{% url 'core:terms' %}" class="flex items-center justify-between text-xs font-semibold text-[#bb0004] hover:text-[#e1251b] no-underline">
+              <span>Read Terms of Service</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Privacy Policy Document -->
+      <div class="lg:col-span-8 xl:col-span-9 space-y-10 text-[#151c27]">
+
+        <!-- Highlight Callout -->
+        <div class="p-6 rounded-2xl bg-white border border-[#1159c2]/20 shadow-xs flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-[#d9e2ff] text-[#1159c2] flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-xl">shield</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-[#151c27] m-0">Our Core Privacy Pledge</h3>
+            <p class="text-xs text-[#5d3f3b] mt-1.5 leading-relaxed m-0">
+              Redback never sells, rents, or monetizes student data to third-party advertisers or lead-generation brokers. Your information is used exclusively to facilitate your practical internship learning, issue verifiable certificates, and confirm authentic completion records to authorized recruiters upon your request.
+            </p>
+          </div>
+        </div>
+
+        <!-- 1. Overview & Scope -->
+        <section id="overview" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">1</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Overview &amp; Scope</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              This Privacy Policy applies to personal information collected by <strong>Redback IT Solutions Private Limited</strong> through our internship platform, task dashboards, public certificate verification tools, and communications channels.
+            </p>
+            <p>
+              By accessing our platform or enrolling in any internship track, you consent to the data collection and usage practices described in this policy.
+            </p>
+          </div>
+        </section>
+
+        <!-- 2. Information We Collect -->
+        <section id="information-collected" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">2</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Information We Collect</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              We collect information that you provide directly, as well as data generated automatically during your course of study:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <span class="font-bold text-xs text-[#151c27] flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-[#bb0004]">badge</span>
+                  Personal &amp; Profile Data
+                </span>
+                <p class="text-[11px] text-slate-500 m-0">
+                  Full Name, Email Address, Contact Number, Academic Institution (College/University), Degree / Major, and District of Residence.
+                </p>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <span class="font-bold text-xs text-[#151c27] flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-[#1159c2]">assignment</span>
+                  Academic &amp; Deliverables Data
+                </span>
+                <p class="text-[11px] text-slate-500 m-0">
+                  Selected Internship Track, module progression logs, submitted code links, project notes, feedback remarks, and completion timestamps.
+                </p>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <span class="font-bold text-xs text-[#151c27] flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">verified</span>
+                  Credential &amp; ID Identifiers
+                </span>
+                <p class="text-[11px] text-slate-500 m-0">
+                  Unique Intern ID (<code class="text-xs font-mono">RBS/INT/XXXXXX</code>), Certificate ID (<code class="text-xs font-mono">CRT-XXXXXXXXXX</code>), and verification QR code URLs.
+                </p>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <span class="font-bold text-xs text-[#151c27] flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-purple-600">devices</span>
+                  Technical &amp; Log Information
+                </span>
+                <p class="text-[11px] text-slate-500 m-0">
+                  IP address, browser type, device operating system, login session tokens, and security access audit logs.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. How We Use Data -->
+        <section id="how-we-use" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">3</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">How We Use Your Information</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              We process your data for legitimate educational and platform administration purposes:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>Administering Internships:</strong> Processing enrollment, assigning task modules, and updating your progress percentages in real time.</li>
+              <li><strong>Official Offer Letters &amp; Certificates:</strong> Rendering personalized, verifiable PDF credentials bearing your legal name, track title, and unique tracking code.</li>
+              <li><strong>Communications:</strong> Sending account confirmations, module reviews, certificate unlock notifications, and customer support responses.</li>
+              <li><strong>Academic Integrity &amp; Security:</strong> Detecting and mitigating plagiarism, account hijacking, multiple account abuse, or falsified submissions.</li>
+              <li><strong>Platform Optimization:</strong> Analyzing aggregate completion metrics to refine track curriculum and improve usability.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 4. Certificate Verification -->
+        <section id="public-verification" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">4</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Public Certificate Verification Portal</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              A cornerstone of the Redback platform is employer-verifiable certification. To prevent credential forgery, our platform provides a public lookup portal accessible via:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li>Scanning the QR code printed on your official Certificate of Completion.</li>
+              <li>Entering your unique Intern ID or Certificate ID at <a href="{% url 'core:verify' %}" class="text-[#1159c2] font-semibold underline">redback.in/verify</a>.</li>
+            </ul>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+              <span class="font-bold text-[#151c27] block">What is displayed on the public verification page:</span>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px] text-slate-600">
+                <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-600">check</span> Intern Full Name</div>
+                <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-600">check</span> Internship Domain Track</div>
+                <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-600">check</span> Official Intern ID</div>
+                <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-600">check</span> Completion Status</div>
+                <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-600">check</span> Certificate Issue Date</div>
+                <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-600">check</span> Verifiable Credential ID</div>
+              </div>
+              <p class="text-[11px] text-slate-400 italic m-0 pt-1">
+                Note: Sensitive details such as your password hash, email address, mobile number, and payment transaction details are <strong>never</strong> displayed on the public verification page.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Payment & Gateway Security -->
+        <section id="payment-data" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">5</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Payment &amp; Gateway Security</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              When you pay for a premium certificate verification fee:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li>Transactions are processed securely through certified, PCI-DSS compliant third-party payment gateways (e.g. Razorpay).</li>
+              <li>Redback does <strong>not</strong> collect, process, or store credit card numbers, debit card PINs, CVV codes, or net banking passwords.</li>
+              <li>We only retain non-sensitive transaction metadata (Order ID, Payment ID, Amount, Timestamp, and Payment Status) to reconcile receipts and unlock your certificate.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 6. Data Sharing & Disclosure -->
+        <section id="data-sharing" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">6</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Data Sharing &amp; Third-Party Disclosure</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              We do not sell, rent, or trade your personal information. We may share data only under the following limited circumstances:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>Hiring Partners &amp; Employers:</strong> When a hiring partner or corporate recruiter queries our certificate verification portal using your credential ID to confirm authentic completion.</li>
+              <li><strong>Academic Institutions:</strong> If you enrolled through an institutional college MoU or university partnership, aggregate or verified completion rosters may be shared with your college placement cell.</li>
+              <li><strong>Service Providers:</strong> Trusted third-party cloud hosting, transactional email delivery (e.g., SMTP services), and payment processors operating under strict confidentiality obligations.</li>
+              <li><strong>Legal Compliance:</strong> If required by Indian law enforcement, court subpoenas, or regulatory authorities to protect against fraud or platform safety threats.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 7. Cookies & Tracking -->
+        <section id="cookies-sessions" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">7</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Cookies &amp; Session Management</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              We use strictly necessary and functional cookies to ensure a secure session:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>Authentication Cookies:</strong> To keep you securely logged into your intern dashboard across page reloads.</li>
+              <li><strong>CSRF Security Tokens:</strong> To protect forms against Cross-Site Request Forgery attacks.</li>
+              <li><strong>Preference Cookies:</strong> To remember UI state, active filter tabs, or search queries.</li>
+            </ul>
+            <p>
+              We do not use invasive cross-site ad trackers or behavioral profiling cookies.
+            </p>
+          </div>
+        </section>
+
+        <!-- 8. Security Safeguards -->
+        <section id="data-security" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">8</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Data Security Safeguards</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              We apply multi-layered technical and administrative controls to protect your records:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>Encryption in Transit:</strong> 256-bit SSL/TLS encryption across all endpoints and web pages.</li>
+              <li><strong>Cryptographic Password Hashing:</strong> User passwords are encrypted using PBKDF2 with SHA-256 and never stored in plain text.</li>
+              <li><strong>Access Control:</strong> Administrative access to student data is restricted to authorized personnel with role-based permissions and audit logs.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 9. Retention & Deletion -->
+        <section id="retention-deletion" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">9</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Data Retention &amp; Account Deletion</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              We retain student registration records and task progress for as long as your account remains active. Verified completion certificates and associated credential IDs are retained indefinitely to guarantee lifetime verification for your future employers.
+            </p>
+            <p>
+              You may request deletion of non-essential profile data or account deactivation by contacting our privacy team at <a href="mailto:info@redback.in" class="text-[#1159c2] font-semibold underline">info@redback.in</a>.
+            </p>
+          </div>
+        </section>
+
+        <!-- 10. Your Privacy Rights -->
+        <section id="user-rights" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">10</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Your Privacy Rights</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              In accordance with applicable privacy regulations, you have the right to:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li>Access and review the personal information associated with your account.</li>
+              <li>Request correction of inaccurate information (e.g. spelling errors in name, college, or district).</li>
+              <li>Request a copy of your task evaluation logs and certificate records.</li>
+              <li>Withdraw consent for marketing communications at any time.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 11. Policy Updates -->
+        <section id="policy-updates" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">11</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Updates to this Privacy Policy</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              We may revise this Privacy Policy periodically to reflect technological advancements, legal requirements, or platform updates. Any changes will be posted on this page with an updated "Effective Date". Continued use of Redback after updates constitutes acceptance of the revised policy.
+            </p>
+          </div>
+        </section>
+
+        <!-- 12. Contact Privacy Officer -->
+        <section id="privacy-contact" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">12</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Contact Our Data Privacy Officer</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              For privacy-related inquiries, data requests, or grievances, please contact our Data Protection Team:
+            </p>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+              <div><strong>Organization:</strong> Redback IT Solutions Private Limited</div>
+              <div><strong>Designation:</strong> Data Protection &amp; Privacy Officer</div>
+              <div><strong>Postal Address:</strong> 5/x1 Hari om 2nd street, TNHB, Phase III, Sathuvachari, Vellore, Tamil Nadu 632009, India</div>
+              <div><strong>Email:</strong> <a href="mailto:info@redback.in" class="text-[#1159c2] font-semibold underline">info@redback.in</a></div>
+              <div><strong>Direct Helpline:</strong> +91 81899 85559 / +91 81899 85554</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Help / Contact CTA Bar -->
+  <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="bg-gradient-to-r from-white via-[#f0f3ff] to-white rounded-2xl border border-[#e7bdb7]/30 p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-[#1159c2] text-white flex items-center justify-center shrink-0 shadow-sm">
+          <span class="material-symbols-outlined text-2xl">privacy_tip</span>
+        </div>
+        <div>
+          <h4 class="text-base sm:text-lg font-bold text-[#151c27] m-0">Need clarity on your student records?</h4>
+          <p class="text-xs sm:text-sm text-[#5d3f3b] mt-1 m-0">Reach out to our privacy and support team anytime.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="{% url 'core:contact' %}" class="bg-[#1159c2] hover:bg-[#0d47a1] text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-xs no-underline flex items-center gap-1.5" style="color: #ffffff !important;">
+          <span style="color: #ffffff !important;">Contact Support</span>
+          <span class="material-symbols-outlined text-base" style="color: #ffffff !important;">arrow_forward</span>
+        </a>
+        <a href="{% url 'core:terms' %}" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs px-5 py-3 rounded-xl transition-colors no-underline">
+          Terms of Service
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% include "core/_footer.html" %}
+{% endblock %}
+

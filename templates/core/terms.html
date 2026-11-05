@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Terms of Service — Redback IT Solutions | Internship Platform{% endblock %}
+{% block meta_title %}Terms of Service — Redback IT Solutions | Internship Platform{% endblock %}
+{% block meta_description %}Read the Terms of Service for Redback IT Solutions. Understand user obligations, internship assessment guidelines, certificate verification rules, and payment policies.{% endblock %}
+{% block meta_keywords %}terms of service, redback terms, internship agreement, certificate policy, technical internship conditions, student rules{% endblock %}
+
+{% block body %}
+{% include "core/_public_nav.html" %}
+
+<main class="flex-1 w-full bg-[#f9f9ff]">
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-[#f0f3ff] via-white to-[#f9f9ff] border-b border-[#e7bdb7]/20 pt-12 pb-14 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1280px] mx-auto">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs text-[#5d3f3b] mb-4" aria-label="Breadcrumb">
+        <a href="{% url 'core:home' %}" class="hover:text-[#bb0004] transition-colors no-underline">Home</a>
+        <span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
+        <span class="text-slate-500">Legal</span>
+        <span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
+        <span class="font-semibold text-[#151c27]">Terms of Service</span>
+      </nav>
+
+      <div class="max-w-3xl">
+        <span class="text-xs font-bold text-[#bb0004] tracking-widest uppercase bg-[#ffdad5]/60 px-3.5 py-1.5 rounded-full inline-block mb-3.5">
+          LEGAL AGREEMENT &amp; USER GUIDELINES
+        </span>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#151c27] tracking-tight leading-tight m-0">
+          Terms of Service
+        </h1>
+        <p class="text-base sm:text-lg text-[#5d3f3b] mt-3 leading-relaxed m-0">
+          These Terms govern your access to and use of Redback IT Solutions Private Limited’s internship portal, task-based assessments, offer letters, and verifiable credential services.
+        </p>
+
+        <!-- Meta info pills -->
+        <div class="flex flex-wrap items-center gap-4 mt-6 text-xs text-[#5d3f3b]">
+          <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs">
+            <span class="material-symbols-outlined text-[#1159c2] text-base">calendar_today</span>
+            <span>Effective Date: <strong>November 1, 2026</strong></span>
+          </span>
+          <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs">
+            <span class="material-symbols-outlined text-emerald-600 text-base">verified_user</span>
+            <span>Applicable to all Enrolled Interns &amp; Visitors</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section with Sticky Sidebar -->
+  <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      
+      <!-- Sticky Table of Contents (Desktop) -->
+      <aside class="hidden lg:block lg:col-span-4 xl:col-span-3">
+        <div class="sticky top-28 bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+          <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
+            <span class="material-symbols-outlined text-[#bb0004] text-lg">toc</span>
+            <span class="text-xs font-bold text-[#151c27] uppercase tracking-wider">Quick Navigation</span>
+          </div>
+
+          <nav class="space-y-1 text-xs">
+            <a href="#acceptance" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              1. Acceptance of Terms
+            </a>
+            <a href="#eligibility" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              2. Eligibility &amp; Registration
+            </a>
+            <a href="#internship-structure" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              3. Tracks &amp; Task Deliverables
+            </a>
+            <a href="#integrity" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              4. Academic Integrity
+            </a>
+            <a href="#certification" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              5. Certificates &amp; Verification
+            </a>
+            <a href="#pricing-payments" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              6. Pricing, Free Tracks &amp; Fees
+            </a>
+            <a href="#ip-rights" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              7. Intellectual Property
+            </a>
+            <a href="#code-of-conduct" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              8. Prohibited Conduct
+            </a>
+            <a href="#termination" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              9. Termination &amp; Suspension
+            </a>
+            <a href="#liability" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              10. Limitation of Liability
+            </a>
+            <a href="#governing-law" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              11. Governing Law &amp; Jurisdiction
+            </a>
+            <a href="#contact-grievance" class="block px-3 py-2 rounded-xl text-[#5d3f3b] hover:bg-[#f0f3ff] hover:text-[#bb0004] font-medium transition-all no-underline">
+              12. Grievance &amp; Contact
+            </a>
+          </nav>
+
+          <div class="pt-3 border-t border-slate-100">
+            <a href="{% url 'core:privacy' %}" class="flex items-center justify-between text-xs font-semibold text-[#1159c2] hover:text-[#bb0004] no-underline">
+              <span>View Privacy Policy</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Legal Terms Document -->
+      <div class="lg:col-span-8 xl:col-span-9 space-y-10 text-[#151c27]">
+
+        <!-- Highlight Callout -->
+        <div class="p-6 rounded-2xl bg-white border border-[#bb0004]/20 shadow-xs flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-xl">gavel</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-[#151c27] m-0">Important Summary for Learners</h3>
+            <p class="text-xs text-[#5d3f3b] mt-1.5 leading-relaxed m-0">
+              By registering on Redback, you agree to complete your own original practical tasks, provide accurate student identity details, and adhere to our academic integrity charter. Completion certificates are tamper-proof and subject to automated and manual anti-plagiarism checks.
+            </p>
+          </div>
+        </div>
+
+        <!-- 1. Acceptance of Terms -->
+        <section id="acceptance" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">1</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Acceptance of Terms</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              These Terms of Service ("Terms") constitute a legally binding agreement between you ("Intern", "User", "You") and <strong>Redback IT Solutions Private Limited</strong> ("Redback", "Company", "We", "Us").
+            </p>
+            <p>
+              By accessing, browsing, registering an account, enrolling in an internship track, or verifying a certificate through our website or mobile interfaces, you acknowledge that you have read, understood, and agree to be bound by these Terms and our companion <a href="{% url 'core:privacy' %}" class="text-[#1159c2] hover:text-[#bb0004] underline font-semibold">Privacy Policy</a>.
+            </p>
+            <p>
+              If you do not agree with any part of these Terms, you must discontinue your use of the platform immediately.
+            </p>
+          </div>
+        </section>
+
+        <!-- 2. Eligibility & Account Registration -->
+        <section id="eligibility" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">2</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Eligibility &amp; Account Registration</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              To register on the Redback Internship Platform, you represent and warrant that:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li>You are at least 16 years of age or enrolled in a recognized secondary, polytechnic, college, or university program.</li>
+              <li>All information provided during registration—including your <strong>Full Name</strong>, <strong>Email Address</strong>, <strong>Mobile Number</strong>, <strong>College / University</strong>, <strong>Degree / Major</strong>, and <strong>District</strong>—is accurate, truthful, and current.</li>
+              <li>Your official full name matches your institutional and government-issued identification, as this name will be permanently inscribed on your verified credentials.</li>
+              <li>You will safeguard your login credentials and immediately notify Redback of any unauthorized access to your account.</li>
+            </ul>
+            <p>
+              Each student is entitled to maintain one primary account. Creating multiple dummy or duplicate accounts may result in suspension of all associated profiles.
+            </p>
+          </div>
+        </section>
+
+        <!-- 3. Tracks & Task Deliverables -->
+        <section id="internship-structure" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">3</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Internship Tracks &amp; Task Deliverables</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              Redback provides outcome-driven practical internship tracks across domains including Artificial Intelligence, Full Stack Development, Cloud Computing, Cybersecurity, Mobile Apps, and Data Engineering.
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>Self-Paced Progression:</strong> You may work through modular tasks at your designated pace within the allotted enrollment window.</li>
+              <li><strong>Submission Requirements:</strong> Practical tasks require submission of verifiable artifacts, such as public source code repositories (e.g. GitHub/GitLab), deployed live URLs, technical documentation, or screencasts.</li>
+              <li><strong>Evaluation &amp; Approval:</strong> Task completion is evaluated by automated test runners and/or industry mentors. Submissions failing quality standards must be revised and resubmitted.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 4. Academic Integrity -->
+        <section id="integrity" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#ffdad5] text-[#bb0004] flex items-center justify-center text-xs font-bold">4</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Academic Integrity &amp; Anti-Plagiarism Policy</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              Redback upholds strict standards of technical authenticity. Verifiable credentials are respected by hiring companies because they validate authentic hands-on competence.
+            </p>
+            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed space-y-1.5">
+              <span class="font-bold block flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">warning</span>
+                Zero Tolerance for Plagiarism
+              </span>
+              <span>
+                Submitting third-party source code without proper attribution, copying project solutions from peer interns, employing automated bots to spoof module completion, or fabricating project URLs will result in immediate disqualification and revocation of any issued certificates.
+              </span>
+            </div>
+            <p>
+              Redback reserves the right to audit task submissions at any time before or after issuing an offer letter or completion certificate.
+            </p>
+          </div>
+        </section>
+
+        <!-- 5. Certificates & Verification -->
+        <section id="certification" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">5</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Verified Certificates &amp; Public Verification</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              Upon successful completion of all mandatory track modules, interns become eligible to receive an official <strong>Certificate of Completion</strong>.
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>Unique Credentials:</strong> Every certificate carries a unique tamper-proof Certificate ID (e.g., <code class="bg-slate-100 text-[#1159c2] px-1.5 py-0.5 rounded font-mono text-xs">CRT-XXXXXXXXXX</code>) and Intern ID (e.g., <code class="bg-slate-100 text-[#151c27] px-1.5 py-0.5 rounded font-mono text-xs">RBS/INT/XXXXXX</code>).</li>
+              <li><strong>Instant QR Verification:</strong> All certificates feature a secure QR code that resolves directly to the official Redback Public Verification Portal (<a href="{% url 'core:verify' %}" class="text-[#1159c2] hover:text-[#bb0004] underline font-semibold">Verify Portal</a>).</li>
+              <li><strong>Third-Party Employer Checks:</strong> Potential employers, colleges, and university placement cells may publicly look up your credential to verify authenticity, domain track, completion status, and issue date.</li>
+              <li><strong>Revocation:</strong> Redback reserves the right to cancel or revoke any certificate found to have been obtained through fraud, identity impersonation, or academic dishonesty.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 6. Pricing, Free Tracks & Payments -->
+        <section id="pricing-payments" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">6</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Pricing, Free Tracks &amp; Payment Terms</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              Redback offers both Free and Certified internship tracks:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li><strong>Free Courses:</strong> When a track is designated as <em>FREE</em>, interns may complete task modules and unlock their verified certificate at no cost (₹0).</li>
+              <li><strong>Certificate Fees &amp; Discounts:</strong> For premium tracks, a transparent certificate verification fee is displayed. If a special offer or discount applies, the discounted price is clearly billed at checkout.</li>
+              <li><strong>Payment Gateway:</strong> All payments are securely processed through RBI-authorized payment processors (e.g. Razorpay). Redback does not store raw credit/debit card numbers or bank account passwords on our servers.</li>
+              <li><strong>Refund Policy:</strong> Certificate fees cover administrative verification, mentor evaluation, digital badge generation, and lifetime cloud credential hosting. Once an official verified certificate has been generated and unlocked, certificate fees are strictly non-refundable. If you experience technical billing errors or duplicate charges, contact <a href="mailto:info@redback.in" class="text-[#1159c2] font-semibold underline">info@redback.in</a> within 7 business days for prompt reconciliation.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 7. Intellectual Property -->
+        <section id="ip-rights" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">7</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Intellectual Property &amp; Learner Rights</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              <strong>Redback Content:</strong> All platform curriculum materials, problem statements, UI graphics, logos, certificate designs, trademarks, and code templates are the exclusive intellectual property of Redback IT Solutions Private Limited. You may not reproduce, resell, or distribute them without prior written authorization.
+            </p>
+            <p>
+              <strong>Your Work:</strong> You retain full copyright and ownership of the original code, software repositories, and written documentation you create during your internship deliverables. By submitting artifacts to the platform, you grant Redback a limited, non-exclusive license to evaluate, host, and display your work strictly for review and credential validation purposes.
+            </p>
+          </div>
+        </section>
+
+        <!-- 8. Code of Conduct -->
+        <section id="code-of-conduct" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">8</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Code of Conduct &amp; Prohibitions</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              While using Redback, you agree NOT to:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li>Use the platform for any unlawful purpose or in violation of applicable IT regulations and laws in India.</li>
+              <li>Attempt to reverse-engineer, decompile, scrape, or probe security vulnerabilities in platform APIs or databases.</li>
+              <li>Impersonate another student, provide forged college or district data, or misrepresent certificate credentials to external parties.</li>
+              <li>Upload malicious code, viruses, malware, or harmful payloads through task submission fields.</li>
+              <li>Harass, abuse, or engage in defamatory conduct toward mentors, staff, or fellow interns.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 9. Termination & Suspension -->
+        <section id="termination" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">9</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Termination &amp; Account Suspension</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              Redback may suspend or permanently terminate your account, access to task modules, and certificate verification privileges at our sole discretion, without prior notice, if:
+            </p>
+            <ul class="list-disc pl-5 space-y-1.5">
+              <li>You breach any provision of these Terms or related platform guidelines.</li>
+              <li>We detect fraudulent activity, submission tampering, or counterfeit certificate circulation.</li>
+              <li>Required by law enforcement or regulatory authorities.</li>
+            </ul>
+            <p>
+              You may request account closure at any time by contacting our support team, provided there are no pending disciplinary or verification investigations.
+            </p>
+          </div>
+        </section>
+
+        <!-- 10. Limitation of Liability -->
+        <section id="liability" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">10</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Disclaimers &amp; Limitation of Liability</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              The platform, internship modules, and educational materials are provided on an <strong>"as is"</strong> and <strong>"as available"</strong> basis without warranties of any kind, either express or implied.
+            </p>
+            <p>
+              Redback provides skill certification and verifiable credentials; however, enrollment does not guarantee employment, job placements, or campus interview selections by third-party companies.
+            </p>
+            <p>
+              To the maximum extent permitted by applicable Indian law, Redback IT Solutions shall not be liable for any indirect, incidental, punitive, or consequential damages resulting from your use or inability to use the platform.
+            </p>
+          </div>
+        </section>
+
+        <!-- 11. Governing Law -->
+        <section id="governing-law" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">11</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Governing Law &amp; Jurisdiction</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              These Terms and any dispute or claim arising out of or in connection with them shall be governed by and construed in accordance with the laws of <strong>India</strong>, without regard to conflict of law principles.
+            </p>
+            <p>
+              Any legal action or proceeding arising under these Terms shall be instituted exclusively in the competent courts located in <strong>Vellore, Tamil Nadu, India</strong>, and both parties consent to personal jurisdiction and venue therein.
+            </p>
+          </div>
+        </section>
+
+        <!-- 12. Contact & Grievance -->
+        <section id="contact-grievance" class="bg-white p-7 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs scroll-mt-28 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#f0f3ff] text-[#1159c2] flex items-center justify-center text-xs font-bold">12</div>
+            <h2 class="text-lg sm:text-xl font-bold text-[#151c27] m-0">Grievance Redressal &amp; Contact Information</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-[#5d3f3b] space-y-3 leading-relaxed">
+            <p>
+              If you have any questions, feedback, or grievance regarding these Terms of Service, please reach out to our official compliance officer:
+            </p>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+              <div><strong>Entity:</strong> Redback IT Solutions Private Limited</div>
+              <div><strong>Address:</strong> 5/x1 Hari om 2nd street, TNHB, Phase III, Sathuvachari, Vellore, Tamil Nadu 632009, India</div>
+              <div><strong>Email:</strong> <a href="mailto:info@redback.in" class="text-[#1159c2] font-semibold underline">info@redback.in</a></div>
+              <div><strong>Support Phone:</strong> +91 81899 85559 / +91 81899 85554</div>
+              <div><strong>Working Hours:</strong> Monday – Saturday: 9:00 AM – 6:30 PM IST</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Help / Contact CTA Bar -->
+  <section class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="bg-gradient-to-r from-white via-[#f0f3ff] to-white rounded-2xl border border-[#e7bdb7]/30 p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-[#bb0004] text-white flex items-center justify-center shrink-0 shadow-sm">
+          <span class="material-symbols-outlined text-2xl">help_center</span>
+        </div>
+        <div>
+          <h4 class="text-base sm:text-lg font-bold text-[#151c27] m-0">Have questions about our policies?</h4>
+          <p class="text-xs sm:text-sm text-[#5d3f3b] mt-1 m-0">Our student support team is always ready to assist you.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="{% url 'core:contact' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-xs no-underline flex items-center gap-1.5" style="color: #ffffff !important;">
+          <span style="color: #ffffff !important;">Contact Support</span>
+          <span class="material-symbols-outlined text-base" style="color: #ffffff !important;">arrow_forward</span>
+        </a>
+        <a href="{% url 'core:privacy' %}" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs px-5 py-3 rounded-xl transition-colors no-underline">
+          Privacy Policy
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% include "core/_footer.html" %}
+{% endblock %}
+

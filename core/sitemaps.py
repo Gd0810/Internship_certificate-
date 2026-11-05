@@ -14,6 +14,8 @@ class StaticViewSitemap(Sitemap):
             ("core:track_list", 0.9, "daily"),
             ("core:about", 0.7, "monthly"),
             ("core:contact", 0.8, "monthly"),
+            ("core:terms", 0.5, "yearly"),
+            ("core:privacy", 0.5, "yearly"),
             ("core:verify", 0.8, "daily"),
         ]
 

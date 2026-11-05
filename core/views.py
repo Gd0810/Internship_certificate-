@@ -233,6 +233,16 @@ def verify(request, query_id=None):
     )
 
 
+def terms(request):
+    """Renders the Terms of Service legal agreement page."""
+    return render(request, "core/terms.html")
+
+
+def privacy(request):
+    """Renders the Privacy Policy and data protection page."""
+    return render(request, "core/privacy.html")
+
+
 def robots_txt(request):
     sitemap_url = request.build_absolute_uri("/sitemap.xml")
     from django.conf import settings
@@ -242,7 +252,10 @@ def robots_txt(request):
         "Allow: /",
         "Allow: /tracks/",
         "Allow: /about/",
+        "Allow: /contact/",
         "Allow: /verify/",
+        "Allow: /terms/",
+        "Allow: /privacy/",
         f"Disallow: /{company_slug}/",
         "Disallow: /dashboard/",
         "Disallow: /accounts/",
