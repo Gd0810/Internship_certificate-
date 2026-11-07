@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from accounts.forms import StyledAuthenticationForm
-from accounts.models import InternProfile
+from accounts.models import InternProfile, TAMIL_NADU_DISTRICTS
 from payments.models import Payment
 from certificates.models import CertificateTemplate, OfferLetterTemplate
 from certificates.template_engine import extract_template_package, TemplatePackageError, render_template_html
@@ -349,6 +349,7 @@ def offer_letter_template_upload(request):
 def student_list(request):
     search_query = request.GET.get("q", "").strip()
     track_filter = request.GET.get("track", "").strip()
+    district_filter = request.GET.get("district", "").strip()
     status_filter = request.GET.get("status", "").strip()
 
     students_qs = InternProfile.objects.select_related("user", "track", "track__category").order_by("-created_at")
@@ -366,6 +367,9 @@ def student_list(request):
     if track_filter:
         students_qs = students_qs.filter(track_id=track_filter)
 
+    if district_filter:
+        students_qs = students_qs.filter(district__iexact=district_filter)
+
     if status_filter == "paid":
         students_qs = students_qs.filter(has_paid=True)
     elif status_filter == "unpaid":
@@ -376,6 +380,12 @@ def student_list(request):
     page_obj = paginator.get_page(request.GET.get("page"))
 
     tracks = InternshipTrack.objects.all().order_by("name")
+
+    # Gather registered districts from database and merge with Tamil Nadu predefined districts
+    registered_districts = set(
+        InternProfile.objects.exclude(district="").values_list("district", flat=True).distinct()
+    )
+    all_districts = sorted(registered_districts.union(set(TAMIL_NADU_DISTRICTS)))
 
     stats = {
         "total": InternProfile.objects.count(),
@@ -389,8 +399,10 @@ def student_list(request):
         {
             "page_obj": page_obj,
             "tracks": tracks,
+            "districts": all_districts,
             "search_query": search_query,
             "track_filter": track_filter,
+            "district_filter": district_filter,
             "status_filter": status_filter,
             "total_count": total_count,
             "stats": stats,
