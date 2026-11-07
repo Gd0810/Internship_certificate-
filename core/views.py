@@ -32,7 +32,7 @@ def _lookup_intern_profile(raw_query):
 
 def home(request):
     featured_tracks = (
-        InternshipTrack.objects.filter(is_active=True).order_by("-created_at")[:6]
+        InternshipTrack.objects.filter(is_active=True).order_by("-created_at")[:4]
     )
     raw_query = request.GET.get("intern_id", "").strip()
     profile, searched, error_message = _lookup_intern_profile(raw_query)

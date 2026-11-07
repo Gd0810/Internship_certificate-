@@ -26,7 +26,7 @@
       </div>
       <h1 class="text-4xl sm:text-5xl lg:text-[54px] text-[#151c27] font-extrabold leading-[1.1] tracking-tight">
         Online Internship Certificates in Vellore.<br/>
-        <span class="text-[#bb0004]">Free &amp; Paid Certified Tracks.</span>
+        <span class="text-[#bb0004]">Free &amp; Paid Certified Courses.</span>
       </h1>
       <p class="text-base sm:text-lg text-[#5d3f3b] max-w-lg mt-2 leading-relaxed">
         Join the premier <strong class="text-[#151c27]">IT company internship with certificate in Vellore</strong>. Complete hands-on software training, test your knowledge, and earn authentic credentials from <span class="font-bold text-[#151c27]">Redback IT Solutions.</span>
@@ -390,7 +390,7 @@
     </div>
     {% if featured_tracks %}
     <div class="icp-landing-track-grid">
-      {% for track in featured_tracks %}
+      {% for track in featured_tracks|slice:":4" %}
         {% include "core/_track_card.html" %}
       {% endfor %}
     </div>
