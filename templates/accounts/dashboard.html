@@ -276,7 +276,7 @@
         <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs">
           <div class="flex items-center justify-between mb-3">
             <div>
-              <h3 class="text-lg font-bold text-[#151c27]">Track Module Progress</h3>
+              <h3 class="text-lg font-bold text-[#151c27]">Course Module Progress</h3>
               <p class="text-xs text-slate-500 mt-0.5">Overall task completion progress in {{ profile.track.name }}</p>
             </div>
             <span class="text-base font-extrabold text-[#bb0004]">{{ profile.progress_percent }}%</span>
@@ -332,7 +332,7 @@
             </div>
 
             <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
-              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Track Domain</span>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Course Domain</span>
               <span class="font-bold text-[#1159c2] text-sm block truncate" title="{{ profile.track.name }}">{{ profile.track.name }}</span>
             </div>
 
@@ -414,12 +414,12 @@
                   <span class="material-symbols-outlined text-lg">folder_shared</span>
                 </div>
                 <div>
-                  <h5 class="text-xs font-bold text-[#151c27] m-0">Track Resource Folder</h5>
+                  <h5 class="text-xs font-bold text-[#151c27] m-0">Course Resource Folder</h5>
                   <p class="text-[11px] text-slate-500 m-0">Shared drive repository and general materials for {{ profile.track.name }}</p>
                 </div>
               </div>
               <a href="{{ profile.track.source_link }}" target="_blank" rel="noopener noreferrer" class="shrink-0 px-3.5 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-[#1159c2] text-[#1159c2] font-bold text-xs transition-colors flex items-center gap-1.5 no-underline">
-                <span>Open Track Drive</span>
+                <span>Open Course Drive</span>
                 <span class="material-symbols-outlined text-xs">open_in_new</span>
               </a>
             </div>
@@ -620,7 +620,7 @@
           {% empty %}
             <div class="bg-white p-12 rounded-2xl border border-slate-200 text-center text-slate-400">
               <span class="material-symbols-outlined text-4xl block mb-2 text-slate-300">assignment_late</span>
-              No task modules published for this track yet.
+              No task modules published for this course yet.
             </div>
           {% endfor %}
         </div>

@@ -54,7 +54,7 @@
         <div class="col-span-1">
           <h4 class="text-xs font-bold text-[#151c27] uppercase tracking-widest mb-3">Programs</h4>
           <ul class="space-y-2 list-none p-0 m-0">
-            <li><a href="{% url 'core:track_list' %}" class="text-xs text-[#5d3f3b] hover:text-[#bb0004] transition-colors no-underline">Internship Tracks</a></li>
+            <li><a href="{% url 'core:track_list' %}" class="text-xs text-[#5d3f3b] hover:text-[#bb0004] transition-colors no-underline">Internship Courses</a></li>
             <li><a href="{% url 'core:track_list' %}" class="text-xs text-[#5d3f3b] hover:text-[#bb0004] transition-colors no-underline">Task Modules</a></li>
             <li><a href="{% url 'core:verify' %}" class="text-xs text-[#5d3f3b] hover:text-[#bb0004] transition-colors no-underline">Verified Certificates</a></li>
           </ul>
@@ -77,6 +77,35 @@
             <li><a href="{% url 'core:terms' %}" class="text-xs text-[#5d3f3b] hover:text-[#bb0004] transition-colors no-underline">Terms of Service</a></li>
             <li><a href="{% url 'core:privacy' %}" class="text-xs text-[#5d3f3b] hover:text-[#bb0004] transition-colors no-underline">Privacy Policy</a></li>
           </ul>
+        </div>
+      </div>
+
+      <!-- Trending Certificate Searches in Vellore (Local SEO Integration) -->
+      <div class="border-t border-[#e7bdb7]/20 pt-6 pb-2">
+        <div class="text-[11px] font-bold text-[#151c27] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[#bb0004] text-sm">trending_up</span>
+          <span>Trending Certificate Searches in Vellore:</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[11px] text-[#5d3f3b]">
+          <a href="{% url 'core:track_list' %}" class="hover:text-[#bb0004] transition-colors no-underline">Online internship certificates in Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:track_list' %}?pricing=free" class="hover:text-[#bb0004] transition-colors no-underline">Free internship certificates in Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:track_list' %}?pricing=paid" class="hover:text-[#bb0004] transition-colors no-underline">Paid internship certificates in Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:track_list' %}" class="hover:text-[#bb0004] transition-colors no-underline">Internship certificate in Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:track_list' %}" class="hover:text-[#bb0004] transition-colors no-underline">Best certificate courses in Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:track_list' %}" class="hover:text-[#bb0004] transition-colors no-underline">Computer certificate courses in Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:track_list' %}" class="hover:text-[#bb0004] transition-colors no-underline">Software training certificate in Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:verify' %}" class="hover:text-[#bb0004] transition-colors no-underline">Verified certificate provider in Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:verify' %}" class="hover:text-[#bb0004] transition-colors no-underline">Redback certificate Vellore</a>
+          <span class="text-slate-300">·</span>
+          <a href="{% url 'core:track_list' %}" class="hover:text-[#bb0004] transition-colors no-underline">IT company internship with certificate in Vellore</a>
         </div>
       </div>
 

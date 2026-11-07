@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Redback — Technology Internship Programs & Verified Certification{% endblock %}
-{% block meta_title %}Redback — Technology Internship Programs & Verified Certification{% endblock %}
-{% block meta_description %}Accelerate your engineering career with Redback IT Solutions. Hands-on practical internships in Generative AI, Full Stack Development, Cloud Computing, and Mobile Apps with verified industry credentials.{% endblock %}
-{% block meta_keywords %}internship, tech internship, software development, Generative AI, Full Stack, Cloud Computing, certificate verification, Redback IT Solutions, student learning{% endblock %}
+{% block title %}Online, Free & Paid Internship Certificates in Vellore | Redback IT Solutions{% endblock %}
+{% block meta_title %}Online, Free & Paid Internship Certificates in Vellore | Redback IT Solutions{% endblock %}
+{% block meta_description %}Earn verified internship certificates in Vellore with Redback IT Solutions. Offering free & paid internship certificates, best computer certificate courses, and software training with instant QR verification.{% endblock %}
+{% block meta_keywords %}online internship certificates in vellore, free internship certificates in vellore, paid internship certificates in vellore, internship certificate in vellore, best certificate courses in vellore, computer certificate courses in vellore, software training certificate in vellore, verified certificate provider in vellore, redback certificate vellore, it company internship with certificate in vellore{% endblock %}
 
 {% block body %}
 {% include "core/_public_nav.html" %}
@@ -20,13 +20,16 @@
 
     <!-- Hero Left Column -->
     <div class="flex flex-col gap-4 z-10">
-      <span class="text-sm text-[#bb0004] font-bold tracking-widest uppercase">LEARN. CHALLENGE. CERTIFY.</span>
+      <div class="inline-flex items-center gap-1.5 text-xs font-bold text-[#bb0004] tracking-widest uppercase">
+        <span class="material-symbols-outlined text-sm">verified</span>
+        <span>VERIFIED CERTIFICATE PROVIDER IN VELLORE</span>
+      </div>
       <h1 class="text-4xl sm:text-5xl lg:text-[54px] text-[#151c27] font-extrabold leading-[1.1] tracking-tight">
-        Test Your Knowledge.<br/>
-        <span class="text-[#bb0004]">Earn Your Certificate.</span>
+        Online Internship Certificates in Vellore.<br/>
+        <span class="text-[#bb0004]">Free &amp; Paid Certified Tracks.</span>
       </h1>
       <p class="text-base sm:text-lg text-[#5d3f3b] max-w-lg mt-2 leading-relaxed">
-        Take your internship assessments and get certified by <span class="font-bold text-[#151c27]">Redback.</span>
+        Join the premier <strong class="text-[#151c27]">IT company internship with certificate in Vellore</strong>. Complete hands-on software training, test your knowledge, and earn authentic credentials from <span class="font-bold text-[#151c27]">Redback IT Solutions.</span>
       </p>
 
       <!-- Feature Grid under text -->
@@ -72,7 +75,7 @@
         </a>
         <a href="{% url 'core:track_list' %}" class="bg-white border-2 border-[#e7bdb7] hover:bg-[#f0f3ff] text-[#151c27] font-semibold text-sm px-8 py-3.5 rounded-xl flex items-center gap-2 transition-all no-underline">
           <span class="material-symbols-outlined text-[20px]">grid_view</span>
-          Explore Tracks
+          Explore Courses
         </a>
       </div>
     </div>
@@ -128,7 +131,7 @@
                   </div>
                 </a>
               {% empty %}
-                <div class="col-span-2 text-center text-xs text-[#5d3f3b] py-4">No active tracks available.</div>
+                <div class="col-span-2 text-center text-xs text-[#5d3f3b] py-4">No active courses available.</div>
               {% endfor %}
             </div>
 
@@ -148,23 +151,28 @@
           <!-- Inner Red Border -->
           <div class="w-full h-full border-[1.5px] border-[#bb0004] bg-white rounded-xl overflow-hidden flex flex-row relative">
             
-            <!-- Left Ribbon Strip (Authentic Default 2) -->
-            <div class="w-7 sm:w-8 shrink-0 h-full bg-[#bb0004] relative border-r-[1.5px] border-[#151c27]">
-              <!-- Subtle vertical accent lines -->
-              <div class="absolute inset-y-0 left-1 w-[1px] bg-white/25"></div>
-            </div>
+            <!-- Left Ribbon Column with Authentic Default 2 Layout (Complete Unclipped Circular Seal) -->
+            <div class="relative h-full shrink-0 flex items-center pl-3 sm:pl-3.5 pr-2 sm:pr-2.5">
+              <!-- Vertical Red Ribbon Stripe -->
+              <div class="w-6 sm:w-7 h-full bg-[#bb0004] relative">
+                <!-- Subtle vertical inner highlight line -->
+                <div class="absolute inset-y-0 left-0.5 w-[1px] bg-white/20"></div>
+                <!-- Right border line of ribbon -->
+                <div class="absolute inset-y-0 right-0 w-[1.5px] bg-[#151c27]"></div>
 
-            <!-- Complete, Fully Visible Redback Circular Seal Badge (Centered on Ribbon Edge) -->
-            <div class="absolute top-1/2 -translate-y-1/2 left-1 sm:left-1.5 z-20 pointer-events-none drop-shadow-md">
-              <img
-                src="{% static 'img/templates/badge.png' %}"
-                alt="Redback Verified Seal"
-                class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-full"
-              />
+                <!-- Complete, Fully Visible Redback Circular Seal Badge (Centered on Ribbon, 100% Unclipped) -->
+                <div class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-20 pointer-events-none drop-shadow-md">
+                  <img
+                    src="{% static 'img/templates/badge.png' %}"
+                    alt="Redback Verified Seal"
+                    class="w-11 h-11 sm:w-12 sm:h-12 max-w-none object-contain"
+                  />
+                </div>
+              </div>
             </div>
 
             <!-- Right Certificate Content Area -->
-            <div class="flex-1 py-2.5 sm:py-3 pl-8 sm:pl-9 pr-2.5 sm:pr-3.5 flex flex-col justify-between text-center relative z-10 bg-white">
+            <div class="flex-1 py-2 sm:py-2.5 pl-2 sm:pl-3 pr-2.5 sm:pr-3 flex flex-col justify-between text-center relative z-10 bg-white min-w-0">
               
               <!-- Header Row: Title & QR Code -->
               <div class="relative pt-0.5">
@@ -189,11 +197,11 @@
                 </div>
               </div>
 
-              <!-- Awarded To & Candidate Name -->
+              <!-- Awarded To & Candidate Name (Official Gopinath Default 2 Demo Name) -->
               <div class="my-auto py-1">
                 <p class="text-[7px] sm:text-[8px] italic text-slate-400 m-0 mb-0.5">awarded to</p>
                 <h2 class="text-base sm:text-lg md:text-xl font-bold text-[#151c27] tracking-tight m-0 leading-tight" style="font-family: 'Poppins', sans-serif;">
-                  Your Name
+                  Gopinath
                 </h2>
                 <div class="w-16 sm:w-20 mx-auto border-b border-slate-200 mt-1 mb-1"></div>
 
@@ -302,10 +310,82 @@
     </div>
   </section> {% endcomment %}
 
+  <!-- SEO Highlights: Verified Certificate Provider in Vellore -->
+  <section class="max-w-[1280px] mx-auto px-4 lg:px-6 mb-12 w-full">
+    <div class="bg-white rounded-3xl border border-[#e7bdb7]/40 p-6 sm:p-8 shadow-xs">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+        <div>
+          <span class="text-xs font-bold text-[#bb0004] uppercase tracking-wider bg-[#ffdad5]/60 px-3.5 py-1 rounded-full inline-block mb-2">
+            Verified Certificate Provider in Vellore
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-[#151c27] tracking-tight m-0">
+            Online, Free &amp; Paid Internship Certificates in Vellore
+          </h2>
+          <p class="text-xs sm:text-sm text-[#5d3f3b] mt-1.5 m-0 max-w-2xl leading-relaxed">
+            Choose from the best computer certificate courses and software training certificate tracks. Complete hands-on modules and receive your official, employer-verified Redback certificate in Vellore.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <a href="{% url 'core:track_list' %}" class="bg-[#f0f3ff] hover:bg-[#d9e2ff] text-[#1159c2] font-bold text-xs px-4.5 py-2.5 rounded-xl transition-all no-underline flex items-center gap-1.5">
+            <span>Explore Certificate Courses</span>
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4 Strategic SEO Keyword Columns -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        <!-- Pillar 1 -->
+        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/70 hover:border-[#bb0004]/30 hover:shadow-xs transition-all">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3">
+            <span class="material-symbols-outlined text-xl">check_circle</span>
+          </div>
+          <h3 class="text-xs font-bold text-[#151c27] m-0">Free Internship Certificates</h3>
+          <p class="text-[11px] text-slate-500 mt-1.5 m-0 leading-relaxed">
+            100% free internship certificates in Vellore with complete module assessments and instant access.
+          </p>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/70 hover:border-[#1159c2]/30 hover:shadow-xs transition-all">
+          <div class="w-9 h-9 rounded-xl bg-blue-100 text-[#1159c2] flex items-center justify-center mb-3">
+            <span class="material-symbols-outlined text-xl">workspace_premium</span>
+          </div>
+          <h3 class="text-xs font-bold text-[#151c27] m-0">Paid Internship Certificates</h3>
+          <p class="text-[11px] text-slate-500 mt-1.5 m-0 leading-relaxed">
+            Verified paid internship certificates in Vellore with comprehensive project deliverables and placement credentials.
+          </p>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/70 hover:border-purple-200 hover:shadow-xs transition-all">
+          <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center mb-3">
+            <span class="material-symbols-outlined text-xl">computer</span>
+          </div>
+          <h3 class="text-xs font-bold text-[#151c27] m-0">Computer Certificate Courses</h3>
+          <p class="text-[11px] text-slate-500 mt-1.5 m-0 leading-relaxed">
+            Industry software training certificate programs in Generative AI, Full Stack Development, Cloud &amp; Python.
+          </p>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/70 hover:border-[#bb0004]/30 hover:shadow-xs transition-all">
+          <div class="w-9 h-9 rounded-xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center mb-3">
+            <span class="material-symbols-outlined text-xl">qr_code_2</span>
+          </div>
+          <h3 class="text-xs font-bold text-[#151c27] m-0">Redback Certificate Vellore</h3>
+          <p class="text-[11px] text-slate-500 mt-1.5 m-0 leading-relaxed">
+            Recognized IT company internship with certificate in Vellore backed by instant online verification for recruiters.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Featured Tracks Grid -->
   <section class="max-w-[1280px] mx-auto px-4 lg:px-6 pb-20 w-full">
     <div class="flex justify-between items-baseline mb-6">
-      <h2 class="text-2xl font-extrabold text-[#151c27]">Featured Tracks</h2>
+      <h2 class="text-2xl font-extrabold text-[#151c27]">Featured Courses</h2>
       <a href="{% url 'core:track_list' %}" class="text-sm font-semibold text-[#bb0004] hover:underline no-underline">View all →</a>
     </div>
     {% if featured_tracks %}
@@ -315,7 +395,7 @@
       {% endfor %}
     </div>
     {% else %}
-    <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No tracks published yet — check back soon.</div>
+    <div class="icp-card" style="padding:40px; text-align:center; color:var(--c-muted);">No courses published yet — check back soon.</div>
     {% endif %}
   </section>
 

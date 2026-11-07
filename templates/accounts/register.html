@@ -185,10 +185,10 @@
               {% endfor %}
             </div>
 
-            <!-- Internship Track with Searchable Dropdown -->
+            <!-- Internship Course with Searchable Dropdown -->
             <div class="relative" id="track-searchable-combobox">
               <label for="{{ form.track.id_for_label }}" class="block text-xs font-bold text-[#151c27] uppercase tracking-wider mb-1.5">
-                Internship Track *
+                Internship Course *
               </label>
 
               <!-- Hidden native select for standard form POST submission and validation -->
@@ -208,7 +208,7 @@
                   <div class="flex items-center gap-2 min-w-0">
                     <span class="material-symbols-outlined text-lg text-[#bb0004] shrink-0">school</span>
                     <span id="track-select-label" class="truncate font-medium text-slate-400">
-                      Select an internship track
+                      Select an internship course
                     </span>
                   </div>
                   <span id="track-chevron" class="material-symbols-outlined text-slate-400 text-lg shrink-0 transition-transform duration-200">
@@ -231,7 +231,7 @@
                       <input
                         type="text"
                         id="track-search-input"
-                        placeholder="Search track (e.g. Python, AI, React, Cloud...)"
+                        placeholder="Search course (e.g. Python, AI, React, Cloud...)"
                         class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-[#151c27] placeholder:text-slate-400 focus:outline-none focus:border-[#bb0004] focus:ring-2 focus:ring-[#bb0004]/20 transition"
                         autocomplete="off"
                       />
@@ -258,7 +258,7 @@
                   <!-- Empty State when no search results -->
                   <div id="track-no-results" class="py-6 px-4 text-center text-xs text-slate-400 hidden">
                     <span class="material-symbols-outlined text-2xl block mb-1 text-slate-300">search_off</span>
-                    <span>No internship tracks match your search</span>
+                    <span>No internship courses match your search</span>
                   </div>
                 </div>
               </div>
@@ -408,7 +408,7 @@
         label.classList.remove('text-slate-400');
         label.classList.add('text-[#151c27]', 'font-bold');
       } else {
-        label.textContent = 'Select an internship track';
+        label.textContent = 'Select an internship course';
         label.classList.remove('text-[#151c27]', 'font-bold');
         label.classList.add('text-slate-400');
       }

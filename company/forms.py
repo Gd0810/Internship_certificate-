@@ -38,20 +38,21 @@ class TrackForm(forms.ModelForm):
             "is_active": forms.CheckboxInput(attrs={"class": "icp-checkbox"}),
         }
         labels = {
-            "track_image": "Track Image / Icon",
-            "points": "Track Points / Skills (Comma-separated)",
-            "category": "Track Category",
-            "is_free": "Free Course / Track (Free Certificate)",
+            "name": "Course Name",
+            "track_image": "Course Image / Icon",
+            "points": "Course Points / Skills (Comma-separated)",
+            "category": "Course Category",
+            "is_free": "Free Course (Free Certificate)",
             "price": "Standard Certificate Price (₹)",
             "discount_price": "Discounted Price (₹) (Optional)",
-            "source_link": "Track Resource / Google Drive Link (Optional)",
+            "source_link": "Course Resource / Google Drive Link (Optional)",
         }
         help_texts = {
-            "points": "Add points/skills separated by comma (,). Each point will be displayed as an individual chip on the track card.",
+            "points": "Add points/skills separated by comma (,). Each point will be displayed as an individual chip on the course card.",
             "category": "Select a category for filtering and navigation.",
-            "is_free": "Check this box to offer this track and certificate 100% free.",
-            "discount_price": "If provided, the track card will strike through the standard price and charge this discounted amount.",
-            "source_link": "Optional Google Drive link or resource folder for track materials.",
+            "is_free": "Check this box to offer this course and certificate 100% free.",
+            "discount_price": "If provided, the course card will strike through the standard price and charge this discounted amount.",
+            "source_link": "Optional Google Drive link or resource folder for course materials.",
         }
 
     def clean(self):

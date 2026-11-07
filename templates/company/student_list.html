@@ -77,13 +77,13 @@
         />
       </div>
 
-      <!-- Track Filter -->
+      <!-- Course Filter -->
       <div class="min-w-[180px]">
         <select
           name="track"
           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-[#151c27] focus:outline-none focus:border-[#bb0004] focus:bg-white cursor-pointer"
         >
-          <option value="">All Tracks</option>
+          <option value="">All Courses</option>
           {% for t in tracks %}
             <option value="{{ t.id }}" {% if track_filter == t.id|stringformat:"s" %}selected{% endif %}>{{ t.name }}</option>
           {% endfor %}
@@ -126,7 +126,7 @@
           <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
             <th class="py-3.5 px-6">Student Information</th>
             <th class="py-3.5 px-6">Intern ID</th>
-            <th class="py-3.5 px-6">Track Domain</th>
+            <th class="py-3.5 px-6">Course Domain</th>
             <th class="py-3.5 px-6">College / Degree</th>
             <th class="py-3.5 px-6">Task Progress</th>
             <th class="py-3.5 px-6">Status</th>

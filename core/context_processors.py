@@ -6,20 +6,24 @@ def site_meta(request):
         if base_url.startswith("http://"):
             base_url = "https://" + base_url[7:]
 
-    return {
+    res = {
         "SITE_NAME": "Redback",
         "SITE_FULL_NAME": "Redback IT Solutions Private Limited",
         "SITE_TAGLINE": "Internship Programs, Practical Learning & Verified Certification",
         "SITE_URL": base_url,
         "SITE_TWITTER_HANDLE": "@redback_it",
         "DEFAULT_META_DESCRIPTION": (
-            "Explore industry-grade technology internship programs with Redback IT Solutions. "
-            "Master in-demand skills in Generative AI, Full Stack Development, Cloud Computing, "
-            "and earn verifiable, shareable credentials."
+            "Looking for online, free, or paid internship certificates in Vellore? "
+            "Redback IT Solutions is a verified certificate provider offering the best computer certificate courses, "
+            "software training certificates, and real-world IT company internships with authentic QR verification."
         ),
         "DEFAULT_META_KEYWORDS": (
-            "internship, tech internship, software development internship, Generative AI internship, "
-            "Full Stack internship, cloud computing training, certificate verification, Redback IT Solutions"
+            "online internship certificates in vellore, free internship certificates in vellore, "
+            "paid internship certificates in vellore, internship certificate in vellore, "
+            "best certificate courses in vellore, computer certificate courses in vellore, "
+            "software training certificate in vellore, verified certificate provider in vellore, "
+            "redback certificate vellore, it company internship with certificate in vellore, "
+            "Redback IT Solutions, technology internship Vellore"
         ),
         "DEFAULT_OG_IMAGE": f"{base_url}/static/img/redback-og-banner.png",
     }

@@ -1,6 +1,6 @@
 {% extends "company/_sidebar_layout.html" %}
 
-{% block company_title %}Internship Tracks Management{% endblock %}
+{% block company_title %}Internship Courses Management{% endblock %}
 
 {% block company_content %}
 <div class="space-y-6">
@@ -8,12 +8,12 @@
   <!-- Header Card -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
     <div>
-      <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">Internship Tracks</h3>
-      <p class="text-xs text-slate-500 mt-0.5">Manage domain tracks, pricing, module tasks, and public visibility</p>
+      <h3 class="text-xl font-extrabold text-[#151c27] tracking-tight">Internship Courses</h3>
+      <p class="text-xs text-slate-500 mt-0.5">Manage domain courses, pricing, module tasks, and public visibility</p>
     </div>
     <a href="{% url 'company:track_create' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition-all flex items-center gap-2 shrink-0 no-underline">
       <span class="material-symbols-outlined text-lg">add_circle</span>
-      <span>Create New Track</span>
+      <span>Create New Course</span>
     </a>
   </div>
 
@@ -23,7 +23,7 @@
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-            <th class="py-3.5 px-6">Track Domain</th>
+            <th class="py-3.5 px-6">Course Domain</th>
             <th class="py-3.5 px-6">Price</th>
             <th class="py-3.5 px-6">Task Modules</th>
             <th class="py-3.5 px-6">Visibility</th>
@@ -96,7 +96,7 @@
                     <span class="material-symbols-outlined text-sm">edit</span>
                     <span>Edit</span>
                   </a>
-                  <form method="post" action="{% url 'company:track_delete' track.pk %}" class="inline" onsubmit="return confirm('Delete this track and all its task modules?');">
+                  <form method="post" action="{% url 'company:track_delete' track.pk %}" class="inline" onsubmit="return confirm('Delete this course and all its task modules?');">
                     {% csrf_token %}
                     <button type="submit" class="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs transition-colors flex items-center gap-1 border-0 cursor-pointer">
                       <span class="material-symbols-outlined text-sm">delete</span>
@@ -110,7 +110,7 @@
             <tr>
               <td colspan="5" class="py-12 text-center text-slate-400">
                 <span class="material-symbols-outlined text-3xl text-slate-300 block mb-1">grid_off</span>
-                No internship tracks found. Create your first track above.
+                No internship courses found. Create your first course above.
               </td>
             </tr>
           {% endfor %}

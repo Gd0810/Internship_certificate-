@@ -26,7 +26,7 @@
 
       <a href="{% url 'company:track_list' %}" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 no-underline {% if request.resolver_match.url_name == 'track_list' %}bg-white/15 text-white font-bold shadow-2xs{% else %}text-slate-300 hover:text-white hover:bg-white/10{% endif %}">
         <span class="material-symbols-outlined text-[18px]">account_tree</span>
-        <span>Tracks &amp; Tasks</span>
+        <span>Courses &amp; Tasks</span>
       </a>
 
       <a href="{% url 'company:offer_letter_template_upload' %}" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 no-underline {% if request.resolver_match.url_name == 'offer_letter_template_upload' %}bg-white/15 text-white font-bold shadow-2xs{% else %}text-slate-300 hover:text-white hover:bg-white/10{% endif %}">

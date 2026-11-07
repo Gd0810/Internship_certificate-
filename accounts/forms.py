@@ -40,7 +40,8 @@ class RegistrationForm(forms.Form):
     track = forms.ModelChoiceField(
         queryset=InternshipTrack.objects.filter(is_active=True),
         widget=forms.Select(attrs={"class": INPUT_CLASSES}),
-        empty_label="Select an internship track",
+        empty_label="Select an internship course",
+        label="Internship Course",
     )
     email = forms.EmailField(widget=forms.EmailInput(attrs={"class": INPUT_CLASSES, "placeholder": "you@example.com"}))
     mobile_number = forms.CharField(

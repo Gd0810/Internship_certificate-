@@ -68,7 +68,7 @@ class InternProfile(models.Model):
     degree = models.CharField(max_length=150, blank=True, default="")
     district = models.CharField(max_length=100, blank=True, default="", help_text="District of the intern")
     track = models.ForeignKey(
-        "company.InternshipTrack", on_delete=models.PROTECT, related_name="enrolled_profiles"
+        "company.InternshipTrack", on_delete=models.PROTECT, related_name="enrolled_profiles", verbose_name="Enrolled Course"
     )
     mobile_number = models.CharField(max_length=16, validators=[mobile_validator])
     has_paid = models.BooleanField(default=False)

@@ -24,7 +24,7 @@
       <div class="flex items-center gap-3 shrink-0">
         <a href="{% url 'company:track_create' %}" class="bg-[#bb0004] hover:bg-[#e1251b] text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition-all flex items-center gap-2 no-underline">
           <span class="material-symbols-outlined text-lg">add_circle</span>
-          <span>Create Internship Track</span>
+          <span>Create Internship Course</span>
         </a>
       </div>
     </div>
@@ -36,7 +36,7 @@
     <!-- Stat 1: Tracks -->
     <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tracks</span>
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Courses</span>
         <div class="w-9 h-9 rounded-xl bg-[#ffdad5] text-[#bb0004] flex items-center justify-center">
           <span class="material-symbols-outlined text-lg">grid_view</span>
         </div>
@@ -118,8 +118,8 @@
           <span class="material-symbols-outlined">library_books</span>
         </div>
         <div>
-          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-[#bb0004] transition-colors">Tracks &amp; Tasks</h4>
-          <p class="text-xs text-slate-500 mt-0.5">Manage tracks and deliverables</p>
+          <h4 class="text-sm font-bold text-[#151c27] group-hover:text-[#bb0004] transition-colors">Courses &amp; Tasks</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Manage courses and deliverables</p>
         </div>
       </div>
     </a>
@@ -167,7 +167,7 @@
     <div class="p-6 border-b border-slate-100 flex items-center justify-between">
       <div>
         <h3 class="text-base font-bold text-[#151c27]">Recent Registered Interns</h3>
-        <p class="text-xs text-slate-500 mt-0.5">Latest student profiles enrolled in internship tracks</p>
+        <p class="text-xs text-slate-500 mt-0.5">Latest student profiles enrolled in internship courses</p>
       </div>
       <a href="{% url 'company:student_list' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#bb0004] hover:text-[#e1251b] transition-colors no-underline">
         <span>View All Interns</span>
@@ -180,7 +180,7 @@
         <thead>
           <tr class="bg-slate-50/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
             <th class="py-3.5 px-6">Intern Name</th>
-            <th class="py-3.5 px-6">Track Domain</th>
+            <th class="py-3.5 px-6">Course Domain</th>
             <th class="py-3.5 px-6">Modules Progress</th>
             <th class="py-3.5 px-6">Certificate Status</th>
             <th class="py-3.5 px-6">Enrolled Date</th>

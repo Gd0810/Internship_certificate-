@@ -65,14 +65,14 @@
 
   <!-- Key Summary Metrics -->
   <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-    <!-- Metric 1: Track -->
+    <!-- Metric 1: Course -->
     <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-      <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Domain Track</span>
+      <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Domain Course</span>
       <div class="mt-2 text-base font-extrabold text-[#1159c2] truncate" title="{{ student.track.name }}">
         {{ student.track.name }}
       </div>
       <span class="text-[11px] text-slate-400">
-        {{ student.track.category.name|default:"General Track" }}
+        {{ student.track.category.name|default:"General Course" }}
       </span>
     </div>
 

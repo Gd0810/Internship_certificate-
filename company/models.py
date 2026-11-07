@@ -13,7 +13,8 @@ class TrackCategory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name_plural = "Track Categories"
+        verbose_name = "Course Category"
+        verbose_name_plural = "Course Categories"
         ordering = ["name"]
 
     def __str__(self):
@@ -78,6 +79,8 @@ class InternshipTrack(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        verbose_name = "Internship Course"
+        verbose_name_plural = "Internship Courses"
         ordering = ["name"]
 
     def __str__(self):
