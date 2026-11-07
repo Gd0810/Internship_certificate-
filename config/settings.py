@@ -110,8 +110,35 @@ WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
 # --------------------------------------------------------------------------
-# Database — SQLite by default, DATABASE_URL (Postgres/MySQL) in production
+# Database Configuration
 # --------------------------------------------------------------------------
+
+# ==========================================================================
+# [PRODUCTION MYSQL DATABASE CONFIGURATION]
+# To use MySQL in production:
+# 1. Install driver: pip install mysqlclient (or: pip install pymysql)
+# 2. Uncomment the DATABASES block below (and comment out the SQLite block).
+# 3. If using PyMySQL, uncomment the two pymysql lines below as well.
+# ==========================================================================
+# import pymysql
+# pymysql.install_as_MySQLdb()
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "credentia_db",            # Your MySQL database name
+#         "USER": "your_mysql_username",     # Your MySQL username
+#         "PASSWORD": "your_mysql_password", # Your MySQL password
+#         "HOST": "localhost",               # Database host (or server IP / RDS host)
+#         "PORT": "3306",                    # MySQL default port
+#         "OPTIONS": {
+#             "charset": "utf8mb4",
+#             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+#         },
+#     }
+# }
+
+# Default / Fallback: Supports DATABASE_URL via .env or local SQLite
 DATABASE_URL = config("DATABASE_URL", default="")
 if DATABASE_URL:
     import dj_database_url
